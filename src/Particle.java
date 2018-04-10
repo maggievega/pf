@@ -14,6 +14,7 @@ public class Particle {
 
     public Particle(int id, double mass, double x1, double y1, double x2, double y2, double r, double velx, double vely){
         this.id = id;
+        this.mass = mass;
         this.r = r;
         this.s = new Segment(x1, x2, y1, y2);
         this.vel = new Point(velx, vely);
@@ -54,7 +55,7 @@ public class Particle {
         double xLeft = midPoint.getX() - limit;
         double xRight = midPoint.getX() + limit;
 
-        if(yTop <y1 && yBot > y2){
+        if(yTop < y1 && yBot > y2){
             vyDir = 0;
         }else if (yTop > y1) {
             vyDir = (y1 - limit) - midPoint.getY();

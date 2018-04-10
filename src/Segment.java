@@ -7,7 +7,7 @@ public class Segment {
     public Segment(double x1, double y1, double x2, double y2){
         this.p1 = new Point(x1, y1);
         this.p2 = new Point(x2, y2);
-        this.length = Math.sqrt(Math.pow(p1.getX()-p2.getX(),2) + Math.pow(p1.getY()-p2.getY(), 2));
+        this.length = Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
     }
 
     public Point getP1() {
@@ -27,7 +27,7 @@ public class Segment {
     }
 
     public Point getMiddlePoint(){
-        return new Point((p1.getX()+p2.getX())/2, (p1.getY()+p2.getY())/2);
+        return new Point((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY()) / 2);
     }
 
     public double getLength() {
