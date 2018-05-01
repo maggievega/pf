@@ -1,3 +1,5 @@
+package ar.edu.itba.proyectofinal;
+
 public class Segment {
 
     private Point p1;
