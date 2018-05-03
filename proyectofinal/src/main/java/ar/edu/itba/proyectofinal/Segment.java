@@ -1,4 +1,3 @@
-package ar.edu.itba.proyectofinal;
 
 public class Segment {
 

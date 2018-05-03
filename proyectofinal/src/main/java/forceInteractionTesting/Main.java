@@ -7,23 +7,25 @@ public class Main {
 
     public static void main(String[] args) {
 
-        double test1 = pDistance(0,0,-1,-1,-1,3);
-        double test2 = pDistance(2,2,1,1,2,0);
-        double test3 = pDistance(3.5,3.5,15.2,3.5,9,3.5);
-        double test = pDistance(0,0,6,7,7,9);
-        System.out.println(Math.sqrt(6*6+7*7));
-        System.out.println(test);
+//        double test1 = pDistance(0,0,-1,-1,-1,3);
+//        double test2 = pDistance(2,2,1,1,2,0);
+//        double test3 = pDistance(3.5,3.5,15.2,3.5,9,3.5);
+//        double test = pDistance(0,0,6,7,7,9);
+//        System.out.println(Math.sqrt(6*6+7*7));
+//        System.out.println(test);
+//
+//
+//        double test4 = distBetweenPointAndLine(0,0,-1,-1,-1,3);
+//        double test5 = distBetweenPointAndLine(2,2,1,1,2,0);
+//        double test6 = distBetweenPointAndLine(3.5,3.5,15.2,3.5,9,3.5);
+//
+//        System.out.println(Math.sqrt(2));
+//        System.out.println(test1 + "    " + test2  + "    " + test3);
+//        System.out.println(test4 + "    " + test5  + "    " + test6);
+//        System.out.println("asd");
+//        System.out.println(pDistance(0,0,-2,3,-4,7));
 
 
-        double test4 = distBetweenPointAndLine(0,0,-1,-1,-1,3);
-        double test5 = distBetweenPointAndLine(2,2,1,1,2,0);
-        double test6 = distBetweenPointAndLine(3.5,3.5,15.2,3.5,9,3.5);
-
-        System.out.println(Math.sqrt(2));
-        System.out.println(test1 + "    " + test2  + "    " + test3);
-        System.out.println(test4 + "    " + test5  + "    " + test6);
-        System.out.println("asd");
-        System.out.println(pDistance(0,0,-2,3,-4,7));
     }
 
 

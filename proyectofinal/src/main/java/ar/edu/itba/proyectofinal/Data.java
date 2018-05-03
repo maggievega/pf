@@ -1,4 +1,3 @@
-package ar.edu.itba.proyectofinal;
 
 class Data {
 
@@ -18,4 +17,20 @@ class Data {
     static double dt = Math.pow(10, -4);
     static double totalTime = 60;
     static double printTime = 0.1;
+
+    static double kn = 2.2 * Math.pow(10,6);
+    static double kt = kn / 25.0;
+
+    static double en = 0.2;
+    static double mr = 1; // TODO: FIND
+
+    static double SD = 20;
+    static double eta = 1;
+    static double T = 1;
+    static double Rt = 1; // TODO: CHANGE
+
+    static double beta = 4.5 * Math.sqrt(SD);
+
+    static double yn = Math.sqrt((4 * kn * mr) / (Math.pow(Math.PI / Math.log(1/ en) , 2)) + 1);
+
 }

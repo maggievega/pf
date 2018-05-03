@@ -1,4 +1,3 @@
-package ar.edu.itba.proyectofinal;
 
 import java.util.List;
 
@@ -11,7 +10,13 @@ public class Simulator {
     }
 
     public void Simulate(){
-
+        double time = 0.0;
+        while (time < Data.totalTime) {
+            for (Particle p: particles) {
+                p.getForce(particles);
+            }
+            time += Data.dt;
+        }
     }
 
 
