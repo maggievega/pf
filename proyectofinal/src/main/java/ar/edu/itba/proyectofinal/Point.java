@@ -1,3 +1,5 @@
+package ar.edu.itba.proyectofinal;
+
 public class Point {
 
     private double x;

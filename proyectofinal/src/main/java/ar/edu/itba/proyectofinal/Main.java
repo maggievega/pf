@@ -1,3 +1,6 @@
+package ar.edu.itba.proyectofinal;
+
+import ar.edu.itba.proyectofinal.Particle;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,3 +1,4 @@
+package ar.edu.itba.proyectofinal;
 
 class Data {
 
@@ -28,6 +29,8 @@ class Data {
     static double eta = 1;
     static double T = 1;
     static double Rt = 1; // TODO: CHANGE
+
+    static double characteristicT = 0.5;
 
     static double beta = 4.5 * Math.sqrt(SD);
 

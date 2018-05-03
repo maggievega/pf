@@ -1,3 +1,4 @@
+package ar.edu.itba.proyectofinal;
 
 import com.sun.jmx.remote.internal.ArrayQueue;
 
@@ -17,7 +18,8 @@ public class Particle {
     private Point force;
     private double torque;
 
-    private Point desiredVelocity;
+    //Referring to desired movement speed to be obtained
+    private double desiredVelocity;
 
     private Point vel;
     private Point acc ;
@@ -127,7 +129,17 @@ public class Particle {
         double desiredAngle = Utils.getAngle( mc, target);
         double aux = desiredAngle - orientation;
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
-        double drivingTorque = - Data.SD * deltaAngle - Data.beta ; //TODO: FALTAN COSAS
+        double drivingTorque = - Data.SD * deltaAngle - Data.beta * angularVelocity + Data.Rt ; //TODO: FALTAN COSAS
+        Point desiredDirection = new Point(target.getX()-mc.getX(),target.getY()-mc.getY());
+        double abs = Math.sqrt(desiredDirection.getX()*desiredDirection.getX()+desiredDirection.getY()*desiredDirection.getY());
+        desiredDirection.setX(desiredDirection.getX()/abs);
+        desiredDirection.setY(desiredDirection.getY()/abs);
+        Point desiredVel = new Point (desiredVelocity*desiredDirection.getX()/abs, desiredVelocity*desiredDirection.getY()/abs);
+        //TODO check for characteristicT
+        Point drivingForce = new Point((desiredVel.getX()-vel.getX())*mass/Data.characteristicT, (desiredVel.getY()-vel.getY())*mass/Data.characteristicT);
+        torque += drivingTorque;
+        force.setX(force.getX()+drivingForce.getX());
+        force.setY(force.getY()+drivingForce.getY());
     }
 
     public Point getForce(List<Particle> particles) {
