@@ -11,9 +11,9 @@ public class Particle {
     private int id;
     private double mass;
     private List<AngularPoint> points;
-    private Point mc;
+    private Point massCenter;
     private double orientation;
-    private double r;
+    private double radio;
 
     private Point force;
     private double torque;
@@ -31,14 +31,19 @@ public class Particle {
 
     private List<Point> targets = new LinkedList<>();
 
-
-    public Particle(int id, double mass, double x1, double y1, double x2, double y2, double r, double velx, double vely){
+    public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
+                    double radio, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration, List<Point> targets) {
         this.id = id;
         this.mass = mass;
-        this.r = r;
-        this.vel = new Point(velx, vely);
-        this.acc = new Point(0, 0);
-        this.force = new Point(0, 0);
+        this.points = points;
+        this.massCenter = massCenter;
+        this.orientation = orientation;
+        this.radio = radio;
+        this.desiredVelocity = desiredVelocity;
+        this.vel = vel;
+        this.angularVelocity = angularVelocity;
+        this.angularAcceleration = angularAcceleration;
+        this.targets = targets;
     }
 
     //TODO
@@ -100,8 +105,8 @@ public class Particle {
 //        this.s = s;
 //    }
 
-    public double getR() {
-        return r;
+    public double getRadio() {
+        return radio;
     }
 
     public int getId() {
@@ -126,11 +131,11 @@ public class Particle {
     public void getDrivingForce() {
         //TODO: Extract target point from target segment
         Point target = targets.get(0);
-        double desiredAngle = Utils.getAngle( mc, target);
+        double desiredAngle = Utils.getAngle( massCenter, target);
         double aux = desiredAngle - orientation;
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
         double drivingTorque = - Data.SD * deltaAngle - Data.beta * angularVelocity + Data.Rt ; //TODO: FALTAN COSAS
-        Point desiredDirection = new Point(target.getX()-mc.getX(),target.getY()-mc.getY());
+        Point desiredDirection = new Point(target.getX()-massCenter.getX(),target.getY()-massCenter.getY());
         double abs = Math.sqrt(desiredDirection.getX()*desiredDirection.getX()+desiredDirection.getY()*desiredDirection.getY());
         desiredDirection.setX(desiredDirection.getX()/abs);
         desiredDirection.setY(desiredDirection.getY()/abs);
@@ -146,7 +151,6 @@ public class Particle {
         resetForce();
         getDrivingForce(); //calcula driving torque
         getContactForce(particles); // calcula contact torque
-
         return force;
     }
 

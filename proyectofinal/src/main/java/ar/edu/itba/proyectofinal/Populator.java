@@ -42,14 +42,9 @@ public class Populator {
         return true;
     }
 
+    //TODO:BETTER
     private static Particle createParticle(int id, double mass, double x, double y, double m, double R, double axis){
-        double dX = Math.sqrt(Math.pow(0.5 * axis, 2) / (1 + m * m));
-        double x1 = x - Math.signum(m) * dX;
-        double x2 = x + Math.signum(m) * dX;
-        double y1 = y - Math.signum(m) * m * dX;
-        double y2 = y + Math.signum(m) * m * dX;
-
-        return new Particle(id, mass, x1, y1, x2, y2, R, 0.0,0.0);
+        return null;
     }
 
 }
