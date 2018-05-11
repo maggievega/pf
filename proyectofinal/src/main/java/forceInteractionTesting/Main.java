@@ -7,14 +7,27 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //testDistances();
-//        closestPoint(0,0,2,0,1,1);
-//        closestPoint(0,0,0,2,1,1);
-//        closestPoint(0,0,10,10,4,0);
 
-        completeClosestPoint(0,0,2,0,1,1);
+        completeClosestPoint(2,0,1,1,0,3);
         completeClosestPoint(0,0,0,2,1,1);
         completeClosestPoint(0,0,10,10,4,0);
+        completeClosestPoint(1,0,0,1,1,1);
+        completeClosestPoint(0,1,1,0,0.5,1);
+
+        double a,b,c,d,mod1,mod2;
+        a = 0 ;
+        b = 5 ;
+        c = 2 ;
+        d = 2 ;
+        mod1 = Math.sqrt(a*a+b*b);
+        mod2 = Math.sqrt(c*c+d*d);
+
+        System.out.println(mod1);
+        System.out.println(mod2);
+        System.out.println(mod1*mod2);
+        dotProduct(a,b,c,d);
+
+
     }
 
 
@@ -47,8 +60,7 @@ public class Main {
                 System.out.println("Closest point is " + x1 + " , " + b);
                 return;
             }
-        }
-        if (y1 == y2) {
+        } else if (y1 == y2) {
             if ((a >= x1 && a >= x2) || (a <= x1 && a <= x2)){
                 if ((a-x1) * a-x1 >= (a - x2) * (a * x2)){
                     System.out.println("Closest point is " + x2 + " , " + y1);
@@ -61,34 +73,35 @@ public class Main {
                 System.out.println("Closest point is " + a + " , " + y1);
                 return;
             }
-        }
+        } else {
 
-        //Normal scenario
-        //Calculating bounds for first point
-        slope = (y2 - y1) / (x2 - x1);
-        perpendicularSlope = -1/ slope;
-        c1 = y1 - perpendicularSlope * x1;
-        f1 = perpendicularSlope * a + c1;
+            //Normal scenario
+            //Calculating bounds for first point
+            slope = (y2 - y1) / (x2 - x1);
+            perpendicularSlope = -1 / slope;
+            c1 = y1 - perpendicularSlope * x1;
+            f1 = perpendicularSlope * a + c1;
 
-        //Calculating bounds for second point
-        c2 = y2 - perpendicularSlope * x2;
-        f2 = perpendicularSlope * a + c2;
+            //Calculating bounds for second point
+            c2 = y2 - perpendicularSlope * x2;
+            f2 = perpendicularSlope * a + c2;
 
-        //find zone
+            //find zone
 
-        if ((b >= f1 && b>= f2) || (b <= f1 && b <= f2)){
-            if (pointSquaredDistance(x1,y1,a,b) <= pointSquaredDistance(x2,y2,a,b)){
-                System.out.println("Closest point is " + x1 + " , " + y1);
-                return;
+            if ((b >= f1 && b >= f2) || (b <= f1 && b <= f2)) {
+                if (pointSquaredDistance(x1, y1, a, b) <= pointSquaredDistance(x2, y2, a, b)) {
+                    System.out.println("Closest point is " + x1 + " , " + y1);
+                    return;
+                } else {
+                    System.out.println("Closest point is " + x2 + " , " + y2);
+                    return;
+                }
             } else {
-                System.out.println("Closest point is " + x2 + " , " + y2);
+                rx = (slope * x1 - perpendicularSlope * a + b - y1) / (slope - perpendicularSlope);
+                ry = perpendicularSlope * (rx - a) + b;
+                System.out.println("Closest point is " + rx + " , " + ry);
                 return;
             }
-        } else {
-            rx = ( slope * x1 - perpendicularSlope * a + b - y1) / ( slope - perpendicularSlope);
-            ry = perpendicularSlope * (rx - a) + b;
-            System.out.println("Closest point is " + rx + " , " + ry);
-            return;
         }
     }
 
@@ -97,6 +110,16 @@ public class Main {
         return (x1-x2) * (x1-x2) + (y1-y2) * (y1-y2);
     }
 
+
+    public static double dotProduct(double x1, double y1, double x2, double y2){
+        System.out.println(x1 * x2 + y1 * y2);
+        return x1 * x2 + y1 * y2;
+    }
+
+    public static double crossProduct(double x1, double y1, double x2, double y2){
+        System.out.println(x1 * y2 - y1 * x2);
+        return x1 * y2 - y1 * x2;
+    }
 
     public static void closestPoint(double x1, double y1, double x2, double y2, double a, double b){
         //Cases where slope or perpendicular slope would be 0 and Infinity
