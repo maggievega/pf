@@ -1,8 +1,5 @@
 package ar.edu.itba.proyectofinal;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
-
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,8 +9,9 @@ public class Particle {
     private double mass;
     private List<AngularPoint> points;
     private Point massCenter;
+    private double maxDistance;
     private double orientation;
-    private double radio;
+    private double radius;
 
     private Point force;
     private double torque;
@@ -32,13 +30,13 @@ public class Particle {
     private List<Point> targets = new LinkedList<>();
 
     public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
-                    double radio, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration, List<Point> targets) {
+                    double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration, List<Point> targets) {
         this.id = id;
         this.mass = mass;
         this.points = points;
         this.massCenter = massCenter;
         this.orientation = orientation;
-        this.radio = radio;
+        this.radius = radius;
         this.desiredVelocity = desiredVelocity;
         this.vel = vel;
         this.angularVelocity = angularVelocity;
@@ -48,65 +46,93 @@ public class Particle {
 
     //TODO
     public void getContactForce(List<Particle> particleList){
+        for (Particle p : particleList) {
+            if (this.id != p.id) {
+                if (canCollide(this,p)) {
+                    checkCollision(this,p);
+                }
+            }
+        }
     }
 
+    public void checkCollision(Particle p1, Particle p2) {
+        double closestDistance, minDistance = Double.MAX_VALUE;
+        Point a= null,b= null, closestPoint = null;
+        List<Segment> p1Segments, p2Segments;
+        List<Point> p1Points, p2Points;
+        p1Segments = p1.getSegments();
+        p2Segments = p2.getSegments();
+        p1Points = p1.getPoints();
+        p2Points = p2.getPoints();
 
-    /**
-     * Points must be provided from TOP to BOTTOM OR LEFT to RIGHT
+        for (Segment segment : p1Segments){
+            for (Point point : p2Points){
+                closestPoint = Utils.completeClosestPoint(segment,point);
+                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earliear
+                   TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
+                */
+                closestDistance =Utils.squaredDistanceBetween(closestPoint,point);
+                if (closestDistance < minDistance){
+                    minDistance = closestDistance;
+                    a = closestPoint;
+                    b = point;
+                }
+            }
+        }
+        for (Segment segment : p2Segments){
+            for (Point point : p1Points){
+                closestPoint = Utils.completeClosestPoint(segment, point);
+                closestDistance = Utils.squaredDistanceBetween(closestPoint, point);
+                if (closestDistance < minDistance){
+                    minDistance = closestDistance;
+                    a = closestPoint;
+                    b = point;
+                }
+            }
+        }
 
-     */
-//    public Point drivingForce(double x1, double y1, double x2, double y2){
-//
-//        //TODO possible check to see if the parameters where given correctly, see what to do with this
-////        if ((y1 == y2 && x1 > x2) || (x1 == x2 && y1 < y2 ){
-////            return null;
-////        }
-//
-//        double vxDir, vyDir, xF, yF;
-//
-//        //TODO SET TAU
-//        double tau= 1;
-//
-//
-//        double limit = r + s.getLength() / 2;
-//        Point midPoint = s.getMiddlePoint();
-//        double yTop = midPoint.getY() + limit;
-//        double yBot = midPoint.getY() - limit;
-//        double xLeft = midPoint.getX() - limit;
-//        double xRight = midPoint.getX() + limit;
-//
-//        if(yTop < y1 && yBot > y2){
-//            vyDir = 0;
-//        }else if (yTop > y1) {
-//            vyDir = (y1 - limit) - midPoint.getY();
-//        }else {
-//            vyDir = (y2 + limit) - midPoint.getY();
-//        }
-//
-//        if (xLeft > x1 && xRight < x2) {
-//            vxDir = 0;
-//        }else if (xLeft < 1) {
-//            vxDir = (x1 + limit) - midPoint.getX();
-//        }else {
-//            vxDir = (x2 - limit) - midPoint.getX();
-//        }
-//
-//        xF = mass * (vxDir - vel.getX()) / tau;
-//        yF = mass * (vyDir - vel.getY()) / tau;
-//        return new Point(xF, yF);
-//
-//    }
-//
-//    public Segment getS() {
-//        return s;
-//    }
-//
-//    public void setS(Segment s) {
-//        this.s = s;
-//    }
+        if ((minDistance < (p1.getRadius() + p2.getRadius())*(p1.getRadius() + p2.getRadius()) )){
+            applyCollisionForces(p1,p2,a,b);
+        }
+    }
 
-    public double getRadio() {
-        return radio;
+    public void applyCollisionForces(Particle p1, Particle p2, Point a, Point b){
+        double force, overlap, versorModule, scalarProjection;
+        Point r, f, translationForce;
+        overlap = Math.sqrt(Utils.squaredDistanceBetween(a,b)) - (p1.getRadius() +  p2.getRadius());
+        //TODO FIND HOW FORCE WAS CALCULATED
+        force = overlap * 15512;
+        r = new Point(a.getX() - p1.massCenter.getX(), a.getY() - p1.massCenter.getY());
+        f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
+        versorModule = Utils.module(f);
+        f.times(force/versorModule);
+        p1.torque += Utils.crossProduct(r,f);
+        /* TODO: Double check this
+         Si hago el producto escalar de la fuerza contra el versor de rm deberia obtener la proyeccion que es paralela
+            https://en.wikipedia.org/wiki/Vector_projection
+        */
+        r.times(-1/Utils.module(r));
+        scalarProjection = Utils.dotProduct(f,r);
+        r.times(scalarProjection);
+        translationForce = r;
+        //TODO: Check!
+        p1.force.setX(p1.force.getX() + Utils.dotProduct(translationForce,new Point(1,0)));
+        p1.force.setY(p1.force.getY() + Utils.dotProduct(translationForce,new Point(0,1)));
+    }
+
+    //TODO Complete method
+    public List<Segment> getSegments () {
+
+        return null;
+    }
+
+    //TODO Complete method
+    public List<Point> getPoints() {
+        return null;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
     public int getId() {
@@ -158,7 +184,11 @@ public class Particle {
         force.setX(0.0);
         force.setY(0.0);
         torque = 0.0;
+    }
 
+    private boolean canCollide(Particle p1, Particle p2){
+        return Utils.squaredDistanceBetween(p1.massCenter,p2.massCenter)
+                <= (p1.maxDistance+p2.maxDistance) * (p1.maxDistance+p2.maxDistance) ? true : false;
     }
 
 

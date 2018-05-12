@@ -8,24 +8,12 @@ public class Main {
     public static void main(String[] args) {
 
 
-        completeClosestPoint(2,0,1,1,0,3);
-        completeClosestPoint(0,0,0,2,1,1);
-        completeClosestPoint(0,0,10,10,4,0);
-        completeClosestPoint(1,0,0,1,1,1);
-        completeClosestPoint(0,1,1,0,0.5,1);
+        Point A = new Point(1,0);
+        Point B = new Point(-2,2);
 
-        double a,b,c,d,mod1,mod2;
-        a = 0 ;
-        b = 5 ;
-        c = 2 ;
-        d = 2 ;
-        mod1 = Math.sqrt(a*a+b*b);
-        mod2 = Math.sqrt(c*c+d*d);
+        System.out.println(dotProduct(A,B));
 
-        System.out.println(mod1);
-        System.out.println(mod2);
-        System.out.println(mod1*mod2);
-        dotProduct(a,b,c,d);
+
 
 
     }
@@ -104,7 +92,9 @@ public class Main {
             }
         }
     }
-
+    public static double dotProduct(Point A, Point B){
+        return A.getX() * B.getX() + A.getY() * B.getY();
+    }
 
     public static double pointSquaredDistance (double x1, double y1, double x2, double y2) {
         return (x1-x2) * (x1-x2) + (y1-y2) * (y1-y2);
