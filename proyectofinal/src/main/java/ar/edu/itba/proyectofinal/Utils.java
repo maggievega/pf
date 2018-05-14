@@ -19,22 +19,6 @@ public class Utils {
         return value >= 0 ? value : value + 2*Math.PI;
     }
 
-    public static double squaredDistanceBetween (Point A, Point B) {
-        return (A.getX() - B.getX()) * (A.getX() - B.getX()) + (A.getY() - B.getY()) * (A.getY() - B.getY());
-    }
-
-
-    public static double dotProduct(Point A, Point B){
-        return A.getX() * B.getX() + A.getY() * B.getY();
-    }
-
-    public static double crossProduct(Point A, Point B){
-        return A.getX() * B.getY() - A.getY() * B.getX();
-    }
-
-    public static double module(Point point){
-        return Math.sqrt(point.getX()*point.getX() +point.getY()* point.getY());
-    }
 
 
     public static Point completeClosestPoint(Segment ab, Point p){
@@ -89,7 +73,7 @@ public class Utils {
             //find zone
 
             if ((b >= f1 && b >= f2) || (b <= f1 && b <= f2)) {
-                if (squaredDistanceBetween(ab.getP1(), p) <= squaredDistanceBetween(ab.getP2(), p)) {
+                if (p.squaredDistanceBetween(ab.getP1()) <= p.squaredDistanceBetween(ab.getP2())) {
                     System.out.println("Closest point is " + x1 + " , " + y1);
                     return new Point(x1, y1);
                 } else {
