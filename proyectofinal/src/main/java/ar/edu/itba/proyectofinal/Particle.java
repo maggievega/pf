@@ -5,6 +5,20 @@ import java.util.List;
 
 public class Particle {
 
+
+    /*
+        TODO : Particle should have the orientation as an independant versor, and all other internal angles should be referrenced
+        orientation should be described as a versor from the centre of mass to the desired direction.
+        TODO : Orientation from a given geometry should be taken as the north of the provided poligon
+
+        TODO ( NEXT ) : Allow particle to change direction versor directly to opposite direction if there is rotational simmetry
+        Solution: Allign direction versor with 0 or PI of desired direction according to which is closer
+
+        TODO: r in crossProduct should not be a versor
+
+        TODO (NEXT): Check that criterion for reaching a target is appropiate
+        Partial Solution:
+    */
     private int id;
     private double mass;
     private List<AngularPoint> points;
@@ -12,6 +26,8 @@ public class Particle {
     private double maxDistance;
     private double orientation;
     private double radius;
+
+    private boolean wall=false;
 
     private Point force;
     private double torque;
@@ -44,7 +60,7 @@ public class Particle {
         this.targets = targets;
     }
 
-    //TODO
+
     public void getContactForce(List<Particle> particleList){
         for (Particle p : particleList) {
             if (this.id != p.id) {
@@ -56,6 +72,9 @@ public class Particle {
     }
 
     public void checkCollision(Particle p) {
+        //TODO: Find a proper way to do this
+        if(this.wall == true){ return; }
+
         double closestDistance, minDistance = Double.MAX_VALUE;
         Point a= null, b= null, closestPoint = null;
         List<Segment> p1Segments, p2Segments;
@@ -65,6 +84,15 @@ public class Particle {
         p1Points = this.getPoints();
         p2Points = p.getPoints();
 
+        /*
+        Discard if cannot collide
+         */
+
+
+        /*For each segment in the current particle, find the closest point to each of the other particle's edges.
+          If the distance to this edge is smaller, than the previosly recorded minimum distance to the other particle,
+          save the closest point on the current particle's segment and the corresponding closest point
+         */
         for (Segment segment : p1Segments){
             for (Point point : p2Points){
                 closestPoint = Utils.completeClosestPoint(segment, point);
@@ -79,6 +107,8 @@ public class Particle {
                 }
             }
         }
+        /*Repeat process for other particle's segments
+         */
         for (Segment segment : p2Segments){
             for (Point point : p1Points){
                 closestPoint = Utils.completeClosestPoint(segment, point);
@@ -90,27 +120,31 @@ public class Particle {
                 }
             }
         }
-
+        /*If closest distance found between both particle's points is smaller than the addition of both's radiuses,
+        calculate and apply collision force
+         */
         if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())){
             this.applyCollisionForces(p, a, b);
         }
     }
 
     public void applyCollisionForces(Particle p, Point a, Point b){
-        double force, overlap, versorModule, scalarProjection;
+        double overlapForce, overlap, versorModule, scalarProjection;
         Point r, f, translationForce;
+
+        /* find overlapment */
         overlap = Math.sqrt(a.squaredDistanceBetween(b)) - (this.getRadius() +  p.getRadius());
-        //TODO FIND HOW FORCE WAS CALCULATED
-        force = overlap * 15512;
+        overlapForce = forceFor(overlap);
+
+        /*r vector goes from centre of mass of this particle, to the contact point
+          f vector is the direction in which the force is being applied, going from one contact point, to the other
+         */
         r = new Point(a.getX() - this.massCenter.getX(), a.getY() - p.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
         versorModule = f.module();
-        f.times(force/versorModule);
-        p.torque += r.crossProduct(f);
-        /* TODO: Double check this
-         Si hago el producto escalar de la fuerza contra el versor de rm deberia obtener la proyeccion que es paralela
-            https://en.wikipedia.org/wiki/Vector_projection
-        */
+        f.times(overlapForce/versorModule);
+        this.torque += r.crossProduct(f);
+        // TODO: Double check this
         r.times(-1/r.module());
         scalarProjection = f.dotProduct(r);
         r.times(scalarProjection);
@@ -118,6 +152,33 @@ public class Particle {
         //TODO: Check!
         this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
         this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
+
+        tangentialForce(p, a, b, overlapForce);
+    }
+    
+    public void tangentialForce(Particle p, Point a, Point b, double overlap){
+        double rModule, fModule, tForce, scalarProjection;
+        Point r,f,tangentForce,tangentVersor, translationForce;
+        Point relativeVelocity = new Point(this.vel.getX()-p.vel.getX(), this.vel.getY()-p.vel.getY());
+        r = new Point(a.getX() - this.massCenter.getX(), a.getY() - p.massCenter.getY());
+        f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
+        fModule = f.module();
+        rModule = r.module();
+        f.times(fModule);
+        r.times(rModule);
+        //p.torque += r.crossProduct(relativeVelocity.dotProduct());
+        tangentVersor = Utils.getPerpendicularTo(f);
+        tForce = - Data.kt * overlap * relativeVelocity.dotProduct(tangentVersor);
+        tangentForce =  tangentVersor;
+        tangentForce.times(tForce);
+
+        this.torque += r.crossProduct(tangentForce);
+        scalarProjection = tangentForce.dotProduct(r);
+        r.times(scalarProjection);
+        translationForce = r;
+        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
+        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
+
     }
 
     public List<Segment> getSegments () {
@@ -132,15 +193,23 @@ public class Particle {
         return aux;
     }
 
-    //TODO Complete method
+    double forceFor (double overlap ) {
+        return - Data.kn * overlap;
+    }
+
     public List<Point> getPoints() {
-        List<Point> aux = new ArrayList<>();
+        List<Point> cartesianPoints = new ArrayList<>();
         for (AngularPoint ap: points) {
-            double x = massCenter.getX() + ap.getLength() * Math.cos(ap.getAngle());
-            double y = massCenter.getY() + ap.getLength() * Math.sin(ap.getAngle());
-            aux.add(new Point(x, y));
+            // Orientation should be taken into account
+            double angle = orientation + ap.getAngle();
+            if (angle >= Math.PI * 2){
+                angle-= 2*Math.PI;
+            }
+            double x = massCenter.getX() + ap.getLength() * Math.cos(angle);
+            double y = massCenter.getY() + ap.getLength() * Math.sin(angle);
+            cartesianPoints.add(new Point(x, y));
         }
-        return aux;
+        return cartesianPoints;
     }
 
     public double getRadius() {
@@ -223,7 +292,8 @@ public class Particle {
         double desiredAngle = Utils.getAngle( massCenter, target);
         double aux = desiredAngle - orientation;
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
-        double drivingTorque = - Data.SD * deltaAngle - Data.beta * angularVelocity + Data.Rt ; //TODO: FALTAN COSAS
+        double drivingTorque = - Data.SD * deltaAngle - Data.beta * angularVelocity + Data.Rt ;
+        //TODO: R(t) should be : sinusoidal, uniform. It shouldn't be changed on every step.
 
         Point desiredDirection = new Point(target.getX() - massCenter.getX(),
                 target.getY() - massCenter.getY());

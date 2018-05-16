@@ -26,7 +26,7 @@ public class Simulator {
             for (Particle p : particles) {
                 updatePosition(p, aux);
                 // Ask if it reached the target and remove it ?
-                // And if it doesnt have more targets remove it from particles ?
+                // And if it doesn't have more targets remove it from particles ?
             }
 
             time += Data.dt;

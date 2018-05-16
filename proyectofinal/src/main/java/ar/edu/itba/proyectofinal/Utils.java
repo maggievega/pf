@@ -19,6 +19,9 @@ public class Utils {
         return value >= 0 ? value : value + 2 * Math.PI;
     }
 
+    public static Point getPerpendicularTo(Point p){
+        return new Point (-p.getY(), p.getX());
+    }
 
 
     public static Point completeClosestPoint(Segment ab, Point p){

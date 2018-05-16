@@ -28,7 +28,9 @@ class Data {
     static double SD = 20;
     static double eta = 1;
     static double T = 1;
-    static double Rt = 1; // TODO: CHANGE
+
+    static double Rt = 0; // TODO: CHANGE
+    static double RtChange = 5;//TODO : Should only be used when uniform noise is used
 
     static double characteristicT = 0.5;
 
