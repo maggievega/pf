@@ -22,12 +22,15 @@ public class Particle {
     private int id;
     private double mass;
     private List<AngularPoint> points;
+
     private Point massCenter;
+    private Point previousMassCenter;
+
     private double maxDistance;
     private double orientation;
     private double radius;
 
-    private boolean wall=false;
+    private boolean wall = false;
 
     private Point force;
     private double torque;
@@ -58,8 +61,16 @@ public class Particle {
         this.angularVelocity = angularVelocity;
         this.angularAcceleration = angularAcceleration;
         this.targets = targets;
+        this.force = new Point(0,0); //Used to initialize the previous position
+        this.previousMassCenter = eulerPosition(-Data.dt);
     }
 
+    /* Used to initiate the previous position */
+    private Point eulerPosition(double delta) {
+        double nextX = getMassCenter().getX() + delta * getVel().getX() + (delta * delta * getForce().getX()) / (2 * getMass());
+        double nextY = getMassCenter().getY() + delta * getVel().getY() + (delta * delta * getForce().getY()) / (2 * getMass());
+        return new Point(nextX, nextY);
+    }
 
     public void getContactForce(List<Particle> particleList){
         for (Particle p : particleList) {
@@ -73,10 +84,10 @@ public class Particle {
 
     public void checkCollision(Particle p) {
         //TODO: Find a proper way to do this
-        if(this.wall == true){ return; }
+        if (this.wall == true) { return; }
 
         double closestDistance, minDistance = Double.MAX_VALUE;
-        Point a= null, b= null, closestPoint = null;
+        Point a = null, b = null, closestPoint = null;
         List<Segment> p1Segments, p2Segments;
         List<Point> p1Points, p2Points;
         p1Segments = this.getSegments();
@@ -145,7 +156,7 @@ public class Particle {
         f.times(overlapForce/versorModule);
         this.torque += r.crossProduct(f);
         // TODO: Double check this
-        r.times(-1/r.module());
+        r.times(-1 / r.module());
         scalarProjection = f.dotProduct(r);
         r.times(scalarProjection);
         translationForce = r;
@@ -159,7 +170,7 @@ public class Particle {
     public void tangentialForce(Particle p, Point a, Point b, double overlap){
         double rModule, fModule, tForce, scalarProjection;
         Point r,f,tangentForce,tangentVersor, translationForce;
-        Point relativeVelocity = new Point(this.vel.getX()-p.vel.getX(), this.vel.getY()-p.vel.getY());
+        Point relativeVelocity = new Point(this.vel.getX() - p.vel.getX(), this.vel.getY() - p.vel.getY());
         r = new Point(a.getX() - this.massCenter.getX(), a.getY() - p.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
         fModule = f.module();
@@ -185,11 +196,11 @@ public class Particle {
         List<Segment> aux = new ArrayList<>();
         List<Point> points = getPoints();
         for (int i=1; i < points.size(); i++) {
-            Segment s = new Segment(points.get(i-1), points.get(i));
+            Segment s = new Segment(points.get(i - 1), points.get(i));
             aux.add(s);
         }
         //Connects the first and the last one
-        aux.add(new Segment(points.get(0), points.get(points.size()-1)));
+        aux.add(new Segment(points.get(0), points.get(points.size() - 1)));
         return aux;
     }
 
@@ -203,7 +214,7 @@ public class Particle {
             // Orientation should be taken into account
             double angle = orientation + ap.getAngle();
             if (angle >= Math.PI * 2){
-                angle-= 2*Math.PI;
+                angle -= 2 * Math.PI;
             }
             double x = massCenter.getX() + ap.getLength() * Math.cos(angle);
             double y = massCenter.getY() + ap.getLength() * Math.sin(angle);
@@ -226,6 +237,10 @@ public class Particle {
 
     public Point getMassCenter() {
         return massCenter;
+    }
+
+    public void setMassCenter(Point massCenter) {
+        this.massCenter = massCenter;
     }
 
     public double getMaxDistance() {
@@ -252,6 +267,10 @@ public class Particle {
         return vel;
     }
 
+    public void setVel(Point vel) {
+        this.vel = vel;
+    }
+
     public Point getAcc() {
         return acc;
     }
@@ -270,6 +289,14 @@ public class Particle {
 
     public List<Point> getTargets() {
         return targets;
+    }
+
+    public Point getPreviousMassCenter() {
+        return previousMassCenter;
+    }
+
+    public void setPreviousMassCenter(Point previousMassCenter) {
+        this.previousMassCenter = previousMassCenter;
     }
 
     @Override

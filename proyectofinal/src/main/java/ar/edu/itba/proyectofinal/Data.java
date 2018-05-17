@@ -6,7 +6,7 @@ class Data {
     static double xSize = 8;
     static double ySize = 8;
     //Wall number refering to TOP(1), RIGHT(2), BOTTOM(3), LEFT(4)
-    static int wall =1;
+    static int wall = 1;
     static double distance = 4;
     static double size = 1;
     static double rMin = 0.24;
