@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Populator {
 
+
+
     //TODO Constructor con variables de tamano del entorno, etc
 
     public static void Populate(List<Particle> particles){

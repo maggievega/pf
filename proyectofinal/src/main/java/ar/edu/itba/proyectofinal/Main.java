@@ -9,9 +9,8 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        List<Particle> particles = new ArrayList<Particle>();
+        List<Particle> particles = new ArrayList<>();
         Populator.Populate(particles);
-
         Simulator s = new Simulator(particles);
         s.Simulate();
 
