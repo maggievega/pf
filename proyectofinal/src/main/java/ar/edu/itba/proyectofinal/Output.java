@@ -11,7 +11,7 @@ class Output {
 
     Output() {
         try {
-            this.writer = new BufferedWriter(new FileWriter("sim.txt"));
+            this.writer = new BufferedWriter(new FileWriter("output/sim.txt"));
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }

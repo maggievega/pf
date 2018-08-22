@@ -4,15 +4,14 @@ import java.util.List;
 
 public class Populator {
 
-
-
-    //TODO Constructor con variables de tamano del entorno, etc
-
+    /**
+     * particles are all loaded in particles, the only thing left to do is position them and their orientation
+     * @param particles
+     */
     public static void Populate(List<Particle> particles){
-        for (int i=1; i<= Data.N; i++) {
+        for (int i=1; i<= particles.size(); i++) {
             double R = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
             double axis = Math.random() * (Data.aMax - Data.aMin) + Data.aMin;
-            double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
 
             double x = Math.random() * Data.xSize;
             double y = Math.random() * Data.ySize;
@@ -25,9 +24,9 @@ public class Populator {
                 m = Math.random() * 2 - 1;
             }
 
-            particles.add(createParticle(i, mass, x, y, m, R, axis));
         }
     }
+
 
     //TODO Remove variables after axis
     private static boolean isValid(double x, double y, double m, double R, double axis, List<Particle> particles){
@@ -45,11 +44,6 @@ public class Populator {
             //TODO: METHOD THAT TELLS YOU IF THEY COLLIDE
         }
         return true;
-    }
-
-    //TODO:BETTER
-    private static Particle createParticle(int id, double mass, double x, double y, double m, double R, double axis){
-        return null;
     }
 
 }

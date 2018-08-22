@@ -1,0 +1,10 @@
+Archivo input ejemplo
+
+n
+desideredVel velx vely angVel angAcant_puntos angulo long angulo long
+(angulo en radianes)
+
+o 
+
+desideredVel velx vely cant_puntos x y x y
+(x e y en relación del (0,0) -> el centro de la partícula)
