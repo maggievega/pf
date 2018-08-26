@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Particle {
-
-
     /*
         TODO (Fixed: Requirement2) : Particle should have the orientation as an independant versor, and all other internal angles should be referrenced
         orientation should be described as a versor from the centre of mass to the desired direction.
@@ -16,9 +14,7 @@ public class Particle {
         Closely related to first issue
 
         TODO ( NEXT ) : Allow particle to change direction versor directly to opposite direction if there is rotational simmetry
-        Solution: Allign direction versor with 0 or PI of desired direction according to which is closer
-
-
+        Solution: Allign direction versor with 0 or PI of desired direction according to which is closerg
 
         TODO: r in crossProduct should not be a versor
 
@@ -391,5 +387,4 @@ public class Particle {
         return this.massCenter.squaredDistanceBetween(p.massCenter)
                 <= (this.maxDistance + p.maxDistance) * (this.maxDistance + p.maxDistance);
     }
-
 }
