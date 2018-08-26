@@ -7,12 +7,18 @@ public class Particle {
 
 
     /*
-        TODO : Particle should have the orientation as an independant versor, and all other internal angles should be referrenced
+        TODO (Fixed: Requirement2) : Particle should have the orientation as an independant versor, and all other internal angles should be referrenced
         orientation should be described as a versor from the centre of mass to the desired direction.
-        TODO : Orientation from a given geometry should be taken as the north of the provided poligon
+        (BUT) center of mass is unkown at the start, so the provided vector could be taken to be from centre of mass to
+        the first point in the list to start with.
+
+        TODO : Orientation from a given geometry should be taken as the north of the provided poligon {Check at input}
+        Closely related to first issue
 
         TODO ( NEXT ) : Allow particle to change direction versor directly to opposite direction if there is rotational simmetry
         Solution: Allign direction versor with 0 or PI of desired direction according to which is closer
+
+
 
         TODO: r in crossProduct should not be a versor
 
@@ -27,8 +33,13 @@ public class Particle {
     private Point previousMassCenter;
 
     private double maxDistance;
-    private double orientation;
     private double radius;
+
+    //Orientation in degrees.
+    private double orientation;
+
+    //In response to Requirement2
+    private Point facingDirection;
 
     private boolean wall = false;
 
@@ -177,6 +188,8 @@ public class Particle {
         rModule = r.module();
         f.times(fModule);
         r.times(rModule);
+
+        //TODO Check this
         //p.torque += r.crossProduct(relativeVelocity.dotProduct());
         tangentVersor = Utils.getPerpendicularTo(f);
         tForce = - Data.kt * overlap * relativeVelocity.dotProduct(tangentVersor);
@@ -315,12 +328,16 @@ public class Particle {
     }
 
     public void getDrivingForce() {
-        Point target = targets.get(0); //TODO: Extract target point from target segment
+
+        //TODO: Extract target point from target segment
+        Point target = targets.get(0);
         double desiredAngle = Utils.getAngle( massCenter, target);
         double aux = desiredAngle - orientation;
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
-        double drivingTorque = - Data.SD * deltaAngle - Data.beta * angularVelocity + Data.Rt ;
+
         //TODO: R(t) should be : sinusoidal, uniform. It shouldn't be changed on every step.
+        double drivingTorque = - Data.SD * deltaAngle - Data.beta * angularVelocity + Data.Rt ;
+
 
         Point desiredDirection = new Point(target.getX() - massCenter.getX(),
                 target.getY() - massCenter.getY());

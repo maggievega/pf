@@ -8,15 +8,137 @@ public class Main {
     public static void main(String[] args) {
 
 
-        Point A = new Point(1,0);
-        Point B = new Point(-2,2);
+        Point A = new Point(0,0);
+        Point B = new Point(0,3);
+        Point C= new Point(3,3);
+        Point D = new Point(3,0);
+        Point E = new Point(2,-1);
+        Point F = new Point(1,-2);
+        Point G = new Point(0,-1);
+        Point H = new Point(1,0);
+        Point[] poligon = {A,B,C,D};
+        double precision = 0.001;
 
-        System.out.println(dotProduct(A,B));
+
+
+//      for(int i = 0; i< 5;i++){
+        long start = System.currentTimeMillis();
+        Point center = massCenter(poligon,precision);
+        System.out.println(inertiaMoment(poligon,center,precision,1));
+        long end = System.currentTimeMillis();
+        System.out.println(" Precision :" + precision  + "      Time : " + ((end-start)/1000.0));
+        //precision/=10;
+//        }
+
+
+//        System.out.println(dotProduct(A,B));
 
 
 
 
     }
+
+    public static boolean liesInside(Point[] poligon, Point p){
+        Point start, end;
+        int wallsCrossed = 0;
+        int startIndex, endIndex;
+        int numberOfSides = poligon.length;
+        for (int i = 0; i < numberOfSides; i++){
+            if (i == numberOfSides-1){
+                end = poligon[0];
+            } else {
+                end = poligon[i+1];
+            }
+            start = poligon[i];
+
+
+        }
+        return wallsCrossed%2 == 1? false : true;
+    }
+
+    public static double[] poligonBounds(Point[] poligon){
+        double xi =  poligon[0].getX();
+        double xf = poligon[0].getX();
+        double yi = poligon[0].getY();
+        double yf = poligon[0].getY();
+        for (Point p: poligon){
+            if (xi>p.getX()){
+                xi = p.getX();
+            }
+            if (xf< p.getX()){
+                xf = p.getX();
+            }
+            if (yi > p.getY()){
+                yi = p.getY();
+            }
+            if (yf < p.getY()){
+                yf = p.getY();
+            }
+        }
+        double[] ans =  {xi,xf,yi,yf};
+        return ans;
+    }
+
+    public static Point massCenter(Point[]poligon, double precision){
+        int acum  = 0;
+        double xAcum = 0;
+        double yAcum = 0;
+        double[] bounds = poligonBounds(poligon);
+        for (double i = bounds[0]; i<= bounds[1]; i+= precision){
+            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
+                if (liesInside(poligon, new Point(i,j))){
+                    acum++;
+                    xAcum+=i;
+                    yAcum+=j;
+                }
+            }
+        }
+        double x =(double)Math.round((xAcum/acum) * 100000d) / 100000d;
+        double y = (double)Math.round((yAcum/acum) * 100000d) / 100000d;
+        return new Point(x,y);
+    }
+
+    public static double inertiaMoment(Point[] poligon, Point relative, double precision, double mass){
+        //TODO-> Check if the return (*mass/points) is correct
+
+        int points  = 0;
+        double inertia = 0;
+        double[] bounds = poligonBounds(poligon);
+        for (double i = bounds[0]; i<= bounds[1]; i+= precision){
+            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
+                if (liesInside(poligon, new Point(i,j))){
+                    points++;
+                    double relX = i - relative.getX();
+                    double relY = j - relative.getY();
+                    inertia += relX * relX + relY * relY;
+                }
+            }
+        }
+
+        return inertia * (mass/points);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //TODO: At returns, corresponding points should be returned

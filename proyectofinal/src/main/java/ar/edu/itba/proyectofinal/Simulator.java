@@ -19,6 +19,7 @@ public class Simulator {
                 Output.printSystem(particles, time);
                 printCont++;
             }
+
             /* Previous positions */
             List<Particle> previousPositions  = new ArrayList<>();
             previousPositions.addAll(particles);
