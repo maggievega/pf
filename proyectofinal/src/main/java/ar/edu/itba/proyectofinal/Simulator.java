@@ -1,6 +1,7 @@
 package ar.edu.itba.proyectofinal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Simulator {
@@ -12,30 +13,30 @@ public class Simulator {
     }
 
     public void Simulate(){
+        Output o = new Output();
         double time = 0.0;
         int printCont = 0;
         while (time < Data.totalTime) {
             if (Data.printTime * printCont <= time) {
-                Output.printSystem(particles, time);
+                o.printSystem(particles, time);
                 printCont++;
             }
 
             /* Previous positions */
-            List<Particle> previousPositions  = new ArrayList<>();
-            previousPositions.addAll(particles);
+            List<Particle> previousPositions  = new ArrayList<>(particles);
 
             //Calculate forces
             particles.forEach((p) -> p.getForce(previousPositions));
 
             for (Particle p : particles) {
                 updatePosition(p);
-
                 // Ask if it reached the target and remove it ?
                 // And if it doesn't have more targets remove it from particles ?
             }
 
             time += Data.dt;
         }
+        o.done();
     }
 
 

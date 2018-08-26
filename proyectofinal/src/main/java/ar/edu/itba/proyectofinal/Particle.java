@@ -76,6 +76,25 @@ public class Particle {
         this.previousMassCenter = eulerPosition(-Data.dt);
     }
 
+    public Particle(int id, double mass, List<AngularPoint> points,
+                   double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration, List<Point> targets) {
+        this.id = id;
+        this.mass = mass;
+        this.points = points;
+        this.desiredVelocity = desiredVelocity;
+        this.vel = vel;
+        this.angularVelocity = angularVelocity;
+        this.angularAcceleration = angularAcceleration;
+        this.targets = targets;
+        this.force = new Point(0,0); //Used to initialize the previous position
+    }
+
+    public void positionParticle(Point massCenter, double orientation) {
+        this.massCenter = massCenter;
+        this.orientation = orientation;
+        this.previousMassCenter = eulerPosition(-Data.dt);
+    }
+
     /* Used to initiate the previous position */
     private Point eulerPosition(double delta) {
         double nextX = getMassCenter().getX() + delta * getVel().getX() + (delta * delta * getForce().getX()) / (2 * getMass());
@@ -95,7 +114,7 @@ public class Particle {
 
     public void checkCollision(Particle p) {
         //TODO: Find a proper way to do this
-        if (this.wall == true) { return; }
+        if (this.wall) { return; }
 
         double closestDistance, minDistance = Double.MAX_VALUE;
         Point a = null, b = null, closestPoint = null;
