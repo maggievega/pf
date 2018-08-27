@@ -51,6 +51,14 @@ public class Simulator {
         double nextVelX = (nextX - p.getPreviousMassCenter().getX()) / (2 * Data.dt);
         double nextVelY = (nextY - p.getPreviousMassCenter().getY()) / (2 * Data.dt);
 
+        //TODO check if logic applies
+        double nextOrientation = 2 * p.getOrientation() - p.getPreviousOrientation() + Data.dt * Data.dt * p.getTorque() /p.getMass();
+        double nextAngularVel = (nextOrientation - p.getPreviousOrientation()) / (2 * Data.dt);
+//        System.out.println(nextOrientation + " ----- " + nextAngularVel);
+        p.setPreviousOrientation(p.getOrientation());
+        p.setOrientation(nextOrientation);
+        p.setAngularVelocity(nextAngularVel);
+
         p.setPreviousMassCenter(p.getMassCenter());
         p.setMassCenter(new Point(nextX, nextY));
         p.setVel(new Point(nextVelX, nextVelY));

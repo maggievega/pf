@@ -54,7 +54,9 @@ public class Particle {
     private double inertiaMoment;
 
     private List<Point> targets;
+    private double previousOrientation;
 
+    //Constructors
     public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
                     double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration, List<Point> targets) {
         this.id = id;
@@ -70,6 +72,9 @@ public class Particle {
         this.targets = targets;
         this.force = new Point(0,0); //Used to initialize the previous position
         this.previousMassCenter = eulerPosition(-Data.dt);
+
+        //TODO check if this works.
+        this.previousOrientation = orientation;
     }
 
     public Particle(int id, double mass, List<AngularPoint> points,
@@ -84,6 +89,52 @@ public class Particle {
         this.targets = targets;
         this.force = new Point(0,0); //Used to initialize the previous position
     }
+
+
+
+    public Point getForce(List<Particle> particles) {
+        resetForce();
+        getDrivingForce(); //calcula driving torque
+        //getContactForce(particles); // calcula contact torque
+        return force;
+    }
+
+
+    public void getDrivingForce() {
+
+        //TODO: Extract target point from target segment
+        Point target = targets.get(0);
+        double desiredAngle = Utils.getAngle( massCenter, target);
+        double help = desiredAngle*-1;
+        help+=2*Math.PI;
+        double aux = desiredAngle - orientation;
+        double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
+
+        //TODO: R(t) should be : sinusoidal, uniform. It shouldn't be changed on every step.
+        double drivingTorque = Data.SD * deltaAngle - Data.beta * angularVelocity + Data.Rt ;
+
+
+        Point desiredDirection = new Point(target.getX() - massCenter.getX(),
+                target.getY() - massCenter.getY());
+        double abs = Math.sqrt(desiredDirection.getX() * desiredDirection.getX() +
+                desiredDirection.getY() * desiredDirection.getY());
+        desiredDirection.setX(desiredDirection.getX() / abs);
+        desiredDirection.setY(desiredDirection.getY() / abs);
+        Point desiredVel = new Point (desiredVelocity * desiredDirection.getX() / abs,
+                desiredVelocity * desiredDirection.getY() / abs);
+        //TODO check for characteristicT
+        Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
+                (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
+        torque += drivingTorque;
+        force.setX(force.getX() + drivingForce.getX());
+        force.setY(force.getY() + drivingForce.getY());
+    }
+
+
+
+
+
+
 
     public void positionParticle(Point massCenter, double orientation) {
         this.massCenter = massCenter;
@@ -192,7 +243,7 @@ public class Particle {
 
         tangentialForce(p, a, b, overlapForce);
     }
-    
+
     public void tangentialForce(Particle p, Point a, Point b, double overlap){
         double rModule, fModule, tForce, scalarProjection;
         Point r,f,tangentForce,tangentVersor, translationForce;
@@ -342,40 +393,7 @@ public class Particle {
         return id;
     }
 
-    public void getDrivingForce() {
 
-        //TODO: Extract target point from target segment
-        Point target = targets.get(0);
-        double desiredAngle = Utils.getAngle( massCenter, target);
-        double aux = desiredAngle - orientation;
-        double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
-
-        //TODO: R(t) should be : sinusoidal, uniform. It shouldn't be changed on every step.
-        double drivingTorque = - Data.SD * deltaAngle - Data.beta * angularVelocity + Data.Rt ;
-
-
-        Point desiredDirection = new Point(target.getX() - massCenter.getX(),
-                target.getY() - massCenter.getY());
-        double abs = Math.sqrt(desiredDirection.getX() * desiredDirection.getX() +
-                desiredDirection.getY() * desiredDirection.getY());
-        desiredDirection.setX(desiredDirection.getX() / abs);
-        desiredDirection.setY(desiredDirection.getY() / abs);
-        Point desiredVel = new Point (desiredVelocity * desiredDirection.getX() / abs,
-                desiredVelocity * desiredDirection.getY() / abs);
-        //TODO check for characteristicT
-        Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
-                (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
-        torque += drivingTorque;
-        force.setX(force.getX() + drivingForce.getX());
-        force.setY(force.getY() + drivingForce.getY());
-    }
-
-    public Point getForce(List<Particle> particles) {
-        resetForce();
-        getDrivingForce(); //calcula driving torque
-        getContactForce(particles); // calcula contact torque
-        return force;
-    }
 
     private void resetForce() {
         force.setX(0.0);
@@ -386,5 +404,22 @@ public class Particle {
     private boolean canCollide(Particle p){
         return this.massCenter.squaredDistanceBetween(p.massCenter)
                 <= (this.maxDistance + p.maxDistance) * (this.maxDistance + p.maxDistance);
+    }
+
+    public double getPreviousOrientation() {
+
+        return previousOrientation;
+    }
+
+    public void setPreviousOrientation(double previousOrientation){
+        this.previousOrientation = previousOrientation;
+    }
+
+    public void setOrientation(double orientation){
+        this.orientation = orientation;
+    }
+
+    public void setAngularVelocity(double angularVelocity){
+        this.angularVelocity = angularVelocity;
     }
 }
