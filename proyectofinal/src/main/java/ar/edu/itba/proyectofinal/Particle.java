@@ -56,6 +56,8 @@ public class Particle {
     private List<Point> targets;
     private double previousOrientation;
 
+    private boolean thisone = false;
+
     //Constructors
     public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
                     double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration, List<Point> targets) {
@@ -159,11 +161,12 @@ public class Particle {
 //                    System.out.println(minDistance);
                     a = closestPoint;
                     b = point;
-
+                    thisone = true;
 //                    System.out.println("Segment :   " + segment.getP1().getX() +","+ segment.getP1().getY() + "\t\t\t\t"+
 //                            segment.getP2().getX() +","+ segment.getP2().getY() );
 //                    System.out.println("Point :     " + point.getX()+","+point.getY());
 //                    System.out.println(a.getX() +","+a.getY() + "    " +b.getX() +","+b.getY() + " FIRSt\n");
+
                 }
             }
         }
@@ -176,10 +179,11 @@ public class Particle {
                 if (closestDistance < minDistance){
                     minDistance = closestDistance;
 //                    System.out.println(minDistance);
-                    a = closestPoint;
+                    b = closestPoint;
                     //todo remove
                     double c;
-                    b = point;
+                    a = point;
+                    thisone = false;
 //                    System.out.println(a.getX() +","+a.getY() + "     " +b.getX() +","+b.getY());
                 }
             }
@@ -222,7 +226,7 @@ public class Particle {
         translationForce = r;
 
         //TODO: Find Actual fix for this.
-        translationForce.times(-1);
+//        translationForce.times(-1);
 
         this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
         this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
@@ -252,7 +256,7 @@ public class Particle {
         scalarProjection = tangentForce.dotProduct(r);
         r.times(scalarProjection);
         translationForce = r;
-        translationForce.times(-1);
+//        translationForce.times(-1);
         this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
         this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
 
