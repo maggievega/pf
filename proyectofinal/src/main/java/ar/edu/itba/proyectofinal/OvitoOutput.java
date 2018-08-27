@@ -21,10 +21,8 @@ public class OvitoOutput {
 
     void printSystem(List<Particle> particles, double time) {
         try {
-            if (!set){
-                this.writer.write(particles.size() + 7 + "\n\n");
-                //set=true;
-            }
+            int particleCount = 4 + particles.size() *4;
+            this.writer.write(particleCount + "\n\n");
             this.writer.write(1+"\t"+12.5+"\t"+12.5+"\t"+0+"\t"+0.8+ "\n");
             this.writer.write(2+"\t"+0+"\t"+12.5+"\t"+0+"\t"+0.8+ "\n");
             this.writer.write(3+"\t"+12.5+"\t"+0+"\t"+0+"\t"+0.8+ "\n");

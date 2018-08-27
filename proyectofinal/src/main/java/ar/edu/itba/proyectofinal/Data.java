@@ -16,7 +16,7 @@ class Data {
     static double mMin = 45;
     static double mMax = 114;
     static double dt = 0.00001;
-    static double totalTime = 15;
+    static double totalTime = 100;
     static double printTime = 0.1;
 
     static double kn = 2.2 * Math.pow(10,6);

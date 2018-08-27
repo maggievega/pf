@@ -75,6 +75,13 @@ public class Particle {
 
         //TODO check if this works.
         this.previousOrientation = orientation;
+
+        this.maxDistance = 0;
+        for (AngularPoint ap: points){
+            if (ap.getLength() > maxDistance){
+                maxDistance=ap.getLength();
+            }
+        }
     }
 
     public Particle(int id, double mass, List<AngularPoint> points,
@@ -95,9 +102,38 @@ public class Particle {
     public Point getForce(List<Particle> particles) {
         resetForce();
         getDrivingForce(); //calcula driving torque
-        //getContactForce(particles); // calcula contact torque
+        getContactForce(particles); // calcula contact torque
         return force;
     }
+
+    public void getContactForce(List<Particle> particleList){
+        for (Particle p : particleList) {
+            if (this.id != p.id) {
+
+                boolean collisionProc = canCollide(p);
+                if (this.canCollide(p)) {
+                    this.checkCollision(p);
+                }
+            }
+        }
+    }
+
+    private boolean canCollide(Particle p){
+//        System.out.println( this.massCenter.squaredDistanceBetween(p.massCenter) + "<= " + (this.maxDistance + p.maxDistance) +
+//                " * " +  (this.maxDistance + p.maxDistance));
+        return this.massCenter.squaredDistanceBetween(p.massCenter)
+                <= (this.maxDistance + p.maxDistance) * (this.maxDistance + p.maxDistance);
+    }
+
+
+
+
+
+
+
+
+
+
 
 
     public void getDrivingForce() {
@@ -149,15 +185,7 @@ public class Particle {
         return new Point(nextX, nextY);
     }
 
-    public void getContactForce(List<Particle> particleList){
-        for (Particle p : particleList) {
-            if (this.id != p.id) {
-                if (this.canCollide(p)) {
-                    this.checkCollision(p);
-                }
-            }
-        }
-    }
+
 
     public void checkCollision(Particle p) {
         //TODO: Find a proper way to do this
@@ -401,10 +429,7 @@ public class Particle {
         torque = 0.0;
     }
 
-    private boolean canCollide(Particle p){
-        return this.massCenter.squaredDistanceBetween(p.massCenter)
-                <= (this.maxDistance + p.maxDistance) * (this.maxDistance + p.maxDistance);
-    }
+
 
     public double getPreviousOrientation() {
 

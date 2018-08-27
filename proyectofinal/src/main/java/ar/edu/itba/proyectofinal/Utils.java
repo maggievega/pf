@@ -37,27 +37,27 @@ public class Utils {
         if (x1 == x2) {
             if ((b >= y1 && b >=y2) || (b <= y1 && b <=y2)){
                 if ((b - y1) * (b - y1) >= (b - y2) * (b - y2)) {
-                    System.out.println("Closest point is " + x1 + " , " + y2);
+//                    System.out.println("Closest point is " + x1 + " , " + y2);
                     return new Point(x1, y2);
                 } else {
-                    System.out.println("Closest point is " + x1 + " , " + y1);
+//                    System.out.println("Closest point is " + x1 + " , " + y1);
                     return new Point(x1, y1);
                 }
             } else {
-                System.out.println("Closest point is " + x1 + " , " + b);
+//                System.out.println("Closest point is " + x1 + " , " + b);
                 return new Point(x1, b);
             }
         } else if (y1 == y2) {
             if ((a >= x1 && a >= x2) || (a <= x1 && a <= x2)){
                 if ((a-x1) * a-x1 >= (a - x2) * (a * x2)){
-                    System.out.println("Closest point is " + x2 + " , " + y1);
+//                    System.out.println("Closest point is " + x2 + " , " + y1);
                     return new Point(x2, y1);
                 } else {
-                    System.out.println("Closest point is " + x1 + " , " + y1);
+//                    System.out.println("Closest point is " + x1 + " , " + y1);
                     return new Point(x1, y1);
                 }
             } else {
-                System.out.println("Closest point is " + a + " , " + y1);
+//                System.out.println("Closest point is " + a + " , " + y1);
                 return new Point(a, y1);
             }
         } else {
@@ -77,16 +77,16 @@ public class Utils {
 
             if ((b >= f1 && b >= f2) || (b <= f1 && b <= f2)) {
                 if (p.squaredDistanceBetween(ab.getP1()) <= p.squaredDistanceBetween(ab.getP2())) {
-                    System.out.println("Closest point is " + x1 + " , " + y1);
+//                    System.out.println("Closest point is " + x1 + " , " + y1);
                     return new Point(x1, y1);
                 } else {
-                    System.out.println("Closest point is " + x2 + " , " + y2);
+//                    System.out.println("Closest point is " + x2 + " , " + y2);
                     return new Point(x2, y2);
                 }
             } else {
                 rx = (slope * x1 - perpendicularSlope * a + b - y1) / (slope - perpendicularSlope);
                 ry = perpendicularSlope * (rx - a) + b;
-                System.out.println("Closest point is " + rx + " , " + ry);
+//                System.out.println("Closest point is " + rx + " , " + ry);
                 return new Point(rx, ry);
             }
         }
