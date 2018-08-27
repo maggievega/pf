@@ -13,11 +13,14 @@ public class Simulator {
     }
 
     public void Simulate(){
-        Output o = new Output();
+        OvitoOutput o = new OvitoOutput();
+        //Output o = new Output();
         double time = 0.0;
         int printCont = 0;
         while (time < Data.totalTime) {
+//
             if (Data.printTime * printCont <= time) {
+//                System.out.println(particles.get(0).getMassCenter().getX()+  "  : " + particles.get(0).getMassCenter().getY());
                 o.printSystem(particles, time);
                 printCont++;
             }
@@ -36,7 +39,7 @@ public class Simulator {
 
             time += Data.dt;
         }
-        o.done();
+//        o.done();
     }
 
 

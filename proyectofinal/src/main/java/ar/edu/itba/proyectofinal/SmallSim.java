@@ -1,8 +1,10 @@
 package ar.edu.itba.proyectofinal;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class SmallSim {
 
@@ -10,15 +12,17 @@ public class SmallSim {
 
         Particle p1 = createParticle(1,5,5, 5, 30);
         Particle p2 = createParticle(2,10,10,5, 30);
+        List<Particle> particles = new ArrayList<>();
+        particles.add(p1);
 
 
+        Simulator sim = new Simulator(particles);
+
+        sim.Simulate();
     }
 
-//    public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
-//                    double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration, List<Point> targets) {
 
     public static Particle createParticle(int id, double massX, double massY, double targetX, double targetY){
-        int id = 1;
         double mass = 1;
         AngularPoint a1 = new AngularPoint(0,1);
         AngularPoint a2 = new AngularPoint(Math.PI/2,1);

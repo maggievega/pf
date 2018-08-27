@@ -5,13 +5,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-class Output {
-
+public class OvitoOutput {
     private BufferedWriter writer;
-
-    Output() {
+    private boolean set = false;
+    OvitoOutput() {
         try {
-            this.writer = new BufferedWriter(new FileWriter("sim.txt",true));
+            this.writer = new BufferedWriter(new FileWriter("ovito.xyz",true));
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
@@ -19,7 +18,14 @@ class Output {
 
     void printSystem(List<Particle> particles, double time) {
         try {
-            this.writer.write(time + "\n");
+            if (!set){
+                this.writer.write(particles.size() + 7 + "\n");
+                set=true;
+            }
+            this.writer.write(1+"\t"+50+"\t"+50+"\t"+0+ "\n");
+            this.writer.write(2+"\t"+0+"\t"+50+"\t"+0+ "\n");
+            this.writer.write(3+"\t"+50+"\t"+0+"\t"+0+ "\n");
+            this.writer.write(4+"\t"+0+"\t"+0+"\t"+0+ "\n");
             //TODO: print borders in another color
             printAllSnapshots(particles);
         } catch (IOException e) {
@@ -32,9 +38,12 @@ class Output {
     }
 
     private void printParticleSnapshot(Particle p) {
+        int count = 5;
         try {
-            this.writer.write(p.getMassCenter().getX() + "\t" + p.getMassCenter().getY() + "\t" +  printAllVertices(p) + "\n");
-
+            for(Point poin: p.getPoints()){
+                this.writer.write((count+"\t"+poin.getX()+"\t"+poin.getY()+"\t"+0+ "\n"));
+                count++;
+            }
         } catch (IOException e) {
             System.out.println("Unable to print. Simulation cannot be outputted");
         }
@@ -55,4 +64,5 @@ class Output {
             System.out.println("Error while closing BufferedWriter");
         }
     }
+
 }
