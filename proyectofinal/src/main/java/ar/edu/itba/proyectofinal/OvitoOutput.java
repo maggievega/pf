@@ -19,13 +19,13 @@ public class OvitoOutput {
     void printSystem(List<Particle> particles, double time) {
         try {
             if (!set){
-                this.writer.write(particles.size() + 7 + "\n");
-                set=true;
+                this.writer.write(particles.size() + 7 + "\n\n");
+                //set=true;
             }
-            this.writer.write(1+"\t"+50+"\t"+50+"\t"+0+ "\n");
-            this.writer.write(2+"\t"+0+"\t"+50+"\t"+0+ "\n");
-            this.writer.write(3+"\t"+50+"\t"+0+"\t"+0+ "\n");
-            this.writer.write(4+"\t"+0+"\t"+0+"\t"+0+ "\n");
+            this.writer.write(1+"\t"+12.5+"\t"+12.5+"\t"+0+"\t"+0.8+ "\n");
+            this.writer.write(2+"\t"+0+"\t"+12.5+"\t"+0+"\t"+0.8+ "\n");
+            this.writer.write(3+"\t"+12.5+"\t"+0+"\t"+0+"\t"+0.8+ "\n");
+            this.writer.write(4+"\t"+0+"\t"+0+"\t"+0+"\t"+0.8+ "\n");
             //TODO: print borders in another color
             printAllSnapshots(particles);
         } catch (IOException e) {
@@ -41,7 +41,7 @@ public class OvitoOutput {
         int count = 5;
         try {
             for(Point poin: p.getPoints()){
-                this.writer.write((count+"\t"+poin.getX()+"\t"+poin.getY()+"\t"+0+ "\n"));
+                this.writer.write((count+"\t"+poin.getX()+"\t"+poin.getY()+"\t"+0+"\t"+0.2+ "\n"));
                 count++;
             }
         } catch (IOException e) {
