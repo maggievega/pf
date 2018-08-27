@@ -119,11 +119,147 @@ public class Particle {
     }
 
     private boolean canCollide(Particle p){
-//        System.out.println( this.massCenter.squaredDistanceBetween(p.massCenter) + "<= " + (this.maxDistance + p.maxDistance) +
-//                " * " +  (this.maxDistance + p.maxDistance));
         return this.massCenter.squaredDistanceBetween(p.massCenter)
-                <= (this.maxDistance + p.maxDistance) * (this.maxDistance + p.maxDistance);
+                <= (this.maxDistance + this.radius + p.maxDistance +p.radius) *
+                    (this.maxDistance + this.radius + p.maxDistance + p.radius);
     }
+
+    public void checkCollision(Particle p) {
+        //TODO: Find a proper way to do this
+        if (this.wall) { return; }
+
+        double closestDistance, minDistance = Double.MAX_VALUE;
+        Point a = null, b = null, closestPoint = null;
+        List<Segment> p1Segments, p2Segments;
+        List<Point> p1Points, p2Points;
+        p1Segments = this.getSegments();
+        p2Segments = p.getSegments();
+        p1Points = this.getPoints();
+        p2Points = p.getPoints();
+
+        /*
+        Discard if cannot collide
+         */
+
+
+
+        /*For each segment in the current particle, find the closest point to each of the other particle's edges.
+          If the distance to this edge is smaller, than the previosly recorded minimum distance to the other particle,
+          save the closest point on the current particle's segment and the corresponding closest point
+         */
+        for (Segment segment : p1Segments){
+            for (Point point : p2Points){
+                closestPoint = Utils.completeClosestPoint(segment, point);
+                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earliear
+                   TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
+                */
+                closestDistance = closestPoint.squaredDistanceBetween(point);
+                if (closestDistance < minDistance){
+                    minDistance = closestDistance;
+//                    System.out.println(minDistance);
+                    a = closestPoint;
+                    b = point;
+
+//                    System.out.println("Segment :   " + segment.getP1().getX() +","+ segment.getP1().getY() + "\t\t\t\t"+
+//                            segment.getP2().getX() +","+ segment.getP2().getY() );
+//                    System.out.println("Point :     " + point.getX()+","+point.getY());
+//                    System.out.println(a.getX() +","+a.getY() + "    " +b.getX() +","+b.getY() + " FIRSt\n");
+                }
+            }
+        }
+        /*Repeat process for other particle's segments
+         */
+        for (Segment segment : p2Segments){
+            for (Point point : p1Points){
+                closestPoint = Utils.completeClosestPoint(segment, point);
+                closestDistance = closestPoint.squaredDistanceBetween(point);
+                if (closestDistance < minDistance){
+                    minDistance = closestDistance;
+//                    System.out.println(minDistance);
+                    a = closestPoint;
+                    //todo remove
+                    double c;
+                    b = point;
+//                    System.out.println(a.getX() +","+a.getY() + "     " +b.getX() +","+b.getY());
+                }
+            }
+        }
+//        System.out.println("__");
+//        System.out.println(a.getX() +","+a.getY() + "    " +b.getX() +","+b.getY());
+//        System.out.println("-----------------------");
+        /*If closest distance found between both particle's points is smaller than the addition of both's radiuses,
+        calculate and apply collision force
+         */
+        if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())){
+//            System.out.println(a.getX() +","+a.getY() + "    " +b.getX() +","+b.getY());
+            this.applyCollisionForces(p, a, b);
+        }
+    }
+
+
+    public void applyCollisionForces(Particle p, Point a, Point b){
+        double overlapForce, overlap, versorModule, scalarProjection;
+        Point r, f, translationForce;
+
+        /* find overlap distance */
+        overlap = Math.sqrt(a.squaredDistanceBetween(b)) - (this.getRadius() +  p.getRadius());
+        overlapForce = forceFor(overlap);
+
+        System.out.println(overlapForce);
+        /*r vector goes from centre of mass of this particle, to the contact point
+          f vector is the direction in which the force is being applied, going from one contact point, to the other
+         */
+        r = new Point(a.getX() - this.massCenter.getX(), a.getY() - p.massCenter.getY());
+        f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
+
+        versorModule = f.module();
+        f.times(overlapForce/versorModule);
+        this.torque += r.crossProduct(f);
+        // TODO: Double check this
+        r.times(-1 / r.module());
+        scalarProjection = f.dotProduct(r);
+        r.times(scalarProjection);
+        translationForce = r;
+
+        //TODO: Find Actual fix for this.
+        translationForce.times(-1);
+
+        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
+        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
+
+        tangentialForce(p, a, b, overlapForce);
+    }
+
+    public void tangentialForce(Particle p, Point a, Point b, double overlap){
+        double rModule, fModule, tForce, scalarProjection;
+        Point r,f,tangentForce,tangentVersor, translationForce;
+        Point relativeVelocity = new Point(this.vel.getX() - p.vel.getX(), this.vel.getY() - p.vel.getY());
+        r = new Point(a.getX() - this.massCenter.getX(), a.getY() - p.massCenter.getY());
+        f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
+        fModule = f.module();
+        rModule = r.module();
+        f.times(fModule);
+        r.times(rModule);
+
+        //TODO Check this
+        //p.torque += r.crossProduct(relativeVelocity.dotProduct());
+        tangentVersor = Utils.getPerpendicularTo(f);
+        tForce = - Data.kt * overlap * relativeVelocity.dotProduct(tangentVersor);
+        tangentForce =  tangentVersor;
+        tangentForce.times(tForce);
+
+        this.torque += r.crossProduct(tangentForce);
+        scalarProjection = tangentForce.dotProduct(r);
+        r.times(scalarProjection);
+        translationForce = r;
+        translationForce.times(-1);
+        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
+        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
+
+    }
+
+
+
 
 
 
@@ -187,117 +323,10 @@ public class Particle {
 
 
 
-    public void checkCollision(Particle p) {
-        //TODO: Find a proper way to do this
-        if (this.wall) { return; }
-
-        double closestDistance, minDistance = Double.MAX_VALUE;
-        Point a = null, b = null, closestPoint = null;
-        List<Segment> p1Segments, p2Segments;
-        List<Point> p1Points, p2Points;
-        p1Segments = this.getSegments();
-        p2Segments = p.getSegments();
-        p1Points = this.getPoints();
-        p2Points = p.getPoints();
-
-        /*
-        Discard if cannot collide
-         */
 
 
-        /*For each segment in the current particle, find the closest point to each of the other particle's edges.
-          If the distance to this edge is smaller, than the previosly recorded minimum distance to the other particle,
-          save the closest point on the current particle's segment and the corresponding closest point
-         */
-        for (Segment segment : p1Segments){
-            for (Point point : p2Points){
-                closestPoint = Utils.completeClosestPoint(segment, point);
-                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earliear
-                   TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
-                */
-                closestDistance = closestPoint.squaredDistanceBetween(point);
-                if (closestDistance < minDistance){
-                    minDistance = closestDistance;
-                    a = closestPoint;
-                    b = point;
-                }
-            }
-        }
-        /*Repeat process for other particle's segments
-         */
-        for (Segment segment : p2Segments){
-            for (Point point : p1Points){
-                closestPoint = Utils.completeClosestPoint(segment, point);
-                closestDistance = closestPoint.squaredDistanceBetween(point);
-                if (closestDistance < minDistance){
-                    minDistance = closestDistance;
-                    a = closestPoint;
-                    b = point;
-                }
-            }
-        }
-        /*If closest distance found between both particle's points is smaller than the addition of both's radiuses,
-        calculate and apply collision force
-         */
-        if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())){
-            this.applyCollisionForces(p, a, b);
-        }
-    }
 
-    public void applyCollisionForces(Particle p, Point a, Point b){
-        double overlapForce, overlap, versorModule, scalarProjection;
-        Point r, f, translationForce;
 
-        /* find overlapment */
-        overlap = Math.sqrt(a.squaredDistanceBetween(b)) - (this.getRadius() +  p.getRadius());
-        overlapForce = forceFor(overlap);
-
-        /*r vector goes from centre of mass of this particle, to the contact point
-          f vector is the direction in which the force is being applied, going from one contact point, to the other
-         */
-        r = new Point(a.getX() - this.massCenter.getX(), a.getY() - p.massCenter.getY());
-        f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
-        versorModule = f.module();
-        f.times(overlapForce/versorModule);
-        this.torque += r.crossProduct(f);
-        // TODO: Double check this
-        r.times(-1 / r.module());
-        scalarProjection = f.dotProduct(r);
-        r.times(scalarProjection);
-        translationForce = r;
-        //TODO: Check!
-        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
-        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
-
-        tangentialForce(p, a, b, overlapForce);
-    }
-
-    public void tangentialForce(Particle p, Point a, Point b, double overlap){
-        double rModule, fModule, tForce, scalarProjection;
-        Point r,f,tangentForce,tangentVersor, translationForce;
-        Point relativeVelocity = new Point(this.vel.getX() - p.vel.getX(), this.vel.getY() - p.vel.getY());
-        r = new Point(a.getX() - this.massCenter.getX(), a.getY() - p.massCenter.getY());
-        f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
-        fModule = f.module();
-        rModule = r.module();
-        f.times(fModule);
-        r.times(rModule);
-
-        //TODO Check this
-        //p.torque += r.crossProduct(relativeVelocity.dotProduct());
-        tangentVersor = Utils.getPerpendicularTo(f);
-        tForce = - Data.kt * overlap * relativeVelocity.dotProduct(tangentVersor);
-        tangentForce =  tangentVersor;
-        tangentForce.times(tForce);
-
-        this.torque += r.crossProduct(tangentForce);
-        scalarProjection = tangentForce.dotProduct(r);
-        r.times(scalarProjection);
-        translationForce = r;
-        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
-        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
-
-    }
 
     public List<Segment> getSegments () {
         List<Segment> aux = new ArrayList<>();
@@ -446,5 +475,13 @@ public class Particle {
 
     public void setAngularVelocity(double angularVelocity){
         this.angularVelocity = angularVelocity;
+    }
+
+    public boolean isWall() {
+        return wall;
+    }
+
+    public void setWall() {
+        this.wall = true;
     }
 }

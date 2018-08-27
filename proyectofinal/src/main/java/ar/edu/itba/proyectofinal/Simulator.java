@@ -32,7 +32,9 @@ public class Simulator {
             particles.forEach((p) -> p.getForce(previousPositions));
 
             for (Particle p : particles) {
-                updatePosition(p);
+                if (!p.isWall()){
+                    updatePosition(p);
+                }
                 // Ask if it reached the target and remove it ?
                 // And if it doesn't have more targets remove it from particles ?
             }

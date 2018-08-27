@@ -13,7 +13,7 @@ public class OvitoOutput {
     private boolean set = false;
     OvitoOutput() {
         try {
-            this.writer = new BufferedWriter(new FileWriter("ovito.xyz",true));
+            this.writer = new BufferedWriter(new FileWriter("ovito.xyz",false));
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
@@ -22,7 +22,7 @@ public class OvitoOutput {
     void printSystem(List<Particle> particles, double time) {
         try {
             int particleCount = 4 + particles.size() *4;
-            this.writer.write(particleCount + "\n\n");
+            this.writer.write(particleCount + "\nTime:   \"+time\n");
             this.writer.write(1+"\t"+12.5+"\t"+12.5+"\t"+0+"\t"+0.8+ "\n");
             this.writer.write(2+"\t"+0+"\t"+12.5+"\t"+0+"\t"+0.8+ "\n");
             this.writer.write(3+"\t"+12.5+"\t"+0+"\t"+0+"\t"+0.8+ "\n");
