@@ -209,11 +209,11 @@ public class Particle {
         overlap = Math.sqrt(a.squaredDistanceBetween(b)) - (this.getRadius() +  p.getRadius());
         overlapForce = forceFor(overlap);
 
-        System.out.println(overlapForce);
+//        System.out.println(overlapForce);
         /*r vector goes from centre of mass of this particle, to the contact point
           f vector is the direction in which the force is being applied, going from one contact point, to the other
          */
-        r = new Point(a.getX() - this.massCenter.getX(), a.getY() - p.massCenter.getY());
+        r = new Point(a.getX() - this.massCenter.getX(), a.getY() - this.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
 
         versorModule = f.module();
@@ -225,13 +225,11 @@ public class Particle {
         r.times(scalarProjection);
         translationForce = r;
 
-        //TODO: Find Actual fix for this.
-//        translationForce.times(-1);
 
         this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
         this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
 
-        tangentialForce(p, a, b, overlapForce);
+//        tangentialForce(p, a, b, overlapForce);
     }
 
     public void tangentialForce(Particle p, Point a, Point b, double overlap){

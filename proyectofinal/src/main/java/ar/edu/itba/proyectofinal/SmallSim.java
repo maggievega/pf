@@ -10,12 +10,14 @@ public class SmallSim {
 
     public static void main(String[] args) {
 
-        Particle p1 = createParticle(1,1,2.5,5, 8.5, 5);
-        Particle p2 = createParticle2(2,1,8.5,5,1, 5);
+        Particle p1 = createParticle2(1,1,2.5,5, 8.5, 7.6);
+        Particle p2 = createParticle2(2,1,8.5,5,1, 8);
+        Particle p3 = createParticle2(3,1,5,7.5,5, 1);
         List<Particle> particles = new ArrayList<>();
         particles.add(p1);
-        p2.setWall();
+//        p2.setWall();
         particles.add(p2);
+        particles.add(p3);
 
 
         Simulator sim = new Simulator(particles);
