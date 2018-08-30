@@ -23,6 +23,10 @@ public class Utils {
         return new Point (-p.getY(), p.getX());
     }
 
+    public static Point getPerpendicularTo2(Point p){
+        return new Point (p.getY(), -p.getX());
+    }
+
 
     public static Point completeClosestPoint(Segment ab, Point p){
         double slope, perpendicularSlope, c1, c2, f1, f2, rx, ry;

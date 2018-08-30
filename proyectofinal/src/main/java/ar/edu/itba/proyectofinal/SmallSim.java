@@ -9,15 +9,25 @@ import java.util.Set;
 public class SmallSim {
 
     public static void main(String[] args) {
-
-        Particle p1 = createParticle2(1,1,2.5,5, 8.5, 7.6);
-        Particle p2 = createParticle2(2,1,8.5,5,1, 8);
-        Particle p3 = createParticle2(3,1,5,7.5,5, 1);
         List<Particle> particles = new ArrayList<>();
+
+        Particle p1 = createParticle(1,80,2.5,5, 8.5, 8);
         particles.add(p1);
-//        p2.setWall();
+        Particle p2 = createParticle(2,80,7.5,5,2.5, 8);
         particles.add(p2);
-        particles.add(p3);
+//        Particle p3 = createParticle2(3,1,5,7,6.5, 25);
+//        particles.add(p3);
+//        Particle p4 = createParticle(4,1,2,2,6.5,25);
+//        particles.add(p4);
+//        Particle p5 = createParticle(5,1,5,3,6.5,25);
+//        particles.add(p5);
+//        Particle wl = createParticle2(6,2,9,9,0,0);
+//        wl.setWall();
+//        particles.add(wl);
+//        Particle wr = createParticle2(7, 2,4,9,0,0);
+//        wr.setWall();
+//        particles.add(wr);
+//        p2.setWall();
 
 
         Simulator sim = new Simulator(particles);
@@ -32,19 +42,19 @@ public class SmallSim {
 //        AngularPoint a2 = new AngularPoint(Math.PI*3/4,1);
 //        AngularPoint a3 = new AngularPoint(Math.PI*5/4,1);
 //        AngularPoint a4 = new AngularPoint(Math.PI*7/4,1);
-        AngularPoint a1 = new AngularPoint(0,1);
-        AngularPoint a2 = new AngularPoint(Math.PI/2,1);
-        AngularPoint a3 = new AngularPoint(Math.PI,1);
-        AngularPoint a4 = new AngularPoint(Math.PI*3/2,1);
+        AngularPoint a1 = new AngularPoint(0,0.2);
+        AngularPoint a2 = new AngularPoint(Math.PI,0.2);
+//        AngularPoint a3 = new AngularPoint(Math.PI,1);
+//        AngularPoint a4 = new AngularPoint(Math.PI*3/2,1);
         List<AngularPoint> angularPoints = new ArrayList<>();
         angularPoints.add(a1);
         angularPoints.add(a2);
-        angularPoints.add(a3);
-        angularPoints.add(a4);
+//        angularPoints.add(a3);
+//        angularPoints.add(a4);
         Point massCenter = new Point(massX,massY);
         double orientation=0;
         double radius = 0.2;
-        double desiredVelocity = 1;
+        double desiredVelocity = 0.5;
         Point vel = new Point(0,0);
         double angularVelocity=0;
         double angularAcceleration=0;
@@ -80,5 +90,7 @@ public class SmallSim {
         targets.add(t1);
         return new Particle(id,mass,angularPoints,massCenter,orientation,radius,desiredVelocity,vel,angularVelocity,angularAcceleration,targets);
     }
+
+
 
 }

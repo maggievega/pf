@@ -101,11 +101,10 @@ public class Particle {
 
 
 
-    public Point getForce(List<Particle> particles) {
+    public void getForce(List<Particle> particles) {
         resetForce();
-        getDrivingForce(); //calcula driving torque
-        getContactForce(particles); // calcula contact torque
-        return force;
+        getDrivingForce();
+        getContactForce(particles);
     }
 
     public void getContactForce(List<Particle> particleList){
@@ -216,47 +215,56 @@ public class Particle {
         r = new Point(a.getX() - this.massCenter.getX(), a.getY() - this.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
 
-        versorModule = f.module();
-        f.times(overlapForce/versorModule);
+        f.times(1/f.module());
+        f.times(overlapForce);
+
+        this.force.setX(this.force.getX() + f.getX());
+        this.force.setX(this.force.getX() + f.getY());
+
+//        r.times(-1 / r.module());
+//        scalarProjection = f.dotProduct(r);
+//        r.times(scalarProjection);
+//        translationForce = r;
+
         this.torque += r.crossProduct(f);
-        // TODO: Double check this
-        r.times(-1 / r.module());
-        scalarProjection = f.dotProduct(r);
-        r.times(scalarProjection);
-        translationForce = r;
 
+//        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
+//        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
 
-        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
-        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
-
-//        tangentialForce(p, a, b, overlapForce);
+        tangentialForce(p, a, b, overlapForce);
     }
 
     public void tangentialForce(Particle p, Point a, Point b, double overlap){
         double rModule, fModule, tForce, scalarProjection;
         Point r,f,tangentForce,tangentVersor, translationForce;
-        Point relativeVelocity = new Point(this.vel.getX() - p.vel.getX(), this.vel.getY() - p.vel.getY());
-        r = new Point(a.getX() - this.massCenter.getX(), a.getY() - p.massCenter.getY());
+
+        //Swapped this with p
+        Point relativeVelocity = new Point(p.vel.getX() - this.vel.getX(), p.vel.getY() - this.vel.getY());
+
+        r = new Point(a.getX() - this.massCenter.getX(), a.getY() - this.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
-        fModule = f.module();
-        rModule = r.module();
-        f.times(fModule);
-        r.times(rModule);
+//        rModule = r.module();
+//        r.times(rModule);
 
         //TODO Check this
-        //p.torque += r.crossProduct(relativeVelocity.dotProduct());
-        tangentVersor = Utils.getPerpendicularTo(f);
-        tForce = - Data.kt * overlap * relativeVelocity.dotProduct(tangentVersor);
+//        p.torque += r.crossProduct(relativeVelocity.dotProduct());
+        tangentVersor = Utils.getPerpendicularTo2(f);
+//        tangentVersor.times(1/tangentVersor.module());
+
+        tForce = - Data.kt * overlap;   //* relativeVelocity.dotProduct(tangentVersor);
+        tangentVersor.times(tForce/tangentVersor.module());
+
         tangentForce =  tangentVersor;
-        tangentForce.times(tForce);
+
+//        tangentForce.times(tForce);
 
         this.torque += r.crossProduct(tangentForce);
-        scalarProjection = tangentForce.dotProduct(r);
-        r.times(scalarProjection);
-        translationForce = r;
+//        scalarProjection = tangentForce.dotProduct(r);
+//        r.times(scalarProjection);
+//        translationForce = r;
 //        translationForce.times(-1);
-        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
-        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
+        this.force.setX(this.force.getX() - tangentForce.getX());
+        this.force.setY(this.force.getY() - tangentForce.getY());
 
     }
 
@@ -279,8 +287,8 @@ public class Particle {
         //TODO: Extract target point from target segment
         Point target = targets.get(0);
         double desiredAngle = Utils.getAngle( massCenter, target);
-        double help = desiredAngle*-1;
-        help+=2*Math.PI;
+//        double help = desiredAngle*-1;
+//        help+=2*Math.PI;
         double aux = desiredAngle - orientation;
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
 
@@ -294,9 +302,10 @@ public class Particle {
                 desiredDirection.getY() * desiredDirection.getY());
         desiredDirection.setX(desiredDirection.getX() / abs);
         desiredDirection.setY(desiredDirection.getY() / abs);
-        Point desiredVel = new Point (desiredVelocity * desiredDirection.getX() / abs,
-                desiredVelocity * desiredDirection.getY() / abs);
-        //TODO check for characteristicT
+
+        Point desiredVel = new Point (desiredVelocity * desiredDirection.getX(),
+                desiredVelocity * desiredDirection.getY());
+
         Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
                 (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
         torque += drivingTorque;
@@ -343,6 +352,7 @@ public class Particle {
     }
 
     double forceFor (double overlap ) {
+        //TODO faltaria la amortiguacion del resorte gama * v(rel)**n
         return - Data.kn * overlap;
     }
 

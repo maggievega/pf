@@ -56,7 +56,7 @@ public class Simulator {
         //TODO check if logic applies
         double nextOrientation = 2 * p.getOrientation() - p.getPreviousOrientation() + Data.dt * Data.dt * p.getTorque() /p.getMass();
         double nextAngularVel = (nextOrientation - p.getPreviousOrientation()) / (2 * Data.dt);
-//        System.out.println(nextOrientation + " ----- " + nextAngularVel);
+//        System.out.println(nextOrientation);
         p.setPreviousOrientation(p.getOrientation());
         p.setOrientation(nextOrientation);
         p.setAngularVelocity(nextAngularVel);
