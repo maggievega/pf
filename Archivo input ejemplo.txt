@@ -1,10 +1,11 @@
-Archivo input ejemplo
+Archivo input ejemplo (siempre separado con tabs)
 
-n
-desideredVel velx vely angVel angAcant_puntos angulo long angulo long
-(angulo en radianes)
+-- particles
 
-o 
+desideredVel velx vely angular_vel angular_acc radius cant_puntos x y x y
 
-desideredVel velx vely cant_puntos x y x y
-(x e y en relación del (0,0) -> el centro de la partícula)
+-- paredes
+cant_puntos x y x y
+
+-- constantes
+nombre	valor
