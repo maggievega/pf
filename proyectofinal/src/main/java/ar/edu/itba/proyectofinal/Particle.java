@@ -119,7 +119,7 @@ public class Particle {
         }
     }
 
-    private boolean canCollide(Particle p){
+    public boolean canCollide(Particle p){
         return this.massCenter.squaredDistanceBetween(p.massCenter)
                 <= (this.maxDistance + this.radius + p.maxDistance +p.radius) *
                     (this.maxDistance + this.radius + p.maxDistance + p.radius);

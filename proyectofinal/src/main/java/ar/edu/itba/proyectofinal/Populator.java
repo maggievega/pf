@@ -6,44 +6,50 @@ public class Populator {
 
     /**
      * particles are all loaded in particles, the only thing left to do is position them and their orientation
-     * @param particles
+     * @param particles the loaded particles
      */
     public static void Populate(List<Particle> particles){
-        for (int i=1; i<= particles.size(); i++) {
-            double R = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
-            double axis = Math.random() * (Data.aMax - Data.aMin) + Data.aMin;
+        for (Particle p: particles) {
+            if (!p.isWall()) {
+                Point mc = generateMassCenter(p, particles);
+                double orientation = 0;
 
-            double x = Math.random() * Data.xSize;
-            double y = Math.random() * Data.ySize;
-            //TODO Consultar si es requerido que las particulas puedan aparecer con cualquier orientacion
-            double m = Math.random() * 2 - 1;
+                p.setMassCenter(mc);
+                p.setOrientation(orientation);
+                //TODO Consultar si es requerido que las particulas puedan aparecer con cualquier orientacion
+                while (!isValid(p, particles)) {
+                    //TODO: Change this so that particles is the walls
+                    mc = generateMassCenter(p, particles);
+                    //TODO: Random between 0 and 2pi
+                    orientation = 0;
+                    p.setMassCenter(mc);
+                    p.setOrientation(orientation);
 
-            while (!isValid(x, y, m, R, axis, particles)) {
-                x = Math.random() * Data.xSize;
-                y = Math.random() * Data.ySize;
-                m = Math.random() * 2 - 1;
+                }
+                //TODO: TARGETS HAVE TO BE ORGANIZED BASED ON THE DISTANCE TO THE PARTICLE
             }
-
         }
     }
 
-
-    //TODO Remove variables after axis
-    private static boolean isValid(double x, double y, double m, double R, double axis, List<Particle> particles){
-        double dX = Math.sqrt(Math.pow(0.5 * axis, 2)/(1 + m * m));
-        double x1 = x - Math.signum(m) * dX;
-        double x2 = x + Math.signum(m) * dX;
-        double y1 = y - Math.signum(m) * m * dX;
-        double y2= y + Math.signum(m) * m * dX;
-        if (x1 - R < 0 || x1 + R > Data.xSize || x2 - R < 0 || x2 + R > Data.xSize ||
-                y1 - R < 0 || y1 + R > Data.ySize || y2 - R < 0 || y2 + R > Data.xSize) {
-            return false;
-        }
-        Particle aux = null;
-        for (Particle p: particles) {
-            //TODO: METHOD THAT TELLS YOU IF THEY COLLIDE
+    private static boolean isValid(Particle p,  List<Particle> particles){
+        for (Particle p2: particles) {
+            if (!p2.isWall() && !p.equals(p2) && p.canCollide(p2)) {
+                return false;
+            }
         }
         return true;
+    }
+
+    private static Point generateMassCenter(Particle p, List<Particle> particles) {
+        Point mc = new Point(0,0);
+        //TODO: HAVE SOME WAY OF KNOWING THE AREA TO START THERE
+        for (Particle p2: particles) {
+//            if(p.isWall() && p.isInitial() && !p.equals(p2)) {
+//
+//            }
+
+        }
+        return mc;
     }
 
 }

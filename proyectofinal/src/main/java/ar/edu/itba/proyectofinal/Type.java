@@ -1,5 +1,5 @@
 package ar.edu.itba.proyectofinal;
 
 public enum Type {
-    WALLS, PARTICLES, CONSTANTS
+    WALLS, PARTICLES, CONSTANTS, TARGETS
 }

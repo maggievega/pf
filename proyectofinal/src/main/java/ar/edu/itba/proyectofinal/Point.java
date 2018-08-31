@@ -35,6 +35,10 @@ public class Point {
         return (this.getX() - p.getX()) * (this.getX() - p.getX()) + (this.getY() - p.getY()) * (this.getY() - p.getY());
     }
 
+    public double distanceBetween (Point p) {
+        return Math.sqrt(squaredDistanceBetween(p));
+    }
+
     public double dotProduct(Point p) {
         return this.getX() * p.getX() + this.getY() * p.getY();
     }
