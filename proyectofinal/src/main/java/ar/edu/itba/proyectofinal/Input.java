@@ -140,7 +140,6 @@ class Input {
     }
 
     private void populateWalls(String line) {
-        //TODO: Change this so that it recieves 4 values and infers a particle out of this
         if (N == -1) {
             N = Integer.parseInt(line);
             return;
@@ -150,29 +149,35 @@ class Input {
             throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
         }
         String[] particle = line.split("\\t");
-        boolean initial = particle[0].equals("I");
-        int starting = initial ? 1 : 0;
-        int countPoints = Integer.parseInt(particle[starting + 5]);
-        if (particle.length != starting + 6 + countPoints * 2) {
+        int countPoints = 1;
+        if (particle.length != countPoints * 2) {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
-        Point massCenter = new Point(Double.parseDouble(particle[starting + 1]), Double.parseDouble(particle[starting + 2]));
-        double orientation = Double.parseDouble(particle[starting + 3]);
-        double mass = Double.parseDouble(particle[starting + 4]);
-        double radius = Double.parseDouble(particle[starting + 5]);
+        double mass = 1;
+        double radius = 0;
 
-        List<AngularPoint> points = new ArrayList<>();
+        List<Point> points = new ArrayList<>();
         for(int i = 0; i < countPoints; i++) {
-            AngularPoint ap;
-            if (particle[starting + 6 + (2 * i)].contains("pi")) {
-                ap = new AngularPoint(Double.parseDouble(particle[starting + 6 + 2 * i].split("pi", 2)[0])*Math.PI, Double.parseDouble(particle[starting + 7 + 2 * i]));
-            } else {
-                ap = new AngularPoint(Double.parseDouble(particle[starting + 6 + 2 * i]), Double.parseDouble(particle[starting + 7 + 2 * i]));
-            }
-            points.add(ap);
+            Point point;
+            point = new Point(Double.parseDouble(particle[1 + 2 * i]), Double.parseDouble(particle[2 + 2 * i]));
+            points.add(point);
         }
-        Particle p = new Particle(Integer.MAX_VALUE - count, mass, points, massCenter, orientation, radius , 0, new Point(0,0), 0, 0, null);
+        for (Point p: points) {
+            if (p.getX() > Data.minX)
+                Data.minX = p.getX();
+            if (p.getX() < Data.maxX)
+                Data.maxX = p.getX();
+            if (p.getY() > Data.minY)
+                Data.minY = p.getY();
+            if (p.getY() < Data.maxY)
+                Data.maxY = p.getY();
+        }
+
+        Point massCenter = Utils.calculateMassCenter(points, mass);
+        List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
+
+        Particle p = new Particle(Integer.MAX_VALUE - count, mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, null);
         p.setWall();
         particles.add(p);
         count ++;

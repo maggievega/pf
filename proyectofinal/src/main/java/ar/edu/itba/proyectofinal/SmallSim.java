@@ -11,9 +11,9 @@ public class SmallSim {
     public static void main(String[] args) {
         List<Particle> particles = new ArrayList<>();
 
-        Particle p1 = createParticle(1,80,2.5,5, 8.5, 8);
+        Particle p1 = createParticle2(1,80,2.5,5, 8.5, 8);
         particles.add(p1);
-        Particle p2 = createParticle(2,80,7.5,5,2.5, 8);
+        Particle p2 = createParticle2(2,80,7.5,5,2.5, 8);
         particles.add(p2);
 //        Particle p3 = createParticle2(3,1,5,7,6.5, 25);
 //        particles.add(p3);

@@ -86,20 +86,6 @@ public class Particle {
         }
     }
 
-    public Particle(int id, double mass, List<AngularPoint> points,
-                   double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration, List<Point> targets) {
-        this.id = id;
-        this.mass = mass;
-        this.points = points;
-        this.desiredVelocity = desiredVelocity;
-        this.vel = vel;
-        this.angularVelocity = angularVelocity;
-        this.angularAcceleration = angularAcceleration;
-        this.targets = targets;
-        this.force = new Point(0,0); //Used to initialize the previous position
-    }
-
-
 
     public void getForce(List<Particle> particles) {
         resetForce();
@@ -235,26 +221,30 @@ public class Particle {
     }
 
     public void tangentialForce(Particle p, Point a, Point b, double overlap){
-        double rModule, fModule, tForce, scalarProjection;
-        Point r,f,tangentForce,tangentVersor, translationForce;
+        double tForce, relativeSpeedT;
+        Point r,f,tangentForce;
 
         //Swapped this with p
         Point relativeVelocity = new Point(p.vel.getX() - this.vel.getX(), p.vel.getY() - this.vel.getY());
 
         r = new Point(a.getX() - this.massCenter.getX(), a.getY() - this.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
-//        rModule = r.module();
-//        r.times(rModule);
+
+        f.times(1/(a.distanceBetween(b)));
 
         //TODO Check this
 //        p.torque += r.crossProduct(relativeVelocity.dotProduct());
-        tangentVersor = Utils.getPerpendicularTo2(f);
+//        tangentVersor = Utils.getPerpendicularTo2(f);
 //        tangentVersor.times(1/tangentVersor.module());
 
-        tForce = - Data.kt * overlap;   //* relativeVelocity.dotProduct(tangentVersor);
-        tangentVersor.times(tForce/tangentVersor.module());
+        relativeSpeedT = relativeVelocity.dotProduct(Utils.getPerpendicularTo(f));
 
-        tangentForce =  tangentVersor;
+        tForce = - Data.kt * overlap * relativeSpeedT;   //* relativeVelocity.dotProduct(tangentVersor);
+//        tangentVersor.times(tForce/tangentVersor.module());
+
+        tangentForce = f;
+
+        Utils.getPerpendicularTo(tangentForce).times(tForce);
 
 //        tangentForce.times(tForce);
 
@@ -267,20 +257,6 @@ public class Particle {
         this.force.setY(this.force.getY() - tangentForce.getY());
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public void getDrivingForce() {
 
@@ -331,13 +307,6 @@ public class Particle {
         double nextY = getMassCenter().getY() + delta * getVel().getY() + (delta * delta * getForce().getY()) / (2 * getMass());
         return new Point(nextX, nextY);
     }
-
-
-
-
-
-
-
 
     public List<Segment> getSegments () {
         List<Segment> aux = new ArrayList<>();
@@ -471,11 +440,7 @@ public class Particle {
     }
 
 
-
-    public double getPreviousOrientation() {
-
-        return previousOrientation;
-    }
+    public double getPreviousOrientation() {  return previousOrientation; }
 
     public void setPreviousOrientation(double previousOrientation){
         this.previousOrientation = previousOrientation;

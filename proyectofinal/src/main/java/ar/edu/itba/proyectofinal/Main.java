@@ -22,7 +22,6 @@ public class Main {
 //        inputWalls.loadWalls(particles);
         inputParticles.loadParticles(particles, targets);
 
-        System.out.println(particles);
         Populator.Populate(particles);
         Simulator s = new Simulator(particles);
         s.Simulate();
