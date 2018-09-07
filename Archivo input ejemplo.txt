@@ -3,7 +3,7 @@ no tener lineas de mas en los archivos
 
 -- particles
 cantidad_de_formatos_de_particulas
-cantidad_de_particulas_de_ese_formato	desideredVel	velx vely angular_vel angular_acc radius cant_puntos x y x y
+cantidad_de_particulas_de_ese_formato	desideredVel velx vely angular_vel angular_acc radius cant_puntos x y x y
 
 -- paredes
 cantidad de paredes que se quieren

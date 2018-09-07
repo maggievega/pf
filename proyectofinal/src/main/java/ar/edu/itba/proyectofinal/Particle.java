@@ -196,13 +196,12 @@ public class Particle {
          */
         r = new Point(a.getX() - this.massCenter.getX(), a.getY() - this.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
-        System.out.println(f);
+
 //        f.times(1 / a.distanceBetween(b));
         f.times(1/f.module());
         f.times(overlapForce);
 
-        this.force.setX(this.force.getX() + f.getX());
-        this.force.setX(this.force.getX() + f.getY());
+        this.force.add(f);
 
 //        r.times(-1 / r.module());
 //        scalarProjection = f.dotProduct(r);
@@ -227,7 +226,7 @@ public class Particle {
         r = new Point(a.getX() - this.massCenter.getX(), a.getY() - this.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
 
-        f.times(1 / (a.distanceBetween(b)));
+        f.times(1 / f.module());
 
         //TODO Check this
 //        p.torque += r.crossProduct(relativeVelocity.dotProduct());
@@ -250,10 +249,9 @@ public class Particle {
 //        r.times(scalarProjection);
 //        translationForce = r;
 //        translationForce.times(-1);
-        this.force.setX(this.force.getX() + tangentForce.getX());
-        this.force.setY(this.force.getY() + tangentForce.getY());
+        this.force.add(tangentForce);
 
-        if(new Double(this.force.getX()).isNaN() || new Double(this.force.getY()).isNaN())
+        if(this.force.getX() == Double.NaN)
             System.out.println("PROBLEM");
 
     }
@@ -276,8 +274,7 @@ public class Particle {
         double abs = Math.sqrt(desiredDirection.getX() * desiredDirection.getX() +
                 desiredDirection.getY() * desiredDirection.getY());
 
-        desiredDirection.setX(desiredDirection.getX() / abs);
-        desiredDirection.setY(desiredDirection.getY() / abs);
+        desiredDirection.times(1 / abs);
 
         Point desiredVel = new Point (desiredVelocity * desiredDirection.getX(),
                 desiredVelocity * desiredDirection.getY());
@@ -285,11 +282,8 @@ public class Particle {
         Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
                 (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
         torque += drivingTorque;
-        force.setX(force.getX() + drivingForce.getX());
-        force.setY(force.getY() + drivingForce.getY());
-
-        if(new Double(this.force.getX()).isNaN() || new Double(this.force.getY()).isNaN())
-            System.out.println("PROBLEM");
+        
+        force.add(drivingForce);
     }
 
     public void positionParticle(Point massCenter, double orientation) {

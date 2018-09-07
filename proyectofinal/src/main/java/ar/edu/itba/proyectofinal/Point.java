@@ -31,6 +31,19 @@ public class Point {
 
     public void times(double scalar) {this.x *= scalar; this.y *= scalar; }
 
+    public void add(Point p) { this.x += p.getX(); this.y += p.getY(); }
+
+    public void substract(Point p) { this.x -= p.getX(); this.y -= p.getY(); }
+
+    public void divide(Point p) {
+        if (p.getX() == 0 || p.getY() == 0) {
+            System.out.println("Division by 0");
+            throw new NumberFormatException("Division by 0");
+        }
+        this.x /= p.getX();
+        this.y /= p.getY();
+    }
+
     public double squaredDistanceBetween (Point p) {
         return (this.getX() - p.getX()) * (this.getX() - p.getX()) + (this.getY() - p.getY()) * (this.getY() - p.getY());
     }
