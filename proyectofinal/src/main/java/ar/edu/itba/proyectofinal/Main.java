@@ -12,17 +12,24 @@ public class Main {
         Input inputConstant = new Input(Type.CONSTANTS, "input/const.txt");
         Input inputParticles = new Input(Type.PARTICLES, "input/particles.txt");
         Input inputTargets = new Input(Type.TARGETS, "input/targets.txt");
-//        Input inputWalls = new Input(Type.WALLS, "input/walls.txt");
+        Input inputWalls = new Input(Type.WALLS, "input/walls.txt");
 
         List<Point> targets = new ArrayList<>();
         List<Particle> particles = new ArrayList<>();
 
+        System.out.println("-- Starting to load");
         inputConstant.load();
         inputTargets.loadTargets(targets);
-//        inputWalls.loadWalls(particles);
+        System.out.println("-- Targets Loaded");
+        inputWalls.loadWalls(particles);
+        System.out.println("-- Walls Loaded");
         inputParticles.loadParticles(particles, targets);
+        System.out.println("-- Particles Loaded");
 
+        System.out.println("-- Start Populating");
         Populator.Populate(particles);
+        System.out.println("-- Population Finished");
+        System.out.println("-- Start Simulation");
         Simulator s = new Simulator(particles);
         s.Simulate();
 

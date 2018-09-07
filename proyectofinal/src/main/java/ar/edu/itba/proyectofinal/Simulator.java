@@ -13,8 +13,8 @@ public class Simulator {
     }
 
     public void Simulate(){
-        OvitoOutput o = new OvitoOutput();
-        //Output o = new Output();
+//        OvitoOutput o = new OvitoOutput();
+        Output o = new Output();
         double time = 0.0;
         int printCont = 0;
         while (time < Data.totalTime) {
@@ -29,7 +29,7 @@ public class Simulator {
             List<Particle> previousPositions  = new ArrayList<>(particles);
 
             //Calculate forces
-            particles.forEach((p) -> p.getForce(previousPositions));
+            particles.forEach((p) -> {if(!p.isWall()) p.getForce(previousPositions);});
 
             for (Particle p : particles) {
                 if (!p.isWall()){
@@ -41,7 +41,7 @@ public class Simulator {
 
             time += Data.dt;
         }
-//        o.done();
+        o.done();
     }
 
 
@@ -56,7 +56,7 @@ public class Simulator {
         //TODO check if logic applies
         double nextOrientation = 2 * p.getOrientation() - p.getPreviousOrientation() + Data.dt * Data.dt * p.getTorque() /p.getMass();
         double nextAngularVel = (nextOrientation - p.getPreviousOrientation()) / (2 * Data.dt);
-//        System.out.println(nextOrientation);
+
         p.setPreviousOrientation(p.getOrientation());
         p.setOrientation(nextOrientation);
         p.setAngularVelocity(nextAngularVel);

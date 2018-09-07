@@ -94,15 +94,9 @@ public class Particle {
     }
 
     public void getContactForce(List<Particle> particleList){
-        for (Particle p : particleList) {
-            if (this.id != p.id) {
-
-                boolean collisionProc = canCollide(p);
-                if (this.canCollide(p)) {
+        for (Particle p : particleList)
+            if (!p.equals(this) && this.canCollide(p))
                     this.checkCollision(p);
-                }
-            }
-        }
     }
 
     public boolean canCollide(Particle p){
@@ -112,8 +106,6 @@ public class Particle {
     }
 
     public void checkCollision(Particle p) {
-        //TODO: Find a proper way to do this
-        if (this.wall) { return; }
 
         double closestDistance, minDistance = Double.MAX_VALUE;
         Point a = null, b = null, closestPoint = null;
@@ -137,7 +129,7 @@ public class Particle {
         for (Segment segment : p1Segments){
             for (Point point : p2Points){
                 closestPoint = Utils.completeClosestPoint(segment, point);
-                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earliear
+                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earlier
                    TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
                 */
                 closestDistance = closestPoint.squaredDistanceBetween(point);
@@ -190,6 +182,10 @@ public class Particle {
         double overlapForce, overlap, versorModule, scalarProjection;
         Point r, f, translationForce;
 
+        if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
+            System.out.println("IGUALES");
+        }
+
         /* find overlap distance */
         overlap = Math.sqrt(a.squaredDistanceBetween(b)) - (this.getRadius() +  p.getRadius());
         overlapForce = forceFor(overlap);
@@ -200,7 +196,8 @@ public class Particle {
          */
         r = new Point(a.getX() - this.massCenter.getX(), a.getY() - this.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
-
+        System.out.println(f);
+//        f.times(1 / a.distanceBetween(b));
         f.times(1/f.module());
         f.times(overlapForce);
 
@@ -230,7 +227,7 @@ public class Particle {
         r = new Point(a.getX() - this.massCenter.getX(), a.getY() - this.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
 
-        f.times(1/(a.distanceBetween(b)));
+        f.times(1 / (a.distanceBetween(b)));
 
         //TODO Check this
 //        p.torque += r.crossProduct(relativeVelocity.dotProduct());
@@ -253,13 +250,15 @@ public class Particle {
 //        r.times(scalarProjection);
 //        translationForce = r;
 //        translationForce.times(-1);
-        this.force.setX(this.force.getX() - tangentForce.getX());
-        this.force.setY(this.force.getY() - tangentForce.getY());
+        this.force.setX(this.force.getX() + tangentForce.getX());
+        this.force.setY(this.force.getY() + tangentForce.getY());
+
+        if(new Double(this.force.getX()).isNaN() || new Double(this.force.getY()).isNaN())
+            System.out.println("PROBLEM");
 
     }
 
-    public void getDrivingForce() {
-
+    private void getDrivingForce() {
         //TODO: Extract target point from target segment
         Point target = targets.get(0);
         double desiredAngle = Utils.getAngle( massCenter, target);
@@ -276,6 +275,7 @@ public class Particle {
                 target.getY() - massCenter.getY());
         double abs = Math.sqrt(desiredDirection.getX() * desiredDirection.getX() +
                 desiredDirection.getY() * desiredDirection.getY());
+
         desiredDirection.setX(desiredDirection.getX() / abs);
         desiredDirection.setY(desiredDirection.getY() / abs);
 
@@ -287,13 +287,10 @@ public class Particle {
         torque += drivingTorque;
         force.setX(force.getX() + drivingForce.getX());
         force.setY(force.getY() + drivingForce.getY());
+
+        if(new Double(this.force.getX()).isNaN() || new Double(this.force.getY()).isNaN())
+            System.out.println("PROBLEM");
     }
-
-
-
-
-
-
 
     public void positionParticle(Point massCenter, double orientation) {
         this.massCenter = massCenter;
@@ -308,7 +305,7 @@ public class Particle {
         return new Point(nextX, nextY);
     }
 
-    public List<Segment> getSegments () {
+    private List<Segment> getSegments () {
         List<Segment> aux = new ArrayList<>();
         List<Point> points = getPoints();
         for (int i=1; i < points.size(); i++) {
@@ -320,12 +317,12 @@ public class Particle {
         return aux;
     }
 
-    double forceFor (double overlap ) {
+    private double forceFor (double overlap ) {
         //TODO faltaria la amortiguacion del resorte gama * v(rel)**n
         return - Data.kn * overlap;
     }
 
-    public List<Point> getPoints() {
+    List<Point> getPoints() {
         List<Point> cartesianPoints = new ArrayList<>();
         for (AngularPoint ap: points) {
             // Orientation should be taken into account
@@ -333,8 +330,8 @@ public class Particle {
             if (angle >= Math.PI * 2){
                 angle -= 2 * Math.PI;
             }
-            double x = massCenter.getX() + ap.getLength() * Math.cos(angle);
-            double y = massCenter.getY() + ap.getLength() * Math.sin(angle);
+            double x = massCenter.getX() + ap.getLength() * Math.sin(angle);
+            double y = massCenter.getY() + ap.getLength() * Math.cos(angle);
             cartesianPoints.add(new Point(x, y));
         }
         return cartesianPoints;
@@ -430,8 +427,6 @@ public class Particle {
     public int hashCode() {
         return id;
     }
-
-
 
     private void resetForce() {
         force.setX(0.0);

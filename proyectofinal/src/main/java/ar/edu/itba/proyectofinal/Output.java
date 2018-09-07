@@ -8,23 +8,34 @@ import java.util.List;
 class Output {
 
     private BufferedWriter writer;
+    private int count = 1;
+
 
     Output() {
         try {
-            this.writer = new BufferedWriter(new FileWriter("sim.txt",true));
+            this.writer = new BufferedWriter(new FileWriter("sim.xyz",true));
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
     }
 
     void printSystem(List<Particle> particles, double time) {
+        count = 1;
         try {
-            this.writer.write(time + "\n");
-            //TODO: print borders in another color
+            int particleCount = sumAP(particles);
+            this.writer.write(particleCount + "\nTime:   \t" + time + "\n");
             printAllSnapshots(particles);
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
+    }
+
+    private int sumAP(List<Particle> particles) {
+        int sum = 0;
+        for (Particle p: particles) {
+            sum += p.getPoints().size();
+        }
+        return sum;
     }
 
     private void printAllSnapshots(List<Particle> particles) {
@@ -33,8 +44,10 @@ class Output {
 
     private void printParticleSnapshot(Particle p) {
         try {
-            this.writer.write(p.getMassCenter().getX() + "\t" + p.getMassCenter().getY() + "\t" +  printAllVertices(p) + "\n");
-
+            for(Point point: p.getPoints()){
+                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + 0.2 + "\n"));
+                count++;
+            }
         } catch (IOException e) {
             System.out.println("Unable to print. Simulation cannot be outputted");
         }

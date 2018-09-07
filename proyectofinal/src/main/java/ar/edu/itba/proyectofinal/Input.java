@@ -111,31 +111,38 @@ class Input {
             throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
         }
         String[] particle = line.split("\\t");
-
-        int countPoints = Integer.parseInt(particle[6]);
-        if (particle.length != 7 + countPoints * 2) {
+        int countParticles = Integer.parseInt(particle[0]);
+        if (countParticles <= 0) {
+            System.out.println("Bad argument");
+            throw new ExceptionInInitializerError("Bad argument");
+        }
+        int countPoints = Integer.parseInt(particle[7]);
+        if (particle.length != 8 + countPoints * 2) {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
 
         double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
-        double desiredVel = Double.parseDouble(particle[0]);
-        Point vel = new Point(Double.parseDouble(particle[1]), Double.parseDouble(particle[2]));
-        double angularVelocity = Double.parseDouble(particle[3]);
-        double angularAcc =Double.parseDouble(particle[4]);
-        double radius = Double.parseDouble(particle[5]);
+        double desiredVel = Double.parseDouble(particle[1]);
+        Point vel = new Point(Double.parseDouble(particle[2]), Double.parseDouble(particle[3]));
+        double angularVelocity = Double.parseDouble(particle[4]);
+        double angularAcc =Double.parseDouble(particle[5]);
+        double radius = Double.parseDouble(particle[6]);
 
         List<Point> points = new ArrayList<>();
         for(int i = 0; i < countPoints; i++) {
             Point point;
-            point = new Point(Double.parseDouble(particle[7 + 2 * i]), Double.parseDouble(particle[8 + 2 * i]));
+            point = new Point(Double.parseDouble(particle[8 + 2 * i]), Double.parseDouble(particle[9 + 2 * i]));
             points.add(point);
         }
         Point massCenter = Utils.calculateMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
 
-        Particle p = new Particle(count, mass, ap, massCenter, 0, radius, desiredVel, vel, angularVelocity , angularAcc, targets);
-        particles.add(p);
+        for (int j = 0; j < countParticles; j ++) {
+            mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
+            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, vel, angularVelocity , angularAcc, targets);
+            particles.add(p);
+        }
         count ++;
     }
 
@@ -149,8 +156,8 @@ class Input {
             throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
         }
         String[] particle = line.split("\\t");
-        int countPoints = 1;
-        if (particle.length != countPoints * 2) {
+        int countPoints = Integer.parseInt(particle[0]);
+        if (particle.length != 1 + countPoints * 2) {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
@@ -164,20 +171,23 @@ class Input {
             points.add(point);
         }
         for (Point p: points) {
-            if (p.getX() > Data.minX)
+            if (p.getX() < Data.minX)
                 Data.minX = p.getX();
-            if (p.getX() < Data.maxX)
+            if (p.getX() > Data.maxX)
                 Data.maxX = p.getX();
-            if (p.getY() > Data.minY)
+            if (p.getY() < Data.minY)
                 Data.minY = p.getY();
-            if (p.getY() < Data.maxY)
+            if (p.getY() > Data.maxY)
                 Data.maxY = p.getY();
         }
 
         Point massCenter = Utils.calculateMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
 
-        Particle p = new Particle(Integer.MAX_VALUE - count, mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, null);
+        List<Point> targets = new ArrayList<>();
+        targets.add(massCenter);
+
+        Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, targets);
         p.setWall();
         particles.add(p);
         count ++;
