@@ -187,7 +187,7 @@ class Input {
             }
         }
 
-        Point massCenter = Utils.massCenter(points, Data.precision);
+        Point massCenter = Utils.calculateMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
 
         List<Point> targets = new ArrayList<>();

@@ -108,17 +108,17 @@ public class Utils {
         }
         return false;
     }
-//
-//    public static Point calculateMassCenter(List<Point> points, double mass) {
-//        double totalMass = 0, totalX = 0, totalY = 0;
-//        for (Point p: points) {
-//            totalX += p.getX() * mass;
-//            totalY += p.getY() * mass;
-//            totalMass += mass;
-//        }
-//        return new Point(totalX / totalMass,totalY / totalMass);
-//
-//    }
+
+    public static Point calculateMassCenter(Point[] points, double mass) {
+        double totalMass = 0, totalX = 0, totalY = 0;
+        for (Point p: points) {
+            totalX += p.getX() * mass;
+            totalY += p.getY() * mass;
+            totalMass += mass;
+        }
+        return new Point(totalX / totalMass,totalY / totalMass);
+
+    }
 
     public static List<AngularPoint> calculateAngularPoints(Point massCenter, Point[] points) {
         List<AngularPoint> ap = new ArrayList<>();
