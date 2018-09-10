@@ -30,7 +30,6 @@ public class Populator {
 
     private static boolean isValid(Particle p, List<Particle> particles) {
         for (Particle p2 : particles) {
-
             if (!p.equals(p2) && !p2.isWall() && p.canCollide(p2))
                 return false;
             if (p2.isWall() && p.onWall(p2))
@@ -40,10 +39,10 @@ public class Populator {
     }
 
     private static Point generateMassCenter(Particle p) {
-        double maxX = Data.maxX - p.getMaxDistance();
-        double minX = Data.minX + p.getMaxDistance();
-        double maxY = Data.maxY - p.getMaxDistance();
-        double minY = Data.minY + p.getMaxDistance();
+        double maxX = Data.maxX - p.getMaxDistance() - p.getRadius();
+        double minX = Data.minX + p.getMaxDistance() + p.getRadius();
+        double maxY = Data.maxY - p.getMaxDistance() - p.getRadius();
+        double minY = Data.minY + p.getMaxDistance() + p.getRadius();
 
         double x = (Math.random() * (maxX - minX)) + minX;
         double y = (Math.random() * (maxY - minY)) + minY;

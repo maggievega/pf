@@ -137,7 +137,8 @@ class Input {
             Point massCenter = Utils.calculateMassCenter(points, mass);
             List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
             double radius = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
-            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, targets, 1);
+            double inertiaMoment = Utils.calculateInertiaMoment(ap, mass);
+            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, targets, inertiaMoment);
             particles.add(p);
         }
         count ++;
