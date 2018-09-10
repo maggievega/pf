@@ -63,7 +63,8 @@ public class Particle {
 
     //Constructors
     public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
-                    double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration, List<Point> targets) {
+                    double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration,
+                    List<Point> targets, double inertiaMoment) {
         this.id = id;
         this.mass = mass;
         this.points = points;
@@ -77,6 +78,7 @@ public class Particle {
         this.targets = targets;
         this.force = new Point(0,0); //Used to initialize the previous position
         this.previousMassCenter = eulerPosition(-Data.dt);
+        this.inertiaMoment = inertiaMoment;
 
         //TODO check if this works.
         this.previousOrientation = orientation;
@@ -94,7 +96,7 @@ public class Particle {
         this.time = time;
         resetForce();
         getDrivingForce();
-        getContactForce(particles);
+//        getContactForce(particles);
     }
 
     public void getContactForce(List<Particle> particleList){
@@ -149,9 +151,9 @@ public class Particle {
 //                    System.out.println(a.getX() +","+a.getY() + "    " +b.getX() +","+b.getY() + " FIRSt\n");
 
                 }
-                if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
-                    System.out.println("IGUALES2");
-                }
+//                if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
+//                    System.out.println("IGUALES2");
+//                }
             }
         }
 
@@ -170,9 +172,9 @@ public class Particle {
                     a = point;
                     thisone = false;
 //                    System.out.println(a.getX() +","+a.getY() + "     " +b.getX() +","+b.getY());
-                    if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
-                        System.out.println("IGUALES2");
-                    }
+//                    if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
+//                        System.out.println("IGUALES2");
+//                    }
                 }
             }
         }
@@ -295,7 +297,7 @@ public class Particle {
                 (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
         this.torque += drivingTorque;
         
-        force.add(drivingForce);
+//        force.add(drivingForce);
     }
 
     public void positionParticle(Point massCenter, double orientation) {

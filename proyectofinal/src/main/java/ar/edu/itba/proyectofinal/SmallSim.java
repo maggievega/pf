@@ -62,7 +62,7 @@ public class SmallSim {
         Point t1 = new Point (targetX,targetY);
         List<Point> targets = new ArrayList<>();
         targets.add(t1);
-        return new Particle(id,mass,angularPoints,massCenter,orientation,radius,desiredVelocity,vel,angularVelocity,angularAcceleration,targets);
+        return new Particle(id,mass,angularPoints,massCenter,orientation,radius,desiredVelocity,vel,angularVelocity,angularAcceleration,targets,1);
     }
 
     public static Particle createParticle2(int id,double m, double massX, double massY, double targetX, double targetY){
@@ -88,7 +88,7 @@ public class SmallSim {
         Point t1 = new Point (targetX,targetY);
         List<Point> targets = new ArrayList<>();
         targets.add(t1);
-        return new Particle(id,mass,angularPoints,massCenter,orientation,radius,desiredVelocity,vel,angularVelocity,angularAcceleration,targets);
+        return new Particle(id,mass,angularPoints,massCenter,orientation,radius,desiredVelocity,vel,angularVelocity,angularAcceleration,targets,1);
     }
 
 

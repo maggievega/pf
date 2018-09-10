@@ -129,6 +129,8 @@ class Input {
         double angularAcc =Double.parseDouble(particle[5]);
         double radius = Double.parseDouble(particle[6]);
 
+        double inertiaMoment = 1;
+
         List<Point> points = new ArrayList<>();
         for(int i = 0; i < countPoints; i++) {
             Point point;
@@ -140,7 +142,7 @@ class Input {
 
         for (int j = 0; j < countParticles; j ++) {
             mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
-            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, vel, angularVelocity , angularAcc, targets);
+            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, vel, angularVelocity , angularAcc, targets, inertiaMoment);
             particles.add(p);
         }
         count ++;
@@ -187,7 +189,7 @@ class Input {
         List<Point> targets = new ArrayList<>();
         targets.add(massCenter);
 
-        Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, targets);
+        Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, targets, 1);
         p.setWall();
         particles.add(p);
         count ++;
