@@ -41,8 +41,9 @@ public class Utils {
         y2= ab.getP2().getY();
         a = p.getX();
         b = p.getY();
-        if (x1 == x2) {
-            if ((b >= y1 && b >=y2) || (b <= y1 && b <=y2)){
+//        if (x1 == x2) {
+        if (doubleEqual(x1,x2)) {
+            if ((b >= y1 && b >= y2) || (b <= y1 && b <= y2)) {
                 if ((b - y1) * (b - y1) >= (b - y2) * (b - y2)) {
 //                    System.out.println("Closest point is " + x1 + " , " + y2);
                     return new Point(x1, y2);
@@ -54,7 +55,8 @@ public class Utils {
 //                System.out.println("Closest point is " + x1 + " , " + b);
                 return new Point(x1, b);
             }
-        } else if (y1 == y2) {
+            //} else if (y1 == y2) {
+        } else if (doubleEqual(y1,y2)){
             if ((a >= x1 && a >= x2) || (a <= x1 && a <= x2)){
                 if ((a-x1) * a-x1 >= (a - x2) * (a * x2)){
 //                    System.out.println("Closest point is " + x2 + " , " + y1);
@@ -97,6 +99,14 @@ public class Utils {
                 return new Point(rx, ry);
             }
         }
+    }
+
+    public static boolean doubleEqual(double x, double y){
+        double dif = x-y;
+        if (dif*dif < Data.dt){
+            return true;
+        }
+        return false;
     }
 
     public static Point calculateMassCenter(List<Point> points, double mass) {

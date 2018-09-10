@@ -29,7 +29,8 @@ public class Simulator {
             List<Particle> previousPositions  = new ArrayList<>(particles);
 
             //Calculate forces
-            particles.forEach((p) -> {if(!p.isWall()) p.getForce(previousPositions);});
+            final double aarr = time;
+            particles.forEach((p) -> {if(!p.isWall()) p.getForce(previousPositions,aarr);});
 
             for (Particle p : particles) {
                 if (!p.isWall()){
@@ -54,7 +55,7 @@ public class Simulator {
         double nextVelY = (nextY - p.getPreviousMassCenter().getY()) / (2 * Data.dt);
 
         //TODO check if logic applies
-        double nextOrientation = 2 * p.getOrientation() - p.getPreviousOrientation() + Data.dt * Data.dt * p.getTorque() /p.getMass();
+        double nextOrientation = 2 * p.getOrientation() - p.getPreviousOrientation() + Data.dt * Data.dt * p.getTorque() /p.getInertiaMoment();
         double nextAngularVel = (nextOrientation - p.getPreviousOrientation()) / (2 * Data.dt);
 
         p.setPreviousOrientation(p.getOrientation());

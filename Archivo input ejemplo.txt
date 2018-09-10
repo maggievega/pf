@@ -11,3 +11,7 @@ cant_puntos x y x y
 
 -- constantes
 nombre	valor
+
+--varian los
+radios
+velocidades deseadas.

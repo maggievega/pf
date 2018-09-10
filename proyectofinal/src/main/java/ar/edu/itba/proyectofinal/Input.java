@@ -162,7 +162,7 @@ class Input {
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
         double mass = 1;
-        double radius = 0;
+        double radius = 0.2;
 
         List<Point> points = new ArrayList<>();
         for(int i = 0; i < countPoints; i++) {

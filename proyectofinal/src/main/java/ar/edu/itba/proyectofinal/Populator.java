@@ -6,14 +6,16 @@ public class Populator {
 
     /**
      * particles are all loaded in particles, the only thing left to do is position them and their orientation
+     *
      * @param particles the loaded particles
      */
-    public static void Populate(List<Particle> particles){
-        for (Particle p: particles) {
+    public static void Populate(List<Particle> particles) {
+        for (Particle p : particles) {
             Point mc;
             if (!p.isWall()) {
                 double orientation = Math.random() * 2 * Math.PI;
                 p.setOrientation(orientation);
+                p.setPreviousOrientation(orientation);
                 do {
                     mc = generateMassCenter(p);
                     p.setMassCenter(mc);
@@ -26,10 +28,14 @@ public class Populator {
         }
     }
 
-    private static boolean isValid(Particle p,  List<Particle> particles){
-        for (Particle p2: particles)
+    private static boolean isValid(Particle p, List<Particle> particles) {
+        for (Particle p2 : particles) {
+
             if (!p.equals(p2) && !p2.isWall() && p.canCollide(p2))
                 return false;
+            if (p2.isWall() && p.onWall(p2))
+                return false;
+        }
         return true;
     }
 
@@ -43,6 +49,7 @@ public class Populator {
         double y = (Math.random() * (maxY - minY)) + minY;
         return new Point(x, y);
     }
+
 
 
 }

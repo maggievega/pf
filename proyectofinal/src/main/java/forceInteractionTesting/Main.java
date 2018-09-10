@@ -2,31 +2,37 @@ package forceInteractionTesting;
 
 
 import ar.edu.itba.proyectofinal.Point;
+import ar.edu.itba.proyectofinal.Segment;
+import ar.edu.itba.proyectofinal.Utils;
 
 public class Main {
 
     public static void main(String[] args) {
 
 
-        Point A = new Point(0,0);
-        Point B = new Point(0,3);
-        Point C= new Point(3,3);
-        Point D = new Point(3,0);
-        Point E = new Point(2,-1);
-        Point F = new Point(1,-2);
-        Point G = new Point(0,-1);
-        Point H = new Point(1,0);
-        Point[] poligon = {A,B,C,D};
-        double precision = 0.001;
+//        Point A = new Point(0,0);
+//        Point B = new Point(0,3);
+//        Point C= new Point(3,3);
+//        Point D = new Point(3,0);
+//        Point E = new Point(2,-1);
+//        Point F = new Point(1,-2);
+//        Point G = new Point(0,-1);
+//        Point H = new Point(1,0);
+//        Point[] poligon = {A,B,C,D};
+//        double precision = 0.001;
 
 
+        Point A = new Point( 8.055799544003124 , 7.379459543866440);
+        Segment seg = new Segment( new Point(10.0 , 10.0 ), new Point(0.0 , 9.999999999999998));
+
+        System.out.println(Utils.completeClosestPoint(seg,A));
 
 //      for(int i = 0; i< 5;i++){
-        long start = System.currentTimeMillis();
-        Point center = massCenter(poligon,precision);
-        System.out.println(inertiaMoment(poligon,center,precision,1));
-        long end = System.currentTimeMillis();
-        System.out.println(" Precision :" + precision  + "      Time : " + ((end-start)/1000.0));
+//        long start = System.currentTimeMillis();
+//        Point center = massCenter(poligon,precision);
+//        System.out.println(inertiaMoment(poligon,center,precision,1));
+//        long end = System.currentTimeMillis();
+//        System.out.println(" Precision :" + precision  + "      Time : " + ((end-start)/1000.0));
         //precision/=10;
 //        }
 

@@ -56,6 +56,9 @@ public class Particle {
     private List<Point> targets;
     private double previousOrientation;
 
+    private double time = 0.0;
+
+
     private boolean thisone = false;
 
     //Constructors
@@ -87,7 +90,8 @@ public class Particle {
     }
 
 
-    public void getForce(List<Particle> particles) {
+    public void getForce(List<Particle> particles, double time) {
+        this.time = time;
         resetForce();
         getDrivingForce();
         getContactForce(particles);
@@ -145,8 +149,12 @@ public class Particle {
 //                    System.out.println(a.getX() +","+a.getY() + "    " +b.getX() +","+b.getY() + " FIRSt\n");
 
                 }
+                if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
+                    System.out.println("IGUALES2");
+                }
             }
         }
+
         /*Repeat process for other particle's segments
          */
         for (Segment segment : p2Segments){
@@ -162,9 +170,13 @@ public class Particle {
                     a = point;
                     thisone = false;
 //                    System.out.println(a.getX() +","+a.getY() + "     " +b.getX() +","+b.getY());
+                    if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
+                        System.out.println("IGUALES2");
+                    }
                 }
             }
         }
+
 //        System.out.println("__");
 //        System.out.println(a.getX() +","+a.getY() + "    " +b.getX() +","+b.getY());
 //        System.out.println("-----------------------");
@@ -183,7 +195,7 @@ public class Particle {
         Point r, f, translationForce;
 
         if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
-            System.out.println("IGUALES");
+//            System.out.println("IGUALES");
         }
 
         /* find overlap distance */
@@ -266,7 +278,7 @@ public class Particle {
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
 
         //TODO: R(t) should be : sinusoidal, uniform. It shouldn't be changed on every step.
-        double drivingTorque = Data.SD * deltaAngle - Data.beta * angularVelocity + Data.Rt ;
+        double drivingTorque = Data.SD * deltaAngle - Data.beta * angularVelocity + sinusoidalNoise(time) ;
 
 
         Point desiredDirection = new Point(target.getX() - massCenter.getX(),
@@ -281,7 +293,7 @@ public class Particle {
 
         Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
                 (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
-        torque += drivingTorque;
+        this.torque += drivingTorque;
         
         force.add(drivingForce);
     }
@@ -422,6 +434,26 @@ public class Particle {
         return id;
     }
 
+    public boolean onWall(Particle p){
+        System.out.println(System.currentTimeMillis());
+        List<Point> points = p.getPoints();
+        Point p1 = points.get(0);
+        Point p2 = points.get(1);
+        if (p1.getX()==p2.getX()){
+            double xDif = this.massCenter.getX() - p1.getX();
+            if(xDif*xDif<= (p.radius+this.radius)*(p.radius +this.radius)){
+                return true;
+            }
+        }else {
+            double yDif = this.massCenter.getY() - p1.getY();
+            if(yDif*yDif<= (p.radius+this.radius)*(p.radius +this.radius)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void resetForce() {
         force.setX(0.0);
         force.setY(0.0);
@@ -450,4 +482,12 @@ public class Particle {
     public void setWall() {
         this.wall = true;
     }
+
+
+    //todo which is the required amplitude
+    public double sinusoidalNoise(double t){
+        return Math.random();
+    }
+
+
 }
