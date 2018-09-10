@@ -437,7 +437,6 @@ public class Particle {
     }
 
     public boolean onWall(Particle p){
-        System.out.println(System.currentTimeMillis());
         List<Point> points = p.getPoints();
         Point p1 = points.get(0);
         Point p2 = points.get(1);

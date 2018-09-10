@@ -116,33 +116,28 @@ class Input {
             System.out.println("Bad argument");
             throw new ExceptionInInitializerError("Bad argument");
         }
-        int countPoints = Integer.parseInt(particle[7]);
-        if (particle.length != 8 + countPoints * 2) {
+        int countPoints = Integer.parseInt(particle[3]);
+
+        if (particle.length != 4 + countPoints * 2) {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
 
-        double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
+        double radius = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
         double desiredVel = Double.parseDouble(particle[1]);
-        Point vel = new Point(Double.parseDouble(particle[2]), Double.parseDouble(particle[3]));
-        double angularVelocity = Double.parseDouble(particle[4]);
-        double angularAcc =Double.parseDouble(particle[5]);
-        double radius = Double.parseDouble(particle[6]);
 
-        double inertiaMoment = 1;
+        Point[] points = new Point[countPoints];
 
-        List<Point> points = new ArrayList<>();
         for(int i = 0; i < countPoints; i++) {
-            Point point;
-            point = new Point(Double.parseDouble(particle[8 + 2 * i]), Double.parseDouble(particle[9 + 2 * i]));
-            points.add(point);
+            points[i] = new Point(Double.parseDouble(particle[4 + 2 * i]), Double.parseDouble(particle[5 + 2 * i]));
         }
-        Point massCenter = Utils.calculateMassCenter(points, mass);
+        Point massCenter = Utils.massCenter(points, Data.precision);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
+        double inertiaMoment = Utils.inertiaMoment(points, massCenter,Data.precision); //no usa la masa
 
         for (int j = 0; j < countParticles; j ++) {
-            mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
-            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, vel, angularVelocity , angularAcc, targets, inertiaMoment);
+            double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
+            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, targets, inertiaMoment * mass);
             particles.add(p);
         }
         count ++;
@@ -157,33 +152,42 @@ class Input {
             System.out.println("More particles than expected");
             throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
         }
+        boolean initial = false;
+        int position = 0;
+
         String[] particle = line.split("\\t");
-        int countPoints = Integer.parseInt(particle[0]);
-        if (particle.length != 1 + countPoints * 2) {
+        if (particle[0].equals("I")){
+            initial = true;
+            position = 1;
+        }
+
+        int countPoints = Integer.parseInt(particle[position]);
+        if (particle.length != position + 1 + countPoints * 2) {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
         double mass = 1;
-        double radius = 0.2;
+        double radius = 0;
 
-        List<Point> points = new ArrayList<>();
+        Point[] points = new Point[countPoints];
+
         for(int i = 0; i < countPoints; i++) {
-            Point point;
-            point = new Point(Double.parseDouble(particle[1 + 2 * i]), Double.parseDouble(particle[2 + 2 * i]));
-            points.add(point);
+            points[i] = new Point(Double.parseDouble(particle[position + 1 + 2 * i]), Double.parseDouble(particle[position + 2 + 2 * i]));
         }
-        for (Point p: points) {
-            if (p.getX() < Data.minX)
-                Data.minX = p.getX();
-            if (p.getX() > Data.maxX)
-                Data.maxX = p.getX();
-            if (p.getY() < Data.minY)
-                Data.minY = p.getY();
-            if (p.getY() > Data.maxY)
-                Data.maxY = p.getY();
+        if (initial) {
+            for (Point p: points) {
+                if (p.getX() < Data.minX)
+                    Data.minX = p.getX();
+                if (p.getX() > Data.maxX)
+                    Data.maxX = p.getX();
+                if (p.getY() < Data.minY)
+                    Data.minY = p.getY();
+                if (p.getY() > Data.maxY)
+                    Data.maxY = p.getY();
+            }
         }
 
-        Point massCenter = Utils.calculateMassCenter(points, mass);
+        Point massCenter = Utils.massCenter(points, Data.precision);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
 
         List<Point> targets = new ArrayList<>();

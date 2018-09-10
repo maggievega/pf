@@ -4,9 +4,15 @@ class Data {
 
     static double mMin = 45;
     static double mMax = 114;
+    static double rMin = 0.24;
+    static double rMax = 0.33;
+
+
     static double dt = 0.000001;
     static double totalTime = 100;
     static double printTime = 0.02;
+
+    static double precision = 0.0001;
 
     static double minX = 0;
     static double minY = 0;

@@ -108,25 +108,105 @@ public class Utils {
         }
         return false;
     }
+//
+//    public static Point calculateMassCenter(List<Point> points, double mass) {
+//        double totalMass = 0, totalX = 0, totalY = 0;
+//        for (Point p: points) {
+//            totalX += p.getX() * mass;
+//            totalY += p.getY() * mass;
+//            totalMass += mass;
+//        }
+//        return new Point(totalX / totalMass,totalY / totalMass);
+//
+//    }
 
-    public static Point calculateMassCenter(List<Point> points, double mass) {
-        double totalMass = 0, totalX = 0, totalY = 0;
-        for (Point p: points) {
-            totalX += p.getX() * mass;
-            totalY += p.getY() * mass;
-            totalMass += mass;
-        }
-        return new Point(totalX / totalMass,totalY / totalMass);
-
-    }
-
-    public static List<AngularPoint> calculateAngularPoints(Point massCenter, List<Point> points) {
+    public static List<AngularPoint> calculateAngularPoints(Point massCenter, Point[] points) {
         List<AngularPoint> ap = new ArrayList<>();
-        for (Point p: points) {
-            double angle = Utils.getAngle(massCenter, p);
-            double length = massCenter.distanceBetween(p);
+        for (int i = 0; i < points.length; i++) {
+            double angle = Utils.getAngle(massCenter, points[i]);
+            double length = massCenter.distanceBetween(points[i]);
             ap.add(new AngularPoint(angle, length));
         }
         return ap;
+    }
+
+    public static double inertiaMoment(Point[] poligon, Point relative, double precision){
+        //TODO-> Check if the return (*mass/points) is correct
+
+        double points  = 0.0;
+        double inertia = 0;
+        double[] bounds = poligonBounds(poligon);
+        for (double i = bounds[0]; i<= bounds[1]; i+= precision){
+            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
+                if (liesInside(poligon, new Point(i,j))){
+                    points+=1.0;
+                    double relX = i - relative.getX();
+                    double relY = j - relative.getY();
+                    inertia += relX * relX + relY * relY;
+                }
+            }
+        }
+        return inertia / points;
+//        return inertia * (mass/points);
+    }
+
+    public static Point massCenter(Point[]poligon, double precision){
+        int acum  = 0;
+        double xAcum = 0;
+        double yAcum = 0;
+        double[] bounds = poligonBounds(poligon);
+        for (double i = bounds[0]; i<= bounds[1]; i+= precision){
+            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
+                if (liesInside(poligon, new Point(i,j))){
+                    acum++;
+                    xAcum+=i;
+                    yAcum+=j;
+                }
+            }
+        }
+        double x =(double)Math.round((xAcum/acum) * 100000d) / 100000d;
+        double y = (double)Math.round((yAcum/acum) * 100000d) / 100000d;
+        return new Point(x,y);
+    }
+
+    public static double[] poligonBounds(Point[] poligon){
+        double xi =  poligon[0].getX();
+        double xf = poligon[0].getX();
+        double yi = poligon[0].getY();
+        double yf = poligon[0].getY();
+        for (Point p: poligon){
+            if (xi>p.getX()){
+                xi = p.getX();
+            }
+            if (xf< p.getX()){
+                xf = p.getX();
+            }
+            if (yi > p.getY()){
+                yi = p.getY();
+            }
+            if (yf < p.getY()){
+                yf = p.getY();
+            }
+        }
+        double[] ans =  {xi,xf,yi,yf};
+        return ans;
+    }
+
+    public static boolean liesInside(Point[] poligon, Point p){
+        Point start, end;
+        int wallsCrossed = 0;
+        int startIndex, endIndex;
+        int numberOfSides = poligon.length;
+        for (int i = 0; i < numberOfSides; i++){
+            if (i == numberOfSides-1){
+                end = poligon[0];
+            } else {
+                end = poligon[i+1];
+            }
+            start = poligon[i];
+
+
+        }
+        return !(wallsCrossed%2 == 1);
     }
 }

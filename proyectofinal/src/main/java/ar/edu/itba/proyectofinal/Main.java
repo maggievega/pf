@@ -9,10 +9,10 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        Input inputConstant = new Input(Type.CONSTANTS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/const.txt");
-        Input inputParticles = new Input(Type.PARTICLES, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/particles.txt");
-        Input inputTargets = new Input(Type.TARGETS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/targets.txt");
-        Input inputWalls = new Input(Type.WALLS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/walls.txt");
+        Input inputConstant = new Input(Type.CONSTANTS, "input/const.txt");
+        Input inputParticles = new Input(Type.PARTICLES, "input/particles.txt");
+        Input inputTargets = new Input(Type.TARGETS, "input/targets.txt");
+        Input inputWalls = new Input(Type.WALLS, "input/walls.txt");
 
         List<Point> targets = new ArrayList<>();
         List<Particle> particles = new ArrayList<>();
