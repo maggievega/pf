@@ -40,3 +40,7 @@ target/
 
 #Ovito Files
 *.xyz
+
+
+#Input files
+*.txt
