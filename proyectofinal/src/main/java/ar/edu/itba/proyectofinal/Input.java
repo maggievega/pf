@@ -122,8 +122,6 @@ class Input {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
-
-        double radius = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
         double desiredVel = Double.parseDouble(particle[1]);
 
         Point[] points = new Point[countPoints];
@@ -131,13 +129,15 @@ class Input {
         for(int i = 0; i < countPoints; i++) {
             points[i] = new Point(Double.parseDouble(particle[4 + 2 * i]), Double.parseDouble(particle[5 + 2 * i]));
         }
-        Point massCenter = Utils.massCenter(points, Data.precision);
-        List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
-        double inertiaMoment = Utils.inertiaMoment(points, massCenter,Data.precision); //no usa la masa
+
+//        double inertiaMoment = Utils.inertiaMoment(points, massCenter,Data.precision); //no usa la masa
 
         for (int j = 0; j < countParticles; j ++) {
             double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
-            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, targets, inertiaMoment * mass);
+            Point massCenter = Utils.calculateMassCenter(points, mass);
+            List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
+            double radius = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
+            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, targets, 1);
             particles.add(p);
         }
         count ++;
@@ -189,7 +189,6 @@ class Input {
 
         Point massCenter = Utils.calculateMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
-
         List<Point> targets = new ArrayList<>();
         targets.add(massCenter);
 

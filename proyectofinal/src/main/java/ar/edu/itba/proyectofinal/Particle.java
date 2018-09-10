@@ -96,7 +96,7 @@ public class Particle {
         this.time = time;
         resetForce();
         getDrivingForce();
-//        getContactForce(particles);
+        getContactForce(particles);
     }
 
     public void getContactForce(List<Particle> particleList){
@@ -297,7 +297,7 @@ public class Particle {
                 (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
         this.torque += drivingTorque;
         
-//        force.add(drivingForce);
+        force.add(drivingForce);
     }
 
     public void positionParticle(Point massCenter, double orientation) {
