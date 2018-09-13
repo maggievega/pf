@@ -3,15 +3,18 @@ no tener lineas de mas en los archivos
 
 -- particles
 cantidad_de_formatos_de_particulas
-cantidad_de_particulas_de_ese_formato	desideredVel velx vely angular_vel angular_acc radius cant_puntos x y x y
+cantidad_de_particulas_de_ese_formato	desideredVel radius cant_puntos x y x y
 
 -- paredes
+se le puede poner un parametro I adelante. para que empiezen en ese cuadrado (tiene que ser un cuadrado)
+siempre son 2 los cant_puntos
 cantidad de paredes que se quieren
-cant_puntos x y x y
+cant_puntos x y x y o 
+I cant_puntos x y x y 
+
+-- targets
+F dice si es final o no (se puede poner o no)
+despues va x y con el punto donde tiene que ir
 
 -- constantes
 nombre	valor
-
---varian los
-radios
-velocidades deseadas.
