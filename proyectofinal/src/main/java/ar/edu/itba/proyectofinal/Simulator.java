@@ -35,7 +35,16 @@ public class Simulator {
             for (Particle p : particles) {
                 if (!p.isWall()){
                     updatePosition(p);
+                    if (p.reachedTarget()) {
+                        if (!p.getCurrentTarget().isEnd())
+                            p.nextTarget();
+                        else { p.resetTargets(); p.resetPosition(); }
+                    }
                 }
+
+                //TODO: Ask if the first target is reached. If it is and it is not final, target goes to the next but particle no
+                // TODO: if it is final, particle can either be removed or put into loop with the same targets.
+                //TODO: CHECK THAT THE FINAL IS FINAL.
                 // Ask if it reached the target and remove it ?
                 // And if it doesn't have more targets remove it from particles ?
             }

@@ -12,7 +12,7 @@ class Input {
     private int N = -1;
     private static int count = 0;
     private List<Particle> particles;
-    private List<Point> targets;
+    private List<Target> targets;
     private String fileName;
     private Type type;
 
@@ -32,13 +32,13 @@ class Input {
         load();
     }
 
-    void loadParticles(List<Particle> p, List<Point> t) {
+    void loadParticles(List<Particle> p, List<Target> t) {
         particles = p;
         targets = t;
         load();
     }
 
-    void loadTargets(List<Point> t) {
+    void loadTargets(List<Target> t) {
         targets = t;
         load();
     }
@@ -87,12 +87,19 @@ class Input {
             throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
         }
         String[] target = line.split("\\t");
-        if (target.length != 2) {
+        int amount = 0;
+        boolean end = false;
+        if (target[0].equals("F")) {
+            amount = 1;
+            end = true;
+        }
+        if (target.length != 2 + amount) {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
-        Point p = new Point(Double.parseDouble(target[0]), Double.parseDouble(target[1]));
-        targets.add(p);
+        Target t = new Target(Double.parseDouble(target[amount]), Double.parseDouble(target[amount + 1]), end);
+        t.setEnd(end);
+        targets.add(t);
         count ++;
     }
 
@@ -116,9 +123,9 @@ class Input {
             System.out.println("Bad argument");
             throw new ExceptionInInitializerError("Bad argument");
         }
-        int countPoints = Integer.parseInt(particle[3]);
+        int countPoints = Integer.parseInt(particle[2]);
 
-        if (particle.length != 4 + countPoints * 2) {
+        if (particle.length != 3 + countPoints * 2) {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
@@ -127,11 +134,9 @@ class Input {
         Point[] points = new Point[countPoints];
 
         for(int i = 0; i < countPoints; i++) {
-            points[i] = new Point(Double.parseDouble(particle[4 + 2 * i]), Double.parseDouble(particle[5 + 2 * i]));
+            points[i] = new Point(Double.parseDouble(particle[3 + 2 * i]), Double.parseDouble(particle[4 + 2 * i]));
         }
-
-//        double inertiaMoment = Utils.inertiaMoment(points, massCenter,Data.precision); //no usa la masa
-
+        
         for (int j = 0; j < countParticles; j ++) {
             double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
             Point massCenter = Utils.calculateMassCenter(points, mass);
@@ -190,8 +195,8 @@ class Input {
 
         Point massCenter = Utils.calculateMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
-        List<Point> targets = new ArrayList<>();
-        targets.add(massCenter);
+        List<Target> targets = new ArrayList<>();
+        targets.add(new Target(massCenter));
 
         Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, targets, 1);
         p.setWall();

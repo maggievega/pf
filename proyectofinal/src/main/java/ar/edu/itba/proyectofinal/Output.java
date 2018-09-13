@@ -1,8 +1,10 @@
 package ar.edu.itba.proyectofinal;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 class Output {
@@ -12,6 +14,14 @@ class Output {
 
 
     Output() {
+        File file = new File("sim.xyz");
+        try {
+            if (Files.deleteIfExists(file.toPath())) //surround it in try catch block
+                System.out.println("LO BORRA");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         try {
             this.writer = new BufferedWriter(new FileWriter("sim.xyz",true));
         } catch (IOException e) {

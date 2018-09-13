@@ -53,7 +53,9 @@ public class Particle {
 
     private double inertiaMoment;
 
-    private List<Point> targets;
+    private List<Target> targets;
+    private int indexTarget = 0;
+
     private double previousOrientation;
 
     private double time = 0.0;
@@ -64,7 +66,7 @@ public class Particle {
     //Constructors
     public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
                     double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration,
-                    List<Point> targets, double inertiaMoment) {
+                    List<Target> targets, double inertiaMoment) {
         this.id = id;
         this.mass = mass;
         this.points = points;
@@ -272,7 +274,7 @@ public class Particle {
 
     private void getDrivingForce() {
         //TODO: Extract target point from target segment
-        Point target = targets.get(0);
+        Target target = targets.get(indexTarget);
         double desiredAngle = Utils.getAngle( massCenter, target);
 //        double help = desiredAngle*-1;
 //        help+=2*Math.PI;
@@ -409,17 +411,38 @@ public class Particle {
         return inertiaMoment;
     }
 
-    public List<Point> getTargets() {
+    public List<Target> getTargets() {
         return targets;
     }
+
+    public Target getCurrentTarget() { return this.targets.get(indexTarget); }
+
+    private boolean reached(Target t) {
+        return this.massCenter.squaredDistanceBetween(t)
+                <= (this.maxDistance + this.radius) *
+                (this.maxDistance + this.radius);
+
+    }
+
+    public boolean reachedTarget() { return this.reached(this.getCurrentTarget());}
 
     public Point getPreviousMassCenter() {
         return previousMassCenter;
     }
 
+    public void nextTarget() {
+        this.indexTarget += 1;
+    }
+
+    public void resetTargets() { this.indexTarget = 0;
+    }
+
+    public void resetPosition() { Populator.getInstance().positionParticle(this); }
+
     public void setPreviousMassCenter(Point previousMassCenter) {
         this.previousMassCenter = previousMassCenter;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -489,6 +512,5 @@ public class Particle {
     public double sinusoidalNoise(double t){
         return Math.random();
     }
-
 
 }

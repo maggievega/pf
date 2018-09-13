@@ -1,5 +1,7 @@
 package ar.edu.itba.proyectofinal;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Populator {
@@ -9,27 +11,53 @@ public class Populator {
      *
      * @param particles the loaded particles
      */
-    public static void Populate(List<Particle> particles) {
+
+    private List<Particle> particles = null;
+    private static Populator instance = null;
+
+    private Populator() {
+    }
+
+    public static Populator getInstance() {
+        if(instance == null) {
+            instance = new Populator();
+        }
+        return instance;
+    }
+
+    public void setParticles(List<Particle> particles) {
+        if(this.particles == null)
+            this.particles = particles;
+    }
+
+    public void Populate() {
         for (Particle p : particles) {
-            Point mc;
-            if (!p.isWall()) {
-                double orientation = Math.random() * 2 * Math.PI;
-                p.setOrientation(orientation);
-                p.setPreviousOrientation(orientation);
-                do {
-                    mc = generateMassCenter(p);
-                    p.setMassCenter(mc);
-                } while (!isValid(p, particles));
+                positionParticle(p);
+                //TODO: TARGETS HAVE TO BE ORGANIZED BASED ON THE DISTANCE TO THE PARTICLE CHECK!
+                Collections.sort(p.getTargets(),
+                        (o1, o2) -> (int) ((int) o1.distanceBetween(p.getMassCenter()) - o2.distanceBetween(p.getMassCenter())));
 
-                p.positionParticle(mc, orientation);
-
-                //TODO: TARGETS HAVE TO BE ORGANIZED BASED ON THE DISTANCE TO THE PARTICLE
-            }
         }
     }
 
-    private static boolean isValid(Particle p, List<Particle> particles) {
-        for (Particle p2 : particles) {
+    public void positionParticle(Particle p) {
+        Point mc;
+        if (!p.isWall()) {
+            double orientation = Math.random() * 2 * Math.PI;
+            p.setOrientation(orientation);
+            p.setPreviousOrientation(orientation);
+            do {
+                mc = generateMassCenter(p);
+                p.setMassCenter(mc);
+            } while (!isValid(p));
+
+            p.positionParticle(mc, orientation);
+        }
+
+    }
+
+    private boolean isValid(Particle p) {
+        for (Particle p2 : this.particles) {
             if (!p.equals(p2) && !p2.isWall() && p.canCollide(p2))
                 return false;
             if (p2.isWall() && p.onWall(p2))

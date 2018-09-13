@@ -14,7 +14,7 @@ public class Main {
         Input inputTargets = new Input(Type.TARGETS, "input/targets.txt");
         Input inputWalls = new Input(Type.WALLS, "input/walls.txt");
 
-        List<Point> targets = new ArrayList<>();
+        List<Target> targets = new ArrayList<>();
         List<Particle> particles = new ArrayList<>();
 
         System.out.println("-- Starting to load");
@@ -26,8 +26,9 @@ public class Main {
         inputParticles.loadParticles(particles, targets);
         System.out.println("-- Particles Loaded");
 
+        Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
-        Populator.Populate(particles);
+        Populator.getInstance().Populate();
         System.out.println("-- Population Finished");
         System.out.println("-- Start Simulation");
         Simulator s = new Simulator(particles);
