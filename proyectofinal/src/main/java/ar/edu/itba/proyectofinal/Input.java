@@ -58,8 +58,6 @@ class Input {
         }
     }
 
-
-
     private void populate(String line) {
         switch (type) {
             case WALLS:
@@ -139,7 +137,7 @@ class Input {
         
         for (int j = 0; j < countParticles; j ++) {
             double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
-            Point massCenter = Utils.calculateMassCenter(points, mass);
+            Point massCenter = Utils.massCenter(points, Data.precision );
             List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
             double radius = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
             double inertiaMoment = Utils.calculateInertiaMoment(ap, mass);
@@ -206,11 +204,13 @@ class Input {
 
     private void populateConstants(String line) {
         String[] values = line.split("\\t");
-        if (values.length != 2) {
+        if (values.length > 2) {
             //error
         }
         String param = values[0].toLowerCase();
         switch (param) {
+            case "continuous":
+                Data.continuous = true;
             case "dt":
                 Data.dt = Double.parseDouble(values[1]);
                 break;

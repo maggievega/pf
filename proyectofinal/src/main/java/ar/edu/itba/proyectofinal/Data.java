@@ -14,6 +14,8 @@ class Data {
 
     static double precision = 0.0001;
 
+    static boolean continuous = false;
+
     static double minX = 0;
     static double minY = 0;
     static double maxX = 10;

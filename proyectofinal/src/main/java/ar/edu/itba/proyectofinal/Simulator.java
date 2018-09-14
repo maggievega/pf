@@ -1,7 +1,7 @@
 package ar.edu.itba.proyectofinal;
 
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Simulator {
@@ -35,18 +35,8 @@ public class Simulator {
             for (Particle p : particles) {
                 if (!p.isWall()){
                     updatePosition(p);
-                    if (p.reachedTarget()) {
-                        if (!p.getCurrentTarget().isEnd())
-                            p.nextTarget();
-                        else { p.resetTargets(); p.resetPosition(); }
-                    }
+                    updateTarget(p);
                 }
-
-                //TODO: Ask if the first target is reached. If it is and it is not final, target goes to the next but particle no
-                // TODO: if it is final, particle can either be removed or put into loop with the same targets.
-                //TODO: CHECK THAT THE FINAL IS FINAL.
-                // Ask if it reached the target and remove it ?
-                // And if it doesn't have more targets remove it from particles ?
             }
 
             time += Data.dt;
@@ -54,9 +44,26 @@ public class Simulator {
         o.done();
     }
 
+    private void updateTarget(Particle p) {
+        if (p.reachedTarget()) {
+            if (!p.getCurrentTarget().isEnd())
+                p.nextTarget(); //TODO: ASK IF NEXT TARGET SHOULD SORT THE REMAINING TARGETS
+            else resetParticle(p);
+        }
+    }
+
+
+    private void resetParticle(Particle p) {
+        if (Data.continuous) {
+            particles.remove(p);
+        } else {
+            p.resetTargets(); p.resetPosition();
+        }
+    }
+
 
     /* Uses Verlet */
-    public void updatePosition(Particle p) {
+    private void updatePosition(Particle p) {
         double nextX = 2 * p.getMassCenter().getX() - p.getPreviousMassCenter().getX() + Data.dt * Data.dt * p.getForce().getX() / p.getMass() ;
         double nextY = 2 * p.getMassCenter().getY() - p.getPreviousMassCenter().getY() + Data.dt * Data.dt * p.getForce().getY() / p.getMass() ;
 
