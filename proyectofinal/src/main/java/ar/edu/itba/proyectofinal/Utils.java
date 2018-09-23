@@ -164,7 +164,7 @@ public class Utils {
         double yAcum = 0;
         double[] bounds = poligonBounds(poligon);
         for (double i = bounds[0]; i<= bounds[1]; i+= precision){
-            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
+            for (double j = bounds[2]; j<= bounds[3] ;j+=precision){
                 if (liesInside(poligon, new Point(i,j))){
                     acum++;
                     xAcum+=i;
