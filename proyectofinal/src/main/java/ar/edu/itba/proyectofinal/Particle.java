@@ -98,7 +98,37 @@ public class Particle {
         this.time = time;
         resetForce();
         getDrivingForce();
-        getContactForce(particles);
+//        getContactForce(particles);
+    }
+
+    private void getDrivingForce() {
+        Target target = targets.get(indexTarget);
+        double desiredAngle = Utils.getAngle( massCenter, target);
+
+        double aux = desiredAngle - orientation;
+        double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
+        List<Point> points = this.getPoints();
+
+        double drivingTorque = Data.SD * deltaAngle - Data.beta * angularVelocity ;//+ sinusoidalNoise(time) ;
+//        System.out.println("Orientation : " + this.orientation);
+//        System.out.println("Desired orientation" + desiredAngle);
+//        System.out.println("--------------");
+
+//        Point desiredDirection = new Point(target.getX() - massCenter.getX(),
+//                target.getY() - massCenter.getY());
+//        double abs = Math.sqrt(desiredDirection.getX() * desiredDirection.getX() +
+//                desiredDirection.getY() * desiredDirection.getY());
+
+//        desiredDirection.times(1 / abs);
+
+//        Point desiredVel = new Point (desiredVelocity * desiredDirection.getX(),
+//                desiredVelocity * desiredDirection.getY());
+
+//        Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
+//                (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
+        this.torque += drivingTorque;
+        System.out.println(this.torque);
+//        force.add(drivingForce);
     }
 
     public void getContactForce(List<Particle> particleList){
@@ -229,7 +259,7 @@ public class Particle {
 //        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
 //        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
 
-        tangentialForce(p, a, b, overlapForce);
+//        tangentialForce(p, a, b, overlapForce);
     }
 
     public void tangentialForce(Particle p, Point a, Point b, double overlap){
@@ -272,35 +302,7 @@ public class Particle {
 
     }
 
-    private void getDrivingForce() {
-        //TODO: Extract target point from target segment
-        Target target = targets.get(indexTarget);
-        double desiredAngle = Utils.getAngle( massCenter, target);
-//        double help = desiredAngle*-1;
-//        help+=2*Math.PI;
-        double aux = desiredAngle - orientation;
-        double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
 
-        //TODO: R(t) should be : sinusoidal, uniform. It shouldn't be changed on every step.
-        double drivingTorque = Data.SD * deltaAngle - Data.beta * angularVelocity + sinusoidalNoise(time) ;
-
-
-        Point desiredDirection = new Point(target.getX() - massCenter.getX(),
-                target.getY() - massCenter.getY());
-        double abs = Math.sqrt(desiredDirection.getX() * desiredDirection.getX() +
-                desiredDirection.getY() * desiredDirection.getY());
-
-        desiredDirection.times(1 / abs);
-
-        Point desiredVel = new Point (desiredVelocity * desiredDirection.getX(),
-                desiredVelocity * desiredDirection.getY());
-
-        Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
-                (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
-        this.torque += drivingTorque;
-        
-        force.add(drivingForce);
-    }
 
     public void positionParticle(Point massCenter, double orientation) {
         this.massCenter = massCenter;
@@ -510,7 +512,7 @@ public class Particle {
 
     //todo which is the required amplitude
     public double sinusoidalNoise(double t){
-        return Math.random();
+        return Data.eta * Data.mMax * this.maxDistance * Data.grav * Math.sin(t * (Math.PI * 2));
     }
 
 }

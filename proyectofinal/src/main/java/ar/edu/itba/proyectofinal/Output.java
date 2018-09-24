@@ -33,7 +33,7 @@ class Output {
         count = 1;
         try {
             int particleCount = sumAP(particles);
-            this.writer.write(particleCount + "\nTime:   \t" + time + "\n");
+            this.writer.write((particleCount) + "\nTime:   \t" + time + "\n");
             printAllSnapshots(particles);
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
@@ -55,9 +55,10 @@ class Output {
     private void printParticleSnapshot(Particle p) {
         try {
             for(Point point: p.getPoints()){
-                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + 0.2 + "\n"));
+                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\n"));
                 count++;
             }
+//            this.writer.write((count + "\t" +  + "\t" + 5 + "\t" + 0 + "\t" + 0.15 + "\n"));
         } catch (IOException e) {
             System.out.println("Unable to print. Simulation cannot be outputted");
         }

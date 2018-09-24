@@ -44,14 +44,16 @@ public class Populator {
         Point mc;
         if (!p.isWall()) {
             double orientation = Math.random() * 2 * Math.PI;
-            p.setOrientation(orientation);
-            p.setPreviousOrientation(orientation);
+//            p.setOrientation(orientation);
+            p.setOrientation(0);
+            p.setPreviousOrientation(0);
             do {
-                mc = generateMassCenter(p);
+//                mc = generateMassCenter(p);
+                mc = new Point(5,7);
                 p.setMassCenter(mc);
             } while (!isValid(p));
 
-            p.positionParticle(mc, orientation);
+            p.positionParticle(mc, 0);
         }
 
     }

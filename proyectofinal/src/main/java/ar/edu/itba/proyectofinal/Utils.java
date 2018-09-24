@@ -18,7 +18,8 @@ public class Utils {
         double y1 = 1;
         double x2 = desired.getX() - massCenter.getX();
         double y2 = desired.getY() - massCenter.getY();
-        double value = Math.atan2(x1 * y2 - y1 * x2, x1 * x2 + y1 * y2);
+        double value = Math.atan2(desired.getX()-massCenter.getX(),desired.getY()-massCenter.getX());
+//        double value = Math.atan2(x1 * y2 - y1 * x2, x1 * x2 + y1 * y2);
         return value >= 0 ? value : value + 2 * Math.PI;
     }
 
@@ -145,7 +146,7 @@ public class Utils {
         double inertia = 0;
         double[] bounds = poligonBounds(poligon);
         for (double i = bounds[0]; i<= bounds[1]; i+= precision){
-            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
+            for (double j = bounds[2]; j<= bounds[3] ;j+=precision){
                 if (liesInside(poligon, new Point(i,j))){
                     points+=1.0;
                     double relX = i - relative.getX();

@@ -74,6 +74,11 @@ public class Simulator {
         double nextOrientation = 2 * p.getOrientation() - p.getPreviousOrientation() + Data.dt * Data.dt * p.getTorque() /p.getInertiaMoment();
         double nextAngularVel = (nextOrientation - p.getPreviousOrientation()) / (2 * Data.dt);
 
+//        System.out.println("-------");
+//        System.out.println(p.getOrientation());
+//        System.out.println(p.getTorque());
+//        System.out.println(p.getPreviousOrientation());
+
         p.setPreviousOrientation(p.getOrientation());
         p.setOrientation(nextOrientation);
         p.setAngularVelocity(nextAngularVel);

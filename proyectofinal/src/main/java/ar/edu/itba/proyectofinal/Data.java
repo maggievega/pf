@@ -28,7 +28,8 @@ class Data {
     static double mr = 1; // TODO: FIND
 
     static double SD = 20;
-    static double eta = 1;
+    static double eta = 0.75;
+    static double grav = 10;
     static double T = 1;
 
     static double Rt = 0; // TODO: CHANGE

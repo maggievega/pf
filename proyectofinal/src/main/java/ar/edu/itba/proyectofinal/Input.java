@@ -137,10 +137,13 @@ class Input {
         
         for (int j = 0; j < countParticles; j ++) {
             double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
+            mass = Data.mMin;
             Point massCenter = Utils.massCenter(points, Data.precision );
             List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
             double radius = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
-            double inertiaMoment = Utils.calculateInertiaMoment(ap, mass);
+            double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision);
+            inertiaMoment *= mass;
+            double inertiaMoment2 = Utils.calculateInertiaMoment(ap, mass);
             Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, targets, inertiaMoment);
             particles.add(p);
         }
@@ -171,7 +174,7 @@ class Input {
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
         double mass = 1;
-        double radius = 0;
+        double radius = 0.00001;
 
         Point[] points = new Point[countPoints];
 
