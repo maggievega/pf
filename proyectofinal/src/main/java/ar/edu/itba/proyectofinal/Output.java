@@ -61,7 +61,6 @@ class Output {
                 this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\n"));
                 count++;
             }
-//            this.writer.write((count + "\t" +  + "\t" + 5 + "\t" + 0 + "\t" + 0.15 + "\n"));
         } catch (IOException e) {
             System.out.println("Unable to print. Simulation cannot be outputted");
         }
@@ -70,7 +69,8 @@ class Output {
     private void printAllTargets() {
         for (Target t : Data.targetList) {
             try {
-                this.writer.write((count + "\t" + t.getX() + "t" + t.getY() + "\t" + 0 + "\t" + 0.10 + "\n"));
+                this.writer.write((count + "\t" + t.getX() + "\t" + t.getY() + "\t" + 0 + "\t" + 0.10 + "\n"));
+                count++;
             } catch (IOException e) {
                 e.printStackTrace();
             }
