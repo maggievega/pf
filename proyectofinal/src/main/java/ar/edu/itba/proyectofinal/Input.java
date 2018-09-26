@@ -95,8 +95,7 @@ class Input {
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
         double interval = Double.parseDouble(target[amount + TargetType.INTERVAL.ordinal()]);
-        Target t = new Target(Double.parseDouble(target[amount]), Double.parseDouble(target[amount + TargetType.TARGET_Y.ordinal()]),  interval, count , end);
-        t.setEnd(end);
+        Target t = new Target(Double.parseDouble(target[amount]), Double.parseDouble(target[amount + TargetType.TARGET_Y.ordinal()]),  interval, end);
         targets.add(t);
         count ++;
     }

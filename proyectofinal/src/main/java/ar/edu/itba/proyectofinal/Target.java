@@ -6,15 +6,14 @@ public class Target extends Point {
     private boolean end = false;
 
     public int R = 0;
-    public int G;
+    public int G = 0;
     public int B = 0;
 
-    public Target(double x, double y, double interval, int count, boolean end) {
+    public Target(double x, double y, double interval, boolean end) {
         super(x, y);
         this.end = end;
+        if (end) setMiddle(); else setFinal();
         s = new Segment(x - interval, y, x + interval, y);
-        G = 255 - count * Data.decrease_color_target;
-
     }
 
     public Target(double x, double y) {
@@ -47,5 +46,14 @@ public class Target extends Point {
 
     public int getB() {
         return B;
+    }
+
+    public void setFinal() {
+        R = 255;
+        G = 255;
+    }
+
+    public void setMiddle() {
+        G = 255;
     }
 }
