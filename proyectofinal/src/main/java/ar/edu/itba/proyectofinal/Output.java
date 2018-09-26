@@ -1,5 +1,7 @@
 package ar.edu.itba.proyectofinal;
 
+import com.sun.prism.shader.Texture_RadialGradient_PAD_AlphaTest_Loader;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -32,9 +34,10 @@ class Output {
     void printSystem(List<Particle> particles, double time) {
         count = 1;
         try {
-            int particleCount = sumAP(particles);
+            int particleCount = sumAP(particles) + Data.targetList.size();
             this.writer.write((particleCount) + "\nTime:   \t" + time + "\n");
             printAllSnapshots(particles);
+            printAllTargets();
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
@@ -61,6 +64,16 @@ class Output {
 //            this.writer.write((count + "\t" +  + "\t" + 5 + "\t" + 0 + "\t" + 0.15 + "\n"));
         } catch (IOException e) {
             System.out.println("Unable to print. Simulation cannot be outputted");
+        }
+    }
+
+    private void printAllTargets() {
+        for (Target t : Data.targetList) {
+            try {
+                this.writer.write((count + "\t" + t.getX() + "t" + t.getY() + "\t" + 0 + "\t" + 0.10 + "\n"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

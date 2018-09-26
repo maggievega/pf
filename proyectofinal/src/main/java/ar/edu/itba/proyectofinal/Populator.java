@@ -33,9 +33,8 @@ public class Populator {
     public void Populate() {
         for (Particle p : particles) {
                 positionParticle(p);
-                //TODO: TARGETS HAVE TO BE ORGANIZED BASED ON THE DISTANCE TO THE PARTICLE CHECK!
-                Collections.sort(p.getTargets(),
-                        (o1, o2) -> (int) ((int) o1.distanceBetween(p.getMassCenter()) - o2.distanceBetween(p.getMassCenter())));
+//                Collections.sort(p.getTargets(),
+//                        (o1, o2) -> (int) ((int) o1.distanceBetween(p.getMassCenter()) - o2.distanceBetween(p.getMassCenter())));
 
         }
     }

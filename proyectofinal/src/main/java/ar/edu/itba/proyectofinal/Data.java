@@ -1,11 +1,15 @@
 package ar.edu.itba.proyectofinal;
 
+import java.util.List;
+
 class Data {
 
     static double mMin = 45;
     static double mMax = 114;
     static double rMin = 0.24;
     static double rMax = 0.33;
+
+    static List<Target> targetList;
 
 
     static double dt = 0.000001;
