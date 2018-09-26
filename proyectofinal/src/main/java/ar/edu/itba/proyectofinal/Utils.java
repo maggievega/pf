@@ -18,17 +18,13 @@ public class Utils {
         double y1 = 1;
         double x2 = desired.getX() - massCenter.getX();
         double y2 = desired.getY() - massCenter.getY();
-        double value = Math.atan2(desired.getX()-massCenter.getX(),desired.getY()-massCenter.getX());
+        double value = Math.atan2(desired.getX()-massCenter.getX(),desired.getY()-massCenter.getY());
 //        double value = Math.atan2(x1 * y2 - y1 * x2, x1 * x2 + y1 * y2);
         return value >= 0 ? value : value + 2 * Math.PI;
     }
 
     public static Point getPerpendicularTo(Point p){
         return new Point (-p.getY(), p.getX());
-    }
-
-    public static Point getPerpendicularTo2(Point p){
-        return new Point (p.getY(), -p.getX());
     }
 
 

@@ -1,7 +1,5 @@
 package ar.edu.itba.proyectofinal;
 
-import com.sun.prism.shader.Texture_RadialGradient_PAD_AlphaTest_Loader;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -18,8 +16,7 @@ class Output {
     Output() {
         File file = new File("sim.xyz");
         try {
-            if (Files.deleteIfExists(file.toPath())) //surround it in try catch block
-                System.out.println("LO BORRA");
+            Files.deleteIfExists(file.toPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,7 +55,7 @@ class Output {
     private void printParticleSnapshot(Particle p) {
         try {
             for(Point point: p.getPoints()){
-                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\n"));
+                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\n"));
                 count++;
             }
         } catch (IOException e) {
@@ -69,20 +66,12 @@ class Output {
     private void printAllTargets() {
         for (Target t : Data.targetList) {
             try {
-                this.writer.write((count + "\t" + t.getX() + "\t" + t.getY() + "\t" + 0 + "\t" + 0.10 + "\n"));
+                this.writer.write((count + "\t" + t.getX() + "\t" + t.getY() + "\t" + 0 + "\t" + Data.wall_radius + "\t" + t.getR() + "\t" + t.getG() + "\t" + t.getB() + "\n"));
                 count++;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    private String printAllVertices(Particle p) {
-        StringBuilder sb = new StringBuilder();
-        for (Point point: p.getPoints()) {
-            sb.append(point.getX()).append("\t").append(point.getY()).append("\t");
-        }
-        return sb.toString();
     }
 
     void done() {

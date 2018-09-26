@@ -95,7 +95,7 @@ class Input {
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
         double interval = Double.parseDouble(target[amount + TargetType.INTERVAL.ordinal()]);
-        Target t = new Target(Double.parseDouble(target[amount]), Double.parseDouble(target[amount + TargetType.TARGET_Y.ordinal()]),  interval, end);
+        Target t = new Target(Double.parseDouble(target[amount]), Double.parseDouble(target[amount + TargetType.TARGET_Y.ordinal()]),  interval, count , end);
         t.setEnd(end);
         targets.add(t);
         count ++;
@@ -174,7 +174,7 @@ class Input {
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
         double mass = 1;
-        double radius = 0.00001;
+        double radius = Data.wall_radius;
 
         Point[] points = new Point[countPoints];
 
@@ -201,6 +201,7 @@ class Input {
 
         Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, targets, 1);
         p.setWall();
+        p.setColor(255, 0, 0);
         particles.add(p);
         count ++;
     }

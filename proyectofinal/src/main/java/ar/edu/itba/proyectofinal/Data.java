@@ -18,6 +18,10 @@ class Data {
 
     static double precision = 0.0001;
 
+    static double wall_radius = 0.2;
+
+    static int decrease_color_target = 30;
+
     static boolean continuous = false;
 
     static double minX = 0;

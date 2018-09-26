@@ -63,6 +63,10 @@ public class Particle {
 
     private boolean thisone = false;
 
+    private int R = 255;
+    private int G = 255;
+    private int B = 255;
+
     //Constructors
     public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
                     double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration,
@@ -509,6 +513,23 @@ public class Particle {
         this.wall = true;
     }
 
+    public int getR() {
+        return R;
+    }
+
+    public int getG() {
+        return G;
+    }
+
+    public int getB() {
+        return B;
+    }
+
+    public void setColor (int R, int G, int B) {
+        this.R = R;
+        this.G = G;
+        this.B = B;
+    }
 
     //todo which is the required amplitude
     public double sinusoidalNoise(double t){
