@@ -29,6 +29,8 @@ public class Point {
         this.y = y;
     }
 
+    public void setPoint(Point p) { this.x = x; this.y = y;}
+
     public void times(double scalar) {this.x *= scalar; this.y *= scalar; }
 
     public void add(Point p) { this.x += p.getX(); this.y += p.getY(); }

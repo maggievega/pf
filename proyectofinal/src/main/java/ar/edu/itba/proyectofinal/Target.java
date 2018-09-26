@@ -4,6 +4,7 @@ public class Target extends Point {
 
     private Segment s;
     private boolean end = false;
+    private double interval;
 
     public int R = 0;
     public int G = 0;
@@ -12,8 +13,7 @@ public class Target extends Point {
     public Target(double x, double y, double interval, boolean end) {
         super(x, y);
         this.end = end;
-        if (end) setMiddle(); else setFinal();
-        s = new Segment(x - interval, y, x + interval, y);
+        if (end) setFinal(); else setMiddle();
     }
 
     public Target(double x, double y) {
@@ -28,12 +28,11 @@ public class Target extends Point {
         return end;
     }
 
-    public void setEnd(boolean end) {
-        this.end = end;
-    }
-
-    public Segment getS() {
-        return s;
+    public void place(Point mc) {
+        if (this.s == null)
+            this.s = new Segment(getX() - interval, getY(), getX() + interval, getY());
+        Point closest = Utils.completeClosestPoint(s, mc);
+        this.setPoint(closest);
     }
 
     public int getR() {
@@ -48,12 +47,12 @@ public class Target extends Point {
         return B;
     }
 
-    public void setFinal() {
+    public void setMiddle() {
         R = 255;
         G = 255;
     }
 
-    public void setMiddle() {
+    public void setFinal() {
         G = 255;
     }
 }

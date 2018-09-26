@@ -12,7 +12,6 @@ class Output {
     private BufferedWriter writer;
     private int count = 1;
 
-
     Output() {
         File file = new File("sim.xyz");
         try {
@@ -55,7 +54,8 @@ class Output {
     private void printParticleSnapshot(Particle p) {
         try {
             for(Point point: p.getPoints()){
-                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\n"));
+                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\t" +
+                        p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" + p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  p.getSelected() + "\n"));
                 count++;
             }
         } catch (IOException e) {
@@ -66,7 +66,7 @@ class Output {
     private void printAllTargets() {
         for (Target t : Data.targetList) {
             try {
-                this.writer.write((count + "\t" + t.getX() + "\t" + t.getY() + "\t" + 0 + "\t" + Data.wall_radius + "\t" + t.getR() + "\t" + t.getG() + "\t" + t.getB() + "\n"));
+                this.writer.write((count + "\t" + t.getX() + "\t" + t.getY() + "\t" + 0 + "\t" + Data.wall_radius + "\t" + t.getR() + "\t" + t.getG() + "\t" + t.getB() +  "\t" + 0  +  "\t" + 0  + "\t" +  0 + "\n"));
                 count++;
             } catch (IOException e) {
                 e.printStackTrace();

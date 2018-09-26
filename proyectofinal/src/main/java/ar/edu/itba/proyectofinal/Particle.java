@@ -38,6 +38,7 @@ public class Particle {
     private Point facingDirection;
 
     private boolean wall = false;
+    private int selected = 1;
 
     private Point force;
     private double torque;
@@ -511,6 +512,11 @@ public class Particle {
 
     public void setWall() {
         this.wall = true;
+        this.selected = 0;
+    }
+
+    public int getSelected() {
+        return selected;
     }
 
     public int getR() {
@@ -536,4 +542,11 @@ public class Particle {
         return Data.eta * Data.mMax * this.maxDistance * Data.grav * Math.sin(t * (Math.PI * 2));
     }
 
+    public double getOrientationX() {
+        return Data.angleLength * Math.sin(orientation);
+    }
+
+    public double getOrientationY() {
+        return Data.angleLength * Math.cos(orientation);
+    }
 }

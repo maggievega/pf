@@ -33,9 +33,7 @@ public class Populator {
     public void Populate() {
         for (Particle p : particles) {
                 positionParticle(p);
-//                Collections.sort(p.getTargets(),
-//                        (o1, o2) -> (int) ((int) o1.distanceBetween(p.getMassCenter()) - o2.distanceBetween(p.getMassCenter())));
-
+                p.getTargets().forEach((t) -> t.place(p.getMassCenter()));
         }
     }
 

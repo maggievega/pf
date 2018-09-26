@@ -4,6 +4,7 @@ import java.util.List;
 
 class Data {
 
+    public static double angleLength = 2;
     static double mMin = 45;
     static double mMax = 114;
     static double rMin = 0.24;
