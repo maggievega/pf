@@ -43,19 +43,52 @@ class Output {
         int sum = 0;
         for (Particle p: particles) {
             sum += p.getPoints().size();
+//            if (p.isWall()) sum += countPointWalls(p.getPoints());
         }
         return sum;
     }
 
+    private int countPointWalls(List<Point> p) {
+        if (p.size() != 2) {
+            //error
+        }
+        Point p1 = p.get(0);
+        Point p2 = p.get(1);
+        double variation;
+        if (p1.getX() == p2.getX()) {
+            variation = Math.abs(p1.getY() - p2.getY());
+        } else {
+            variation =  Math.abs(p1.getX() - p2.getX());
+        }
+        return (int) (variation / Data.spacing);
+    }
+
     private void printAllSnapshots(List<Particle> particles) {
-        particles.forEach(this::printParticleSnapshot);
+        particles.forEach(this::printSnapshot);
+    }
+
+    private void printSnapshot(Particle p) {
+        if (p.isWall())
+            printWallSnapshot(p);
+        else
+            printParticleSnapshot(p);
     }
 
     private void printParticleSnapshot(Particle p) {
         try {
             for(Point point: p.getPoints()){
-                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\t" +
-                        p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" + p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  p.getSelected() + "\n"));
+                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" + p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  1 + "\n"));
+                count++;
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to print. Simulation cannot be outputted");
+        }
+    }
+
+    private void printWallSnapshot(Particle p) {
+        try {
+            for(Point point: p.getPoints()){
+                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" + p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  0 + "\n"));
                 count++;
             }
         } catch (IOException e) {

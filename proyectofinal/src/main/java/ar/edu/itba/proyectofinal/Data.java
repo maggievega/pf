@@ -20,6 +20,7 @@ class Data {
     static double precision = 0.0001;
 
     static double wall_radius = 0.2;
+    static double spacing = 0.5;
 
     static int decrease_color_target = 30;
 
