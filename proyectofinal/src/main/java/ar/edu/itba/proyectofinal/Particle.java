@@ -71,7 +71,7 @@ public class Particle {
     //Constructors
     public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
                     double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration,
-                    List<Target> targets, double inertiaMoment) {
+                    double inertiaMoment) {
         this.id = id;
         this.mass = mass;
         this.points = points;
@@ -82,7 +82,6 @@ public class Particle {
         this.vel = vel;
         this.angularVelocity = angularVelocity;
         this.angularAcceleration = angularAcceleration;
-        this.targets = targets;
         this.force = new Point(0,0); //Used to initialize the previous position
         this.previousMassCenter = eulerPosition(-Data.dt);
         this.inertiaMoment = inertiaMoment;
@@ -529,6 +528,10 @@ public class Particle {
 
     public int getB() {
         return B;
+    }
+
+    public void setTargets(List<Target> targets) {
+        this.targets = targets;
     }
 
     public void setColor (int R, int G, int B) {

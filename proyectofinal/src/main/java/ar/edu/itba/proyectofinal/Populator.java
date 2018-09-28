@@ -1,5 +1,6 @@
 package ar.edu.itba.proyectofinal;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -33,8 +34,17 @@ public class Populator {
     public void Populate() {
         for (Particle p : particles) {
                 positionParticle(p);
-                p.getTargets().forEach((t) -> t.place(p.getMassCenter()));
+                populateTargets(p);
         }
+    }
+
+    private void populateTargets(Particle p) {
+        List<Target> targets = new ArrayList<>();
+        for (Target t: Data.targetList) {
+            Target aux = new Target(t.getX(), t.getY(), p.getMassCenter(), t.getInterval(), t.isEnd());
+            targets.add(new Target(aux));
+        }
+        p.setTargets(targets);
     }
 
     public void positionParticle(Particle p) {

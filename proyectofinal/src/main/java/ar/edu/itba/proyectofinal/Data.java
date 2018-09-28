@@ -1,5 +1,6 @@
 package ar.edu.itba.proyectofinal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class Data {
@@ -10,8 +11,7 @@ class Data {
     static double rMin = 0.24;
     static double rMax = 0.33;
 
-    static List<Target> targetList;
-
+    static List<Target> targetList = new ArrayList<>();
 
     static double dt = 0.000001;
     static double totalTime = 100;
@@ -21,8 +21,6 @@ class Data {
 
     static double wall_radius = 0.2;
     static double spacing = 0.5;
-
-    static int decrease_color_target = 30;
 
     static boolean continuous = false;
 
@@ -34,8 +32,8 @@ class Data {
     static double kn = 2.2 * Math.pow(10,6);
     static double kt = kn / 25.0;
 
-    static double en = 0.2;
-    static double mr = 1; // TODO: FIND
+    private static double en = 0.2;
+    private static double mr = 1; // TODO: FIND
 
     static double SD = 20;
     static double eta = 0.75;

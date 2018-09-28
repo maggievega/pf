@@ -11,7 +11,6 @@ class Input {
     private int N = -1;
     private static int count = 0;
     private List<Particle> particles;
-    private List<Target> targets;
     private String fileName;
     private Type type;
 
@@ -30,16 +29,13 @@ class Input {
         load();
     }
 
-    void loadParticles(List<Particle> p, List<Target> t) {
+    void loadParticles(List<Particle> p) {
         particles = p;
-        targets = t;
         load();
     }
 
-    void loadTargets(List<Target> t) {
-        targets = t;
+    void loadTargets() {
         load();
-        Data.targetList = targets;
     }
 
     private void resetCounter() {
@@ -96,7 +92,7 @@ class Input {
         }
         double interval = Double.parseDouble(target[amount + TargetType.INTERVAL.ordinal()]);
         Target t = new Target(Double.parseDouble(target[amount]), Double.parseDouble(target[amount + TargetType.TARGET_Y.ordinal()]),  interval, end);
-        targets.add(t);
+        Data.targetList.add(t);
         count ++;
     }
 
@@ -143,7 +139,7 @@ class Input {
             double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision);
             inertiaMoment *= mass;
 //            double inertiaMoment2 = Utils.calculateInertiaMoment(ap, mass);
-            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, targets, inertiaMoment);
+            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, inertiaMoment);
             particles.add(p);
         }
         count ++;
@@ -195,10 +191,8 @@ class Input {
 
         Point massCenter = Utils.calculateMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
-        List<Target> targets = new ArrayList<>();
-        targets.add(new Target(massCenter));
 
-        Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, targets, 1);
+        Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, 1);
         p.setWall();
         p.setColor(255, 0, 0);
         particles.add(p);

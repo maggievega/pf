@@ -98,7 +98,7 @@ public class Utils {
         }
     }
 
-    public static boolean doubleEqual(double x, double y){
+    static boolean doubleEqual(double x, double y){
         double dif = x-y;
         if (dif*dif < Data.dt){
             return true;
@@ -106,7 +106,7 @@ public class Utils {
         return false;
     }
 
-    public static Point calculateMassCenter(Point[] points, double mass) {
+    static Point calculateMassCenter(Point[] points, double mass) {
         double totalMass = 0, totalX = 0, totalY = 0;
         for (Point p: points) {
             totalX += p.getX() * mass;
@@ -117,7 +117,7 @@ public class Utils {
 
     }
 
-    public static List<AngularPoint> calculateAngularPoints(Point massCenter, Point[] points) {
+    static List<AngularPoint> calculateAngularPoints(Point massCenter, Point[] points) {
         List<AngularPoint> ap = new ArrayList<>();
         for (int i = 0; i < points.length; i++) {
             double angle = Utils.getAngle(massCenter, points[i]);
