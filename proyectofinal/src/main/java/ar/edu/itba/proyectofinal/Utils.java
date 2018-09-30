@@ -13,13 +13,13 @@ public class Utils {
      * @param desired
      * @return
      */
+
     public static double getAngle (Point massCenter, Point desired) {
         double x1 = 0;
         double y1 = 1;
         double x2 = desired.getX() - massCenter.getX();
         double y2 = desired.getY() - massCenter.getY();
         double value = Math.atan2(desired.getX()-massCenter.getX(),desired.getY()-massCenter.getY());
-//        double value = Math.atan2(x1 * y2 - y1 * x2, x1 * x2 + y1 * y2);
         return value >= 0 ? value : value + 2 * Math.PI;
     }
 

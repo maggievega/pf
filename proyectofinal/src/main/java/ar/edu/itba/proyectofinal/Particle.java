@@ -5,18 +5,8 @@ import java.util.List;
 
 public class Particle {
     /*
-        TODO (Fixed: Requirement2) : Particle should have the orientation as an independant versor, and all other internal angles should be referrenced
-        orientation should be described as a versor from the centre of mass to the desired direction.
-        (BUT) center of mass is unkown at the start, so the provided vector could be taken to be from centre of mass to
-        the first point in the list to start with.
-
-        TODO : Orientation from a given geometry should be taken as the north of the provided poligon {Check at input}
-        Closely related to first issue
-
         TODO ( NEXT ) : Allow particle to change direction versor directly to opposite direction if there is rotational simmetry
         Solution: Allign direction versor with 0 or PI of desired direction according to which is closerg
-
-        TODO: r in crossProduct should not be a versor
 
         TODO (NEXT): Check that criterion for reaching a target is appropiate
         Partial Solution:
@@ -64,8 +54,8 @@ public class Particle {
 
     private boolean thisone = false;
 
-    private int R = 255;
-    private int G = 255;
+    private int R = 0;
+    private int G = 0;
     private int B = 255;
 
     //Constructors
@@ -113,7 +103,7 @@ public class Particle {
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
         List<Point> points = this.getPoints();
 
-        double drivingTorque = Data.SD * deltaAngle - Data.beta * angularVelocity ;//+ sinusoidalNoise(time) ;
+        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity + sinusoidalNoise(time) ;
 //        System.out.println("Orientation : " + this.orientation);
 //        System.out.println("Desired orientation" + desiredAngle);
 //        System.out.println("--------------");
@@ -131,7 +121,7 @@ public class Particle {
 //        Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
 //                (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
         this.torque += drivingTorque;
-        System.out.println(this.torque);
+//        System.out.println(this.torque);
 //        force.add(drivingForce);
     }
 

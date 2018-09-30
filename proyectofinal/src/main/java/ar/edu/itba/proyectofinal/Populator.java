@@ -50,14 +50,17 @@ public class Populator {
     public void positionParticle(Particle p) {
         Point mc;
         if (!p.isWall()) {
-            double orientation = Math.random() * 2 * Math.PI;
+//            double orientation = Math.random() * 2 * Math.PI;
+            double orientation = 0;
             p.setOrientation(orientation);
+            p.setPreviousOrientation(orientation);
 //            p.setOrientation(0);
 //            p.setPreviousOrientation(0);
             do {
                 mc = generateMassCenter(p);
-//                mc = new Point(5,7);
+//                mc = new Point(5,5);
                 p.setMassCenter(mc);
+                p.setPreviousMassCenter(mc);
             } while (!isValid(p));
 
             p.positionParticle(mc, orientation);

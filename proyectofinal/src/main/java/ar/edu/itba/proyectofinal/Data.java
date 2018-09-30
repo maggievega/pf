@@ -14,8 +14,8 @@ class Data {
     static List<Target> targetList = new ArrayList<>();
 
     static double dt = 0.000001;
-    static double totalTime = 100;
-    static double printTime = 0.02;
+    static double totalTime = 20;
+    static double printTime = 0.002;
 
     static double precision = 0.0001;
 
