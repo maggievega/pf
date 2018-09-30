@@ -10,7 +10,8 @@ import java.util.List;
 class Output {
 
     private BufferedWriter writer;
-    private int count = 1;
+    private int count = 0;
+    private int particleCount = -1;
 
     Output() {
         File file = new File("sim.xyz");
@@ -28,9 +29,10 @@ class Output {
     }
 
     void printSystem(List<Particle> particles, double time) {
-        count = 1;
+        count = 0;
         try {
-            int particleCount = sumAP(particles) + Data.targetList.size();
+            if (particleCount == -1)
+                particleCount = sumAP(particles) + Data.targetList.size();
             this.writer.write((particleCount) + "\nTime:   \t" + time + "\n");
             printAllSnapshots(particles);
             printAllTargets();
@@ -42,20 +44,22 @@ class Output {
     private int sumAP(List<Particle> particles) {
         int sum = 0;
         for (Particle p: particles) {
-            sum += p.getPoints().size();
-//            if (p.isWall()) sum += countPointWalls(p.getPoints());
+            if (p.isWall())
+                sum += countPointWalls(p.getPoints());
+            else
+                sum += p.getPoints().size();
         }
         return sum;
     }
 
     private int countPointWalls(List<Point> p) {
         if (p.size() != 2) {
-            //error
+            System.out.println("Error");
         }
         Point p1 = p.get(0);
         Point p2 = p.get(1);
         double variation;
-        if (p1.getX() == p2.getX()) {
+        if (Utils.doubleEqual(p1.getX(), p2.getX())) {
             variation = Math.abs(p1.getY() - p2.getY());
         } else {
             variation =  Math.abs(p1.getX() - p2.getX());
@@ -86,14 +90,45 @@ class Output {
     }
 
     private void printWallSnapshot(Particle p) {
-        try {
-            for(Point point: p.getPoints()){
-                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" + p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  0 + "\n"));
-                count++;
-            }
-        } catch (IOException e) {
-            System.out.println("Unable to print. Simulation cannot be outputted");
+        List<Segment> listSeg = p.getSegments();
+        Point p1 = listSeg.get(0).getP1();
+        Point p2 = listSeg.get(0).getP2();
+        printSegment(p1, p2, p.getR(), p.getG(), p.getB(), p.getRadius(), p.getOrientationX(), p.getOrientationY());
+    }
+
+    private void printSegment(Point p1, Point p2, int R, int G, int B, double radius, double orientationX, double orientationY) {
+        double i;
+        if (Utils.doubleEqual(p1.getX(), p2.getX())) {
+            int signDiff =  Utils.getSign(p2.getY() - p1.getY());
+            int signStart = Utils.getSign(p1.getY());
+            int sign = signStart > 0 ? signDiff : signStart;
+            double start = Math.abs(p1.getY());
+            double end = Math.abs(p2.getY());
+            for (i = start; i < end; i += Data.spacing)
+                try {
+                    this.writer.write((count + "\t" + p1.getX() + "\t" + i  * sign + "\t" + 0 + "\t" + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX + "\t" + orientationY + "\t" +  0 + "\n"));
+                    count++;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        } else {
+            double m = (p1.getY() - p2.getY()) / (p1.getX() - p2.getX());
+            double b = p1.getY() - m * p1.getX();
+            int signDiff =  Utils.getSign(p2.getX() - p1.getX());
+            int signStart = Utils.getSign(p1.getX());
+            int sign = signStart > 0 ? signDiff : signStart;
+            double start = Math.abs(p1.getX());
+            double end = Math.abs(p2.getX());
+            for (i = start; i < end; i += Data.spacing)
+                try {
+                    this.writer.write((count + "\t" + i + "\t" + (m * i * sign + b) + "\t" + 0 + "\t" + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX + "\t" + orientationY + "\t" + 0 + "\n"));
+                    count++;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
         }
+
     }
 
     private void printAllTargets() {

@@ -27,6 +27,10 @@ public class Utils {
         return new Point (-p.getY(), p.getX());
     }
 
+    public static int getSign (double n) {
+        return n >= 0 ?  1 : -1;
+    }
+
 
     public static Point completeClosestPoint(Segment ab, Point p){
         double slope, perpendicularSlope, c1, c2, f1, f2, rx, ry;

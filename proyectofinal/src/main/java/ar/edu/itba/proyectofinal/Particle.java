@@ -311,7 +311,7 @@ public class Particle {
         return new Point(nextX, nextY);
     }
 
-    private List<Segment> getSegments () {
+    public List<Segment> getSegments () {
         List<Segment> aux = new ArrayList<>();
         List<Point> points = getPoints();
         for (int i=1; i < points.size(); i++) {
