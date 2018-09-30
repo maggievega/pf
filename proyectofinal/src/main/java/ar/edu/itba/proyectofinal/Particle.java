@@ -92,7 +92,7 @@ public class Particle {
         this.time = time;
         resetForce();
         getDrivingForce();
-//        getContactForce(particles);
+        getContactForce(particles);
     }
 
     private void getDrivingForce() {
@@ -103,26 +103,26 @@ public class Particle {
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
         List<Point> points = this.getPoints();
 
-        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity + sinusoidalNoise(time) ;
+        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity;//+ sinusoidalNoise(time) ;
 //        System.out.println("Orientation : " + this.orientation);
 //        System.out.println("Desired orientation" + desiredAngle);
 //        System.out.println("--------------");
 
-//        Point desiredDirection = new Point(target.getX() - massCenter.getX(),
-//                target.getY() - massCenter.getY());
-//        double abs = Math.sqrt(desiredDirection.getX() * desiredDirection.getX() +
-//                desiredDirection.getY() * desiredDirection.getY());
-
-//        desiredDirection.times(1 / abs);
-
-//        Point desiredVel = new Point (desiredVelocity * desiredDirection.getX(),
-//                desiredVelocity * desiredDirection.getY());
-
-//        Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
-//                (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
+        Point desiredDirection = new Point(target.getX() - massCenter.getX(),
+                target.getY() - massCenter.getY());
+        double abs = Math.sqrt(desiredDirection.getX() * desiredDirection.getX() +
+                desiredDirection.getY() * desiredDirection.getY());
+//
+        desiredDirection.times(1 / abs);
+//
+        Point desiredVel = new Point (desiredVelocity * desiredDirection.getX(),
+                desiredVelocity * desiredDirection.getY());
+//
+        Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
+                (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
         this.torque += drivingTorque;
 //        System.out.println(this.torque);
-//        force.add(drivingForce);
+        force.add(drivingForce);
     }
 
     public void getContactForce(List<Particle> particleList){
@@ -248,12 +248,12 @@ public class Particle {
 //        r.times(scalarProjection);
 //        translationForce = r;
 
-        this.torque += r.crossProduct(f);
+        this.torque -= r.crossProduct(f);
 
 //        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
 //        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
 
-//        tangentialForce(p, a, b, overlapForce);
+        tangentialForce(p, a, b, overlapForce);
     }
 
     public void tangentialForce(Particle p, Point a, Point b, double overlap){

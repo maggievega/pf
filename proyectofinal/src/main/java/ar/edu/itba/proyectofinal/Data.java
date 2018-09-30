@@ -15,7 +15,7 @@ class Data {
 
     static double dt = 0.000001;
     static double totalTime = 20;
-    static double printTime = 0.002;
+    static double printTime = 0.01;
 
     static double precision = 0.0001;
 

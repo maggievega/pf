@@ -50,8 +50,8 @@ public class Populator {
     public void positionParticle(Particle p) {
         Point mc;
         if (!p.isWall()) {
-//            double orientation = Math.random() * 2 * Math.PI;
-            double orientation = 0;
+            double orientation = Math.random() * 2 * Math.PI;
+//            double orientation = 0;
             p.setOrientation(orientation);
             p.setPreviousOrientation(orientation);
 //            p.setOrientation(0);
