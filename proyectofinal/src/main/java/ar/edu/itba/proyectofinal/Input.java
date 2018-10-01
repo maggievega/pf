@@ -140,6 +140,7 @@ class Input {
             inertiaMoment *= mass;
 //            double inertiaMoment2 = Utils.calculateInertiaMoment(ap, mass);
             Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, inertiaMoment);
+            p.setColor(255,255,255);
             particles.add(p);
         }
         count ++;
