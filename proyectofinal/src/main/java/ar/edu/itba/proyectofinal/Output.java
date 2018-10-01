@@ -32,7 +32,7 @@ class Output {
         count = 0;
         try {
             if (particleCount == -1)
-                particleCount = sumAP(particles) + Data.targetList.size();
+                particleCount = sumParticles(particles) + sumTargets(Data.targetList);
             this.writer.write((particleCount) + "\nTime:   \t" + time + "\n");
             printAllSnapshots(particles);
             printAllTargets();
@@ -41,23 +41,31 @@ class Output {
         }
     }
 
-    private int sumAP(List<Particle> particles) {
+    private int sumParticles(List<Particle> particles) {
         int sum = 0;
         for (Particle p: particles) {
-            if (p.isWall())
-                sum += countPointWalls(p.getPoints());
+            if (p.isWall()) {
+                List<Point> points = p.getPoints();
+                if (points.size() != 2)
+                    System.out.println("ERROR");
+                sum += countPoints(points.get(0), points.get(1));
+            }
             else
                 sum += p.getPoints().size();
         }
         return sum;
     }
 
-    private int countPointWalls(List<Point> p) {
-        if (p.size() != 2) {
-            System.out.println("Error");
+    private int sumTargets(List<Target> targets) {
+        int sum = 0;
+        for (Target t: targets) {
+            Segment s = t.getS();
+            sum += countPoints(s.getP1(), s.getP2());
         }
-        Point p1 = p.get(0);
-        Point p2 = p.get(1);
+        return sum;
+    }
+
+    private int countPoints(Point p1, Point p2) {
         double variation;
         if (Utils.doubleEqual(p1.getX(), p2.getX())) {
             variation = Math.abs(p1.getY() - p2.getY());
@@ -133,12 +141,8 @@ class Output {
 
     private void printAllTargets() {
         for (Target t : Data.targetList) {
-            try {
-                this.writer.write((count + "\t" + t.getX() + "\t" + t.getY() + "\t" + 0 + "\t" + Data.wall_radius + "\t" + t.getR() + "\t" + t.getG() + "\t" + t.getB() +  "\t" + 0  +  "\t" + 0  + "\t" +  0 + "\n"));
-                count++;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Segment s = t.getS();
+            printSegment(s.getP1(), s.getP2(), t.getR(), t.getG(), t.getB(), Data.wall_radius, 0, 0);
         }
     }
 
