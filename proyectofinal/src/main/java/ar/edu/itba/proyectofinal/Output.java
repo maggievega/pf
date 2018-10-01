@@ -72,7 +72,7 @@ class Output {
         } else {
             variation =  Math.abs(p1.getX() - p2.getX());
         }
-        return (int) (variation / Data.spacing);
+        return (int) (variation / Data.spacing) + 1;
     }
 
     private void printAllSnapshots(List<Particle> particles) {
@@ -112,7 +112,7 @@ class Output {
             int sign = signStart > 0 ? signDiff : signStart;
             double start = Math.abs(p1.getY());
             double end = Math.abs(p2.getY());
-            for (i = start; i < end; i += Data.spacing)
+            for (i = start; i <= end; i += Data.spacing)
                 try {
                     this.writer.write((count + "\t" + p1.getX() + "\t" + i  * sign + "\t" + 0 + "\t" + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX + "\t" + orientationY + "\t" +  0 + "\n"));
                     count++;
@@ -127,7 +127,7 @@ class Output {
             int sign = signStart > 0 ? signDiff : signStart;
             double start = Math.abs(p1.getX());
             double end = Math.abs(p2.getX());
-            for (i = start; i < end; i += Data.spacing)
+            for (i = start; i <= end; i += Data.spacing)
                 try {
                     this.writer.write((count + "\t" + i + "\t" + (m * i * sign + b) + "\t" + 0 + "\t" + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX + "\t" + orientationY + "\t" + 0 + "\n"));
                     count++;
