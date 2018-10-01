@@ -42,7 +42,7 @@ public class Populator {
         List<Target> targets = new ArrayList<>();
         for (Target t: Data.targetList) {
             Target aux = new Target(t.getX(), t.getY(), p.getMassCenter(), t.getInterval(), t.isEnd());
-            targets.add(new Target(aux));
+            targets.add(aux);
         }
         p.setTargets(targets);
     }
