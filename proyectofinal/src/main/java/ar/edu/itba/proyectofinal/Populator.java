@@ -63,11 +63,12 @@ public class Populator {
 
     public void paperPosition(Particle p, Point position){
         if(!p.isWall()) {
-            p.setOrientation(Math.PI);
-            p.setPreviousOrientation(Math.PI);
+            double orientation = Math.random() * 2 * Math.PI;
+            p.setOrientation(orientation);
+            p.setPreviousOrientation(orientation);
             p.setMassCenter(position);
             p.setPreviousMassCenter(position);
-            p.positionParticle(position,Math.PI);
+            p.positionParticle(position,orientation);
         }
     }
 

@@ -133,6 +133,8 @@ public class Particle {
         for (Particle p : particleList)
             if (!p.equals(this) && this.canCollide(p))
                     this.checkCollision(p);
+
+
     }
 
     public boolean canCollide(Particle p){

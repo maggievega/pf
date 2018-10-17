@@ -123,6 +123,7 @@ class Input {
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
         double desiredVel = Double.parseDouble(particle[ParticleType.DESIRED_VEL.ordinal()]);
+        System.out.println("DESIRED " + desiredVel);
 
         Point[] points = new Point[countPoints];
 

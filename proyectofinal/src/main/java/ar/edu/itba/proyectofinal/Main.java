@@ -8,6 +8,8 @@ import java.util.List;
 
 public class Main {
 
+    //TODO Que la reinsercion arriba sea despues de bajar unos 2 metros.
+
     public static void main(String[] args) {
 //        Input inputConstant = new Input(Type.CONSTANTS, "/input/const.txt");
 //        Input inputParticles = new Input(Type.PARTICLES, "/input/particles.txt");
