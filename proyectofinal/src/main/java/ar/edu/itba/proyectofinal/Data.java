@@ -8,26 +8,26 @@ class Data {
     public static double angleLength = 2;
     static double mMin = 45;
     static double mMax = 114;
-    static double rMin = 0.24;
-    static double rMax = 0.33;
+    static double rMin = 0.12;
+    static double rMax = 0.165;
 
     static List<Target> targetList = new ArrayList<>();
 
-    static double dt = 0.000001;
-    static double totalTime = 20;
-    static double printTime = 0.01;
+    static double dt = 0.0001;
+    static double totalTime = 2000;
+    static double printTime = 0.05;
 
     static double precision = 0.0001;
 
-    static double wall_radius = 0.2;
+    static double wall_radius = 0.05;
     static double spacing = 0.5;
 
     static boolean continuous = false;
 
     static double minX = 0;
     static double minY = 0;
-    static double maxX = 10;
-    static double maxY = 10;
+    static double maxX = 8;
+    static double maxY = 8;
 
     static double kn = 2.2 * Math.pow(10,6);
     static double kt = kn / 25.0;
@@ -49,4 +49,5 @@ class Data {
 
     static double yn = Math.sqrt((4 * kn * mr) / (Math.pow(Math.PI / Math.log(1/ en) , 2)) + 1);
 
+    static double AmpModifier = 1;
 }

@@ -139,7 +139,8 @@ class Input {
             double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision);
             inertiaMoment *= mass;
 //            double inertiaMoment2 = Utils.calculateInertiaMoment(ap, mass);
-            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, inertiaMoment);
+            double phase = Math.random() * Math.PI * 2;
+            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, inertiaMoment, phase);
             p.setColor(255,255,255);
             particles.add(p);
         }
@@ -193,7 +194,7 @@ class Input {
         Point massCenter = Utils.calculateMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
 
-        Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, 1);
+        Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, 1,0);
         p.setWall();
         p.setColor(255, 0, 0);
         particles.add(p);

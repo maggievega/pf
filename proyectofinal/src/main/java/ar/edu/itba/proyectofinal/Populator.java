@@ -32,9 +32,42 @@ public class Populator {
     }
 
     public void Populate() {
+        int i= 0;
         for (Particle p : particles) {
+            System.out.println("Particle " + ++i);
                 positionParticle(p);
                 populateTargets(p);
+        }
+    }
+
+    public void PopulatePaper(Point grid){
+        int part=0;
+        double xDiv = Data.maxX / grid.getX();
+        double yDiv = Data.maxY / grid.getY();
+        for (int i = 0; i < grid.getX(); i++) {
+            for (int j = 0; j < grid.getY(); j++) {
+                Particle p;
+                do {
+                    p = particles.get(part++);
+                }while (p.isWall());
+                if(p==null)
+                    System.out.println("ERROR");
+                paperPosition(p,new Point(i * xDiv + xDiv/2, j * yDiv + yDiv/2));
+                populateTargets(p);
+                System.out.println(i * xDiv + " - " + j * yDiv);
+//                System.out.println(i + " - " + j + " -  " + part);
+//                part++;
+            }
+        }
+    }
+
+    public void paperPosition(Particle p, Point position){
+        if(!p.isWall()) {
+            p.setOrientation(Math.PI);
+            p.setPreviousOrientation(Math.PI);
+            p.setMassCenter(position);
+            p.setPreviousMassCenter(position);
+            p.positionParticle(position,Math.PI);
         }
     }
 
@@ -51,14 +84,10 @@ public class Populator {
         Point mc;
         if (!p.isWall()) {
             double orientation = Math.random() * 2 * Math.PI;
-//            double orientation = 0;
             p.setOrientation(orientation);
             p.setPreviousOrientation(orientation);
-//            p.setOrientation(0);
-//            p.setPreviousOrientation(0);
             do {
                 mc = generateMassCenter(p);
-//                mc = new Point(5,5);
                 p.setMassCenter(mc);
                 p.setPreviousMassCenter(mc);
             } while (!isValid(p));
@@ -66,6 +95,16 @@ public class Populator {
             p.positionParticle(mc, orientation);
         }
 
+    }
+
+    public void resetParticle(Particle p){
+        p.setOrientation(Math.PI);
+        p.setPreviousOrientation(Math.PI);
+        double x = Math.random() * (Data.maxX - 1 ) + 0.3;
+        Point mc = new Point(x,7.8);
+        p.setMassCenter(mc);
+        p.setPreviousMassCenter(mc);
+        p.positionParticle(mc,Math.PI);
     }
 
     private boolean isValid(Particle p) {

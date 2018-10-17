@@ -1,5 +1,6 @@
 package ar.edu.itba.proyectofinal;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +8,6 @@ public class Particle {
     /*
         TODO ( NEXT ) : Allow particle to change direction versor directly to opposite direction if there is rotational simmetry
         Solution: Allign direction versor with 0 or PI of desired direction according to which is closerg
-
-        TODO (NEXT): Check that criterion for reaching a target is appropiate
-        Partial Solution:
     */
     private int id;
     private double mass;
@@ -52,6 +50,10 @@ public class Particle {
     private double time = 0.0;
 
 
+    //For sinusoidal noise
+    private double phase;
+
+
     private boolean thisone = false;
 
     private int R = 0;
@@ -61,7 +63,7 @@ public class Particle {
     //Constructors
     public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
                     double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration,
-                    double inertiaMoment) {
+                    double inertiaMoment, double phase) {
         this.id = id;
         this.mass = mass;
         this.points = points;
@@ -75,6 +77,8 @@ public class Particle {
         this.force = new Point(0,0); //Used to initialize the previous position
         this.previousMassCenter = eulerPosition(-Data.dt);
         this.inertiaMoment = inertiaMoment;
+
+        this.phase = phase;
 
         //TODO check if this works.
         this.previousOrientation = orientation;
@@ -103,7 +107,7 @@ public class Particle {
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
         List<Point> points = this.getPoints();
 
-        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity;//+ sinusoidalNoise(time) ;
+        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity + sinusoidalNoise(time) ;
 //        System.out.println("Orientation : " + this.orientation);
 //        System.out.println("Desired orientation" + desiredAngle);
 //        System.out.println("--------------");
@@ -268,7 +272,6 @@ public class Particle {
 
         f.times(1 / f.module());
 
-        //TODO Check this
 //        p.torque += r.crossProduct(relativeVelocity.dotProduct());
 //        tangentVersor = Utils.getPerpendicularTo2(f);
 //        tangentVersor.times(1/tangentVersor.module());
@@ -433,7 +436,10 @@ public class Particle {
     public void resetTargets() { this.indexTarget = 0;
     }
 
-    public void resetPosition() { Populator.getInstance().positionParticle(this); }
+    public void resetPosition() {
+//        Populator.getInstance().positionParticle(this);
+        Populator.getInstance().resetParticle(this);
+    }
 
     public void setPreviousMassCenter(Point previousMassCenter) {
         this.previousMassCenter = previousMassCenter;
@@ -532,7 +538,7 @@ public class Particle {
 
     //todo which is the required amplitude
     public double sinusoidalNoise(double t){
-        return Data.eta * Data.mMax * this.maxDistance * Data.grav * Math.sin(t * (Math.PI * 2));
+        return Data.eta * Data.mMax * this.maxDistance * Data.grav * Math.sin(t * (Math.PI * 2) + phase) / Data.AmpModifier;
     }
 
     public double getOrientationX() {

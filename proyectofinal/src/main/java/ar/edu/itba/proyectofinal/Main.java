@@ -14,9 +14,9 @@ public class Main {
 //        Input inputTargets = new Input(Type.TARGETS, "/input/targets.txt");
 //        Input inputWalls = new Input(Type.WALLS, "/input/walls.txt");
         Input inputConstant = new Input(Type.CONSTANTS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/const.txt");
-        Input inputParticles = new Input(Type.PARTICLES, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/particles.txt");
-        Input inputTargets = new Input(Type.TARGETS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/targets.txt");
-        Input inputWalls = new Input(Type.WALLS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/walls.txt");
+        Input inputParticles = new Input(Type.PARTICLES, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/particlesPaper.txt");
+        Input inputTargets = new Input(Type.TARGETS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/targetsPaper.txt");
+        Input inputWalls = new Input(Type.WALLS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/wallsPaper.txt");
 
 
         List<Particle> particles = new ArrayList<>();
@@ -32,7 +32,8 @@ public class Main {
 
         Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
-        Populator.getInstance().Populate();
+//        Populator.getInstance().Populate();
+        Populator.getInstance().PopulatePaper(new Point(12,16));
         System.out.println("-- Population Finished");
         System.out.println("-- Start Simulation");
         Simulator s = new Simulator(particles);
