@@ -7,14 +7,13 @@ import java.util.List;
 public class Simulator {
 
     private static List<Particle> particles;
+    private static Output o;
 
     public Simulator(List<Particle> p) {
         particles = p;
     }
 
     public void Simulate(){
-//        OvitoOutput o = new OvitoOutput();
-        Output o = new Output();
         double time = 0.0;
         int printCont = 0;
         while (time < Data.totalTime) {
@@ -35,7 +34,7 @@ public class Simulator {
             for (Particle p : particles) {
                 if (!p.isWall()){
                     updatePosition(p);
-                    updateTarget(p);
+                    updateTarget(p, time);
                 }
             }
 
@@ -44,14 +43,17 @@ public class Simulator {
         o.done();
     }
 
-    private void updateTarget(Particle p) {
+    private void updateTarget(Particle p, double time) {
         if (p.reachedTarget()) {
             if (!p.getCurrentTarget().isEnd())
                 p.nextTarget(); //TODO: ASK IF NEXT TARGET SHOULD SORT THE REMAINING TARGETS
-            else resetParticle(p);
+            else {
+                resetParticle(p);
+                o.printCaudal(1, time);
+            }
+
         }
     }
-
 
     private void resetParticle(Particle p) {
         if (Data.continuous) {
