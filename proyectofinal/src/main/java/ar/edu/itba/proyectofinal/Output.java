@@ -18,9 +18,9 @@ class Output {
 
 
     Output() {
-        File file = new File("sim.xyz");
-        File caudalFile = new File("caudal.txt");
-        File exitFile = new File("exit.txt");
+        File file = new File("sim3.xyz");
+        File caudalFile = new File("caudal3.txt");
+        File exitFile = new File("exit3.txt");
         try {
             Files.deleteIfExists(file.toPath());
             Files.deleteIfExists(caudalFile.toPath());
@@ -30,9 +30,9 @@ class Output {
         }
 
         try {
-            this.exitWriter = new BufferedWriter(new FileWriter("exit.txt", true));
-            this.caudalWriter = new BufferedWriter(new FileWriter("caudal.txt", true));
-            this.writer = new BufferedWriter(new FileWriter("sim.xyz",true));
+            this.exitWriter = new BufferedWriter(new FileWriter("exit3.txt", true));
+            this.caudalWriter = new BufferedWriter(new FileWriter("caudal3.txt", true));
+            this.writer = new BufferedWriter(new FileWriter("sim3.xyz",true));
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
@@ -51,9 +51,9 @@ class Output {
         }
     }
 
-    void printExit(double time) {
+    void printExit(double time, int amount) {
         try {
-            this.exitWriter.write((1 + " \t " + time + " \n"));
+            this.exitWriter.write((amount + " \t " + time + " \n"));
             this.exitWriter.flush();
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");

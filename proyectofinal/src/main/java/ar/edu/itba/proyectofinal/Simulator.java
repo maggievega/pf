@@ -14,6 +14,7 @@ public class Simulator {
 
     private static double lastT = 0;
     private static int realocationCounter = 0;
+    private static int leftRoom = 1;
 
     public Simulator(List<Particle> p) {
         particles = p;
@@ -55,8 +56,9 @@ public class Simulator {
                 p.nextTarget();
             else {
                 resetParticle(p);
-                o.printExit(t);
+                o.printExit(t, leftRoom);
                 realocationCounter += 1;
+                leftRoom += 1;
                 if (realocationCounter == Data.caudal) {
                     o.printCaudal(t, lastT);
                     lastT = t;
