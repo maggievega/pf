@@ -17,6 +17,8 @@ class Data {
     static double totalTime = 2000;
     static double printTime = 0.05;
 
+    static int caudal = 10;
+
     static double precision = 0.0001;
 
     static double wall_radius = 0.05;

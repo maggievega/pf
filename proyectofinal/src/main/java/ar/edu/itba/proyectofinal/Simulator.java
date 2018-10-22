@@ -1,13 +1,19 @@
 package ar.edu.itba.proyectofinal;
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Simulator {
 
     private static List<Particle> particles;
-    private static Output o;
+    private static Output o = new Output();
+
+    private static double lastT = 0;
+    private static int realocationCounter = 0;
 
     public Simulator(List<Particle> p) {
         particles = p;
@@ -43,13 +49,19 @@ public class Simulator {
         o.done();
     }
 
-    private void updateTarget(Particle p, double time) {
+    private void updateTarget(Particle p, double t) {
         if (p.reachedTarget()) {
             if (!p.getCurrentTarget().isEnd())
-                p.nextTarget(); //TODO: ASK IF NEXT TARGET SHOULD SORT THE REMAINING TARGETS
+                p.nextTarget();
             else {
                 resetParticle(p);
-                o.printCaudal(1, time);
+                o.printExit(t);
+                realocationCounter += 1;
+                if (realocationCounter == Data.caudal) {
+                    o.printCaudal(t, lastT);
+                    lastT = t;
+                    realocationCounter = 0;
+                }
             }
 
         }

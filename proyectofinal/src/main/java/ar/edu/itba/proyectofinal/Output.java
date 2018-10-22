@@ -10,23 +10,29 @@ import java.util.List;
 class Output {
 
     private BufferedWriter writer;
-    private BufferedWriter writerCaudal;
+    private BufferedWriter caudalWriter;
+    private BufferedWriter exitWriter;
+
     private int count = 0;
     private int particleCount = -1;
 
+
     Output() {
         File file = new File("sim.xyz");
-        File fileC = new File("caudal.txt");
+        File caudalFile = new File("caudal.txt");
+        File exitFile = new File("exit.txt");
         try {
             Files.deleteIfExists(file.toPath());
-            Files.deleteIfExists(fileC.toPath());
+            Files.deleteIfExists(caudalFile.toPath());
+            Files.deleteIfExists(exitFile.toPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
+            this.exitWriter = new BufferedWriter(new FileWriter("exit.txt", true));
+            this.caudalWriter = new BufferedWriter(new FileWriter("caudal.txt", true));
             this.writer = new BufferedWriter(new FileWriter("sim.xyz",true));
-            this.writerCaudal =  new BufferedWriter(new FileWriter("caudal.txt",true));
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
@@ -45,12 +51,23 @@ class Output {
         }
     }
 
-    void printCaudal(int amount, double time) {
+    void printExit(double time) {
         try {
-            this.writerCaudal.write(amount + "\t" + time + "\n");
+            this.exitWriter.write((1 + " \t " + time + " \n"));
+            this.exitWriter.flush();
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
+    }
+
+    void printCaudal(double t, double lastT) {
+        try {
+            this.caudalWriter.write(t + "\t" + (Data.caudal/(t-lastT)) + "\n");
+            this.caudalWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private int sumParticles(List<Particle> particles) {
@@ -161,7 +178,8 @@ class Output {
     void done() {
         try {
             this.writer.close();
-            this.writerCaudal.close();
+            this.caudalWriter.close();
+            this.exitWriter.close();
         } catch (IOException e) {
             System.out.println("Error while closing BufferedWriter");
         }
