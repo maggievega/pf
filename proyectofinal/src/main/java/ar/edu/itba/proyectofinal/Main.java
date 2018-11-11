@@ -8,18 +8,16 @@ import java.util.List;
 
 public class Main {
 
-    //TODO Que la reinsercion arriba sea despues de bajar unos 2 metros.
-
     public static void main(String[] args) {
+        System.out.println(Data.dt);
         Input inputConstant = new Input(Type.CONSTANTS, "input/const.txt");
-        Input inputParticles = new Input(Type.PARTICLES, "input/particlesPaper.txt");
+        Input inputParticles = new Input(Type.PARTICLES, "input/particlesPaperLong.txt");
         Input inputTargets = new Input(Type.TARGETS, "input/targetsPaper.txt");
         Input inputWalls = new Input(Type.WALLS, "input/wallsPaper.txt");
 //        Input inputConstant = new Input(Type.CONSTANTS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/const.txt");
 //        Input inputParticles = new Input(Type.PARTICLES, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/particlesPaper.txt");
 //        Input inputTargets = new Input(Type.TARGETS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/targetsPaper.txt");
 //        Input inputWalls = new Input(Type.WALLS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/wallsPaper.txt");
-
 
         List<Particle> particles = new ArrayList<>();
 
@@ -32,13 +30,16 @@ public class Main {
         inputParticles.loadParticles(particles);
         System.out.println("-- Particles Loaded");
 
+        String extra = "long_0.7_" + particles.get(100).getDesiredVelocity() + "_" + Data.SD + "";
+        Output o = new Output("sim" + extra + ".xyz", "exit" + extra + ".txt");
+
         Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
 //        Populator.getInstance().Populate();
         Populator.getInstance().PopulatePaper(new Point(12,16));
         System.out.println("-- Population Finished");
         System.out.println("-- Start Simulation");
-        Simulator s = new Simulator(particles);
+        Simulator s = new Simulator(particles, o);
         s.Simulate();
 
     }

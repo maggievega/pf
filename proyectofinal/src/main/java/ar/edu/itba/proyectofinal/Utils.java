@@ -131,14 +131,6 @@ public class Utils {
         return ap;
     }
 
-    public static double calculateInertiaMoment(List<AngularPoint> angularPoints, double mass) {
-        double sum = 0.0;
-        for (AngularPoint ap: angularPoints) {
-            sum += (ap.getLength() * ap.getLength() * (mass / angularPoints.size() + 1));
-        }
-        return sum;
-    }
-
     public static double inertiaMoment(Point[] poligon, Point relative, double precision){
         //TODO-> Check if the return (*mass/points) is correct
 

@@ -1,22 +1,19 @@
 package ar.edu.itba.proyectofinal;
 
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Simulator {
 
     private static List<Particle> particles;
-    private static Output o = new Output();
+    private static Output output;
 
-    private static double lastT = 0;
-    private static int realocationCounter = 0;
+    private static double lastExit = 0;
+    private static double time150 = 0;
     private static int leftRoom = 1;
 
-    public Simulator(List<Particle> p) {
+    public Simulator(List<Particle> p, Output o) {
+        output = o;
         particles = p;
     }
 
@@ -24,11 +21,14 @@ public class Simulator {
         double time = 0.0;
         int printCont = 0;
         while (time < Data.totalTime) {
-//
             if (Data.printTime * printCont <= time) {
-//                System.out.println(particles.get(0).getMassCenter().getX()+  "  : " + particles.get(0).getMassCenter().getY());
-                o.printSystem(particles, time);
+                output.printSystem(particles, time);
                 printCont++;
+            }
+
+            // If 20 seconds have passed and no particles leave. They are stuck, finish simulation
+            if (Double.compare(time - lastExit, 20) >= 0) {
+                break;
             }
 
             /* Previous positions */
@@ -47,7 +47,8 @@ public class Simulator {
 
             time += Data.dt;
         }
-        o.done();
+        System.out.println(calculateCaudal(time, leftRoom, time150, 0.7));
+        output.done();
     }
 
     private void updateTarget(Particle p, double t) {
@@ -56,13 +57,11 @@ public class Simulator {
                 p.nextTarget();
             else {
                 resetParticle(p);
-                o.printExit(t, leftRoom);
-                realocationCounter += 1;
+                output.printExit(t, leftRoom);
                 leftRoom += 1;
-                if (realocationCounter == Data.caudal) {
-                    o.printCaudal(t, lastT);
-                    lastT = t;
-                    realocationCounter = 0;
+                lastExit = t;
+                if (leftRoom == Data.caudal) {
+                    time150 = t;
                 }
             }
 
@@ -77,6 +76,10 @@ public class Simulator {
         }
     }
 
+    private double calculateCaudal(double time, double amount, double time150, double width) {
+        return (amount - 150) / ((time - time150) * width);
+    }
+
 
     /* Uses Verlet */
     private void updatePosition(Particle p) {
@@ -86,7 +89,6 @@ public class Simulator {
         double nextVelX = (nextX - p.getPreviousMassCenter().getX()) / (2 * Data.dt);
         double nextVelY = (nextY - p.getPreviousMassCenter().getY()) / (2 * Data.dt);
 
-        //TODO check if logic applies
         double nextOrientation = 2 * p.getOrientation() - p.getPreviousOrientation() + Data.dt * Data.dt * p.getTorque() /p.getInertiaMoment();
         double nextAngularVel = (nextOrientation - p.getPreviousOrientation()) / (2 * Data.dt);
 

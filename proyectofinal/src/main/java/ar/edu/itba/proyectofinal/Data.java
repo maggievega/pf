@@ -13,11 +13,18 @@ class Data {
 
     static List<Target> targetList = new ArrayList<>();
 
-    static double dt = 0.0001;
+    static double kn = 2.2 * Math.pow(10,6);
+    static double kt = kn / 25.0;
+
+    private static double en = 0.2;
+    private static double mr = 1; // TODO: FIND
+
+    private static double tc = Math.PI * Math.sqrt(mr / (2 * kn));
+    static double dt = tc/300;
     static double totalTime = 2000;
     static double printTime = 0.05;
 
-    static int caudal = 10;
+    static int caudal = 150;
 
     static double precision = 0.00001;
 
@@ -31,13 +38,9 @@ class Data {
     static double maxX = 8;
     static double maxY = 8;
 
-    static double kn = 2.2 * Math.pow(10,6);
-    static double kt = kn / 25.0;
 
-    private static double en = 0.2;
-    private static double mr = 1; // TODO: FIND
 
-    static double SD = 20;
+    static double SD = 15;
     static double eta = 0.75;
     static double grav = 10;
     static double T = 1;

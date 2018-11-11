@@ -10,29 +10,25 @@ import java.util.List;
 class Output {
 
     private BufferedWriter writer;
-    private BufferedWriter caudalWriter;
     private BufferedWriter exitWriter;
 
     private int count = 0;
     private int particleCount = -1;
 
 
-    Output() {
-        File file = new File("sim3.xyz");
-        File caudalFile = new File("caudal3.txt");
-        File exitFile = new File("exit3.txt");
+    Output(String out, String exit) {
+        File file = new File(out);
+        File exitFile = new File(exit);
         try {
             Files.deleteIfExists(file.toPath());
-            Files.deleteIfExists(caudalFile.toPath());
             Files.deleteIfExists(exitFile.toPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            this.exitWriter = new BufferedWriter(new FileWriter("exit3.txt", true));
-            this.caudalWriter = new BufferedWriter(new FileWriter("caudal3.txt", true));
-            this.writer = new BufferedWriter(new FileWriter("sim3.xyz",true));
+            this.exitWriter = new BufferedWriter(new FileWriter(exit, true));
+            this.writer = new BufferedWriter(new FileWriter(out,true));
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
@@ -58,16 +54,6 @@ class Output {
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
-    }
-
-    void printCaudal(double t, double lastT) {
-        try {
-            this.caudalWriter.write(t + "\t" + (Data.caudal/(t-lastT)) + "\n");
-            this.caudalWriter.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private int sumParticles(List<Particle> particles) {
@@ -178,7 +164,6 @@ class Output {
     void done() {
         try {
             this.writer.close();
-            this.caudalWriter.close();
             this.exitWriter.close();
         } catch (IOException e) {
             System.out.println("Error while closing BufferedWriter");

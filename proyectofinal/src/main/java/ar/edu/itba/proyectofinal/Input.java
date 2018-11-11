@@ -3,7 +3,6 @@ package ar.edu.itba.proyectofinal;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -133,13 +132,11 @@ class Input {
         
         for (int j = 0; j < countParticles; j ++) {
             double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
-            mass = Data.mMin;
             Point massCenter = Utils.massCenter(points, Data.precision );
             List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
             double radius = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
             double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision);
             inertiaMoment *= mass;
-//            double inertiaMoment2 = Utils.calculateInertiaMoment(ap, mass);
             double phase = Math.random() * Math.PI * 2;
             Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, inertiaMoment, phase);
             p.setColor(255,255,255);

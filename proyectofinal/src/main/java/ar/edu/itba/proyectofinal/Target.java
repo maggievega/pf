@@ -27,14 +27,6 @@ public class Target extends Point {
         place(mc);
     }
 
-    public Target(double x, double y) {
-        super(x,y);
-    }
-
-    public Target(Point p) {
-        super(p.getX(), p.getY());
-    }
-
     public boolean isEnd() {
         return end;
     }

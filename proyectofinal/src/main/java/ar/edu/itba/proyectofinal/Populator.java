@@ -19,28 +19,27 @@ public class Populator {
     private Populator() {
     }
 
-    public static Populator getInstance() {
-        if(instance == null) {
+    static Populator getInstance() {
+        if (instance == null) {
             instance = new Populator();
         }
         return instance;
     }
 
-    public void setParticles(List<Particle> particles) {
-        if(this.particles == null)
+    void setParticles(List<Particle> particles) {
+        if (this.particles == null)
             this.particles = particles;
     }
 
     public void Populate() {
         int i= 0;
         for (Particle p : particles) {
-            System.out.println("Particle " + ++i);
-                positionParticle(p);
-                populateTargets(p);
+            positionParticle(p);
+            populateTargets(p);
         }
     }
 
-    public void PopulatePaper(Point grid){
+    void PopulatePaper(Point grid){
         int part=0;
         double xDiv = Data.maxX / grid.getX();
         double yDiv = Data.maxY / grid.getY();
@@ -50,18 +49,16 @@ public class Populator {
                 do {
                     p = particles.get(part++);
                 }while (p.isWall());
-                if(p==null)
+                if(p == null)
                     System.out.println("ERROR");
-                paperPosition(p,new Point(i * xDiv + xDiv/2, j * yDiv + yDiv/2));
+                paperPosition(p,new Point(i * xDiv + xDiv / 2, j * yDiv + yDiv / 2));
                 populateTargets(p);
                 System.out.println(i * xDiv + " - " + j * yDiv);
-//                System.out.println(i + " - " + j + " -  " + part);
-//                part++;
             }
         }
     }
 
-    public void paperPosition(Particle p, Point position){
+    private void paperPosition(Particle p, Point position){
         if(!p.isWall()) {
             double orientation = Math.random() * 2 * Math.PI;
             p.setOrientation(orientation);
@@ -81,7 +78,7 @@ public class Populator {
         p.setTargets(targets);
     }
 
-    public void positionParticle(Particle p) {
+    private void positionParticle(Particle p) {
         Point mc;
         if (!p.isWall()) {
             double orientation = Math.random() * 2 * Math.PI;
@@ -98,7 +95,7 @@ public class Populator {
 
     }
 
-    public void resetParticle(Particle p){
+     void resetParticle(Particle p){
         p.setOrientation(Math.PI);
         p.setPreviousOrientation(Math.PI);
         double x = Math.random() * (Data.maxX - 1 ) + 0.3;

@@ -22,9 +22,6 @@ public class Particle {
     //Orientation in degrees.
     private double orientation;
 
-    //In response to Requirement2
-    private Point facingDirection;
-
     private boolean wall = false;
     private int selected = 1;
 
@@ -35,7 +32,6 @@ public class Particle {
     private double desiredVelocity;
 
     private Point vel;
-    private Point acc ;
 
     private double angularVelocity;
     private double angularAcceleration;
@@ -173,19 +169,11 @@ public class Particle {
                 closestDistance = closestPoint.squaredDistanceBetween(point);
                 if (closestDistance < minDistance){
                     minDistance = closestDistance;
-//                    System.out.println(minDistance);
                     a = closestPoint;
                     b = point;
                     thisone = true;
-//                    System.out.println("Segment :   " + segment.getP1().getX() +","+ segment.getP1().getY() + "\t\t\t\t"+
-//                            segment.getP2().getX() +","+ segment.getP2().getY() );
-//                    System.out.println("Point :     " + point.getX()+","+point.getY());
-//                    System.out.println(a.getX() +","+a.getY() + "    " +b.getX() +","+b.getY() + " FIRSt\n");
 
                 }
-//                if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
-//                    System.out.println("IGUALES2");
-//                }
             }
         }
 
@@ -197,67 +185,41 @@ public class Particle {
                 closestDistance = closestPoint.squaredDistanceBetween(point);
                 if (closestDistance < minDistance){
                     minDistance = closestDistance;
-//                    System.out.println(minDistance);
                     b = closestPoint;
-                    //todo remove
-                    double c;
                     a = point;
                     thisone = false;
-//                    System.out.println(a.getX() +","+a.getY() + "     " +b.getX() +","+b.getY());
-//                    if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
-//                        System.out.println("IGUALES2");
-//                    }
                 }
             }
         }
 
-//        System.out.println("__");
-//        System.out.println(a.getX() +","+a.getY() + "    " +b.getX() +","+b.getY());
-//        System.out.println("-----------------------");
         /*If closest distance found between both particle's points is smaller than the addition of both's radiuses,
         calculate and apply collision force
          */
-        if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())){
-//            System.out.println(a.getX() +","+a.getY() + "    " +b.getX() +","+b.getY());
+        if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius()))
             this.applyCollisionForces(p, a, b);
-        }
     }
 
 
     public void applyCollisionForces(Particle p, Point a, Point b){
-        double overlapForce, overlap, versorModule, scalarProjection;
-        Point r, f, translationForce;
-
-        if (Double.compare(a.getX(),b.getX()) == 0 && Double.compare(a.getY(),b.getY()) == 0) {
-//            System.out.println("IGUALES");
-        }
+        double overlapForce, overlap;
+        Point r, f;
 
         /* find overlap distance */
         overlap = Math.sqrt(a.squaredDistanceBetween(b)) - (this.getRadius() +  p.getRadius());
         overlapForce = forceFor(overlap);
 
-//        System.out.println(overlapForce);
         /*r vector goes from centre of mass of this particle, to the contact point
           f vector is the direction in which the force is being applied, going from one contact point, to the other
          */
         r = new Point(a.getX() - this.massCenter.getX(), a.getY() - this.massCenter.getY());
         f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
 
-//        f.times(1 / a.distanceBetween(b));
         f.times(1/f.module());
         f.times(overlapForce);
 
         this.force.add(f);
 
-//        r.times(-1 / r.module());
-//        scalarProjection = f.dotProduct(r);
-//        r.times(scalarProjection);
-//        translationForce = r;
-
         this.torque -= r.crossProduct(f);
-
-//        this.force.setX(this.force.getX() + translationForce.dotProduct(new Point(1,0)));
-//        this.force.setY(this.force.getY() + translationForce.dotProduct(new Point(0,1)));
 
         tangentialForce(p, a, b, overlapForce);
     }
@@ -274,30 +236,17 @@ public class Particle {
 
         f.times(1 / f.module());
 
-//        p.torque += r.crossProduct(relativeVelocity.dotProduct());
-//        tangentVersor = Utils.getPerpendicularTo2(f);
-//        tangentVersor.times(1/tangentVersor.module());
-
         relativeSpeedT = relativeVelocity.dotProduct(Utils.getPerpendicularTo(f));
 
         tForce = - Data.kt * overlap * relativeSpeedT;   //* relativeVelocity.dotProduct(tangentVersor);
-//        tangentVersor.times(tForce/tangentVersor.module());
 
         tangentForce = f;
 
         Utils.getPerpendicularTo(tangentForce).times(tForce);
 
-//        tangentForce.times(tForce);
-
         this.torque += r.crossProduct(tangentForce);
-//        scalarProjection = tangentForce.dotProduct(r);
-//        r.times(scalarProjection);
-//        translationForce = r;
-//        translationForce.times(-1);
-        this.force.add(tangentForce);
 
-        if(this.force.getX() == Double.NaN)
-            System.out.println("PROBLEM");
+        this.force.add(tangentForce);
 
     }
 
@@ -352,10 +301,6 @@ public class Particle {
         return radius;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public double getMass() {
         return mass;
     }
@@ -394,10 +339,6 @@ public class Particle {
 
     public void setVel(Point vel) {
         this.vel = vel;
-    }
-
-    public Point getAcc() {
-        return acc;
     }
 
     public double getAngularVelocity() {
@@ -512,10 +453,6 @@ public class Particle {
         this.selected = 0;
     }
 
-    public int getSelected() {
-        return selected;
-    }
-
     public int getR() {
         return R;
     }
@@ -538,9 +475,8 @@ public class Particle {
         this.B = B;
     }
 
-    //todo which is the required amplitude
     public double sinusoidalNoise(double t){
-        return Data.eta * Data.mMax * this.maxDistance * Data.grav * Math.sin(t * (Math.PI * 2) + phase) / Data.AmpModifier;
+        return Data.eta * Data.mMax * this.maxDistance * Data.grav * Math.sin(t * (Math.PI * 2) + phase);
     }
 
     public double getOrientationX() {
