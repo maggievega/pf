@@ -19,17 +19,16 @@ public class Main {
             jc.usage();
             return;
         }
-        String starting = "input/";
-        String ending = "output/";
-        System.out.println(Data.dt);
-//        Input inputConstant = new Input(Type.CONSTANTS, "input/const.txt");
-//        Input inputParticles = new Input(Type.PARTICLES, "input/particlesPaperLong.txt");
-//        Input inputTargets = new Input(Type.TARGETS, "input/targetsPaper.txt");
-//        Input inputWalls = new Input(Type.WALLS, "input/wallsPaper.txt");
-        Input inputConstant = new Input(Type.CONSTANTS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/const.txt");
-        Input inputParticles = new Input(Type.PARTICLES, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/particlesPaper.txt");
-        Input inputTargets = new Input(Type.TARGETS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/targetsPaper.txt");
-        Input inputWalls = new Input(Type.WALLS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/wallsPaper.txt");
+        String starting = "../input/";
+        String ending = "../output/";
+        Input inputConstant = new Input(Type.CONSTANTS, starting + args.constants);
+        Input inputParticles = new Input(Type.PARTICLES, starting + args.particles);
+        Input inputTargets = new Input(Type.TARGETS, starting + args.targets);
+        Input inputWalls = new Input(Type.WALLS, starting + args.walls);
+//        Input inputConstant = new Input(Type.CONSTANTS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/const.txt");
+//        Input inputParticles = new Input(Type.PARTICLES, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/particlesPaper.txt");
+//        Input inputTargets = new Input(Type.TARGETS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/targetsPaper.txt");
+//        Input inputWalls = new Input(Type.WALLS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/wallsPaper.txt");
 
         List<Particle> particles = new ArrayList<>();
 
@@ -43,7 +42,8 @@ public class Main {
         System.out.println("-- Particles Loaded");
 
         String extra = "long_0.7_ONLYEXIT" + particles.get(100).getDesiredVelocity() + "_" + Data.SD + "";
-        Output o = new Output("sim" + extra + ".xyz", "exit" + extra + ".txt");
+        Output o = new Output(ending + args.out
+                , ending + args.exit);
 
         Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");

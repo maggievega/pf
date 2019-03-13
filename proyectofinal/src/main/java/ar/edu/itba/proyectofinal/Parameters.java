@@ -26,7 +26,7 @@ public class Parameters {
 
     @Parameter(	names = {"-o", "--out"},
             description = "Particles ovito")
-    public String out = "out.txt";
+    public String out = "sim.xyz";
 
     @Parameter(	names = {"-h", "--help"},
             description = "Print this help",
