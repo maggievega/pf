@@ -1,6 +1,7 @@
 package ar.edu.itba.proyectofinal;
 
 import ar.edu.itba.proyectofinal.Particle;
+import com.beust.jcommander.JCommander;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,18 @@ import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] argv) {
+        Parameters args = new Parameters();
+        JCommander jc = JCommander.newBuilder()
+                .addObject(args)
+                .build();
+        jc.parse(argv);
+        if (args.help) {
+            jc.usage();
+            return;
+        }
+        String starting = "input/";
+        String ending = "output/";
         System.out.println(Data.dt);
 //        Input inputConstant = new Input(Type.CONSTANTS, "input/const.txt");
 //        Input inputParticles = new Input(Type.PARTICLES, "input/particlesPaperLong.txt");
