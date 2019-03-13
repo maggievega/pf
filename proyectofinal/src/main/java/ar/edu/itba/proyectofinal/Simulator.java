@@ -25,9 +25,9 @@ public class Simulator {
         int printCont = 0;
         while (time < Data.totalTime) {
             if (Data.printTime * printCont <= time) {
-                output.printSystem(particles, time);
+//                output.printSystem(particles, time);
 //                System.out.println(printCont);
-                System.out.println(System.currentTimeMillis() - prevtime);
+//                System.out.println(System.currentTimeMillis() - prevtime);
                 prevtime = System.currentTimeMillis();
                 printCont++;
 
@@ -73,6 +73,7 @@ public class Simulator {
             else {
                 resetParticle(p);
                 output.printExit(t, leftRoom);
+                System.out.println(leftRoom);
                 leftRoom += 1;
                 lastExit = t;
                 if (leftRoom == Data.caudal) {
