@@ -30,7 +30,7 @@ public class Main {
         inputParticles.loadParticles(particles);
         System.out.println("-- Particles Loaded");
 
-        String extra = "long_0.7_FIX" + particles.get(100).getDesiredVelocity() + "_" + Data.SD + "";
+        String extra = "long_0.7_ONLYEXIT" + particles.get(100).getDesiredVelocity() + "_" + Data.SD + "";
         Output o = new Output("sim" + extra + ".xyz", "exit" + extra + ".txt");
 
         Populator.getInstance().setParticles(particles);
