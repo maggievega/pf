@@ -12,18 +12,25 @@ public class Simulator {
     private static double time150 = 0;
     private static int leftRoom = 1;
 
+    private long prevtime;
+
     public Simulator(List<Particle> p, Output o) {
         output = o;
         particles = p;
     }
 
     public void Simulate(){
+        prevtime = System.currentTimeMillis();
         double time = 0.0;
         int printCont = 0;
         while (time < Data.totalTime) {
             if (Data.printTime * printCont <= time) {
                 output.printSystem(particles, time);
+//                System.out.println(printCont);
+                System.out.println(System.currentTimeMillis() - prevtime);
+                prevtime = System.currentTimeMillis();
                 printCont++;
+
             }
 
             // If 20 seconds have passed and no particles leave. They are stuck, finish simulation
@@ -36,7 +43,15 @@ public class Simulator {
 
             //Calculate forces
             final double aarr = time;
-            particles.forEach((p) -> {if(!p.isWall()) p.getForce(previousPositions,aarr);});
+//            prevtime = System.currentTimeMillis();
+//            particles.forEach((p) -> {if(!p.isWall()) p.getForce(previousPositions,aarr);});
+            particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForce(previousPositions,aarr);});
+
+
+
+//            System.out.println(System.currentTimeMillis()-prevtime);
+
+
 
             for (Particle p : particles) {
                 if (!p.isWall()){

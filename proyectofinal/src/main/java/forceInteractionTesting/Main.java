@@ -1,9 +1,10 @@
 package forceInteractionTesting;
 
 
-import ar.edu.itba.proyectofinal.Point;
-import ar.edu.itba.proyectofinal.Segment;
-import ar.edu.itba.proyectofinal.Utils;
+import ar.edu.itba.proyectofinal.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -22,10 +23,11 @@ public class Main {
 //        double precision = 0.001;
 
 
-        Point A = new Point( 8.055799544003124 , 7.379459543866440);
-        Segment seg = new Segment( new Point(10.0 , 10.0 ), new Point(0.0 , 9.999999999999998));
-
-        System.out.println(Utils.completeClosestPoint(seg,A));
+//
+//        Point A = new Point( 8.055799544003124 , 7.379459543866440);
+//        Segment seg = new Segment( new Point(10.0 , 10.0 ), new Point(0.0 , 9.999999999999998));
+//
+//        System.out.println(Utils.completeClosestPoint(seg,A));
 
 //      for(int i = 0; i< 5;i++){
 //        long start = System.currentTimeMillis();
@@ -39,9 +41,89 @@ public class Main {
 
 //        System.out.println(dotProduct(A,B));
 
+        List<Particle> particles = new ArrayList<Particle>();
+
+        Point[] p1points = new Point[2];
+//        List<Point> p1points = new ArrayList<Point>();
+        p1points[0]=(new Point(5.329584190765531,0.20916659820020084));
+        p1points[1]=(new Point(5.444584162485996,0.20924724739286732));
+
+        List<Segment> segments1 = new ArrayList<>();
+        segments1.add(new Segment(p1points[0], p1points[1]));
+
+        Point[] p2points = new Point[2];
+
+//        List<Point> p2points = new ArrayList<Point>();
+        p2points[0]=(new Point(5.00682340941375,	0.1706952529048219));
+        p2points[1]=(new Point(5.121823402907966,0.17073393533496034));
+        System.out.println(p2points[1].squaredDistanceBetween(p1points[0]));
+        List<Segment> segments2 = new ArrayList<>();
+        segments2.add(new Segment(p2points[0], p2points[1]));
+        double closestDistance, minDistance = Double.MAX_VALUE;
+        Point a = null, b = null, closestPoint = null;
+        for (Segment segment : segments1){
+            System.out.println("Checking segment" + segment.toString());
+            for (Point point : p2points){
+                System.out.println("Checking point" + point.toString());
+                closestPoint = Utils.completeClosestPoint(segment, point);
+                System.out.println("Closest point is: " + closestPoint.toString());
+                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earlier
+                   TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
+                */
+                closestDistance = closestPoint.squaredDistanceBetween(point);
+                if (closestDistance < minDistance){
+                    System.out.println("new min : " + closestDistance);
+                    minDistance = closestDistance;
+                    a = closestPoint;
+                    b = point;
+                }
+            }
+
+            double r1 = 0.123146;
+            double r2 = 0.161865;
+
+            System.out.println("min dist: " +minDistance);
+            System.out.println((0.123146 + 0.161865) * (0.123146 + 0.161865));
+            if (minDistance < (r1+r2)*(r1+r2)){
+                System.out.println("CHOCAN2");
+            }else{
+                System.out.println("NOCHOC");
+            }
+//                this.applyCollisionForces(p, a, b);
+        }
 
 
 
+
+
+
+    }
+
+    public static Particle createParticle(int id,Point[] points, double r){
+        double mMin = 45;
+        double mMax = 114;
+        double rMin = 0.12;
+        double rMax = 0.165;
+        double precision = 0.00001;
+        double mass = Math.random() * (mMax - mMin) + mMin;
+        Point massCenter = Utils.massCenter(points, precision );
+        List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
+        double radius = Math.random() * (rMax - rMin) + Data.rMin;
+        double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision);
+        inertiaMoment *= mass;
+        double phase = Math.random() * Math.PI * 2;
+        Particle p = new Particle(id, mass, ap, massCenter, 0, r, 2.0, new Point(0,0), 0 , 0, inertiaMoment, phase);
+        p.setColor(255,255,255);
+
+
+        return p;
+    }
+
+    public static double getOrientation(Point p1, Point p2){
+
+
+
+        return 0;
     }
 
     public static boolean liesInside(Point[] poligon, Point p){
@@ -123,6 +205,8 @@ public class Main {
 
         return inertia * (mass/points);
     }
+
+
 
 
 

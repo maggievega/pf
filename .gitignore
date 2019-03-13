@@ -41,3 +41,6 @@ target/
 #Ovito Files
 *.xyz
 
+#Caudal Files
+*.txt
+

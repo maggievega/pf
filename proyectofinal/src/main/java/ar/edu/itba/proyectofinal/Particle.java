@@ -192,7 +192,7 @@ public class Particle {
             }
         }
 
-        /*If closest distance found between both particle's points is smaller than the addition of both's radiuses,
+        /*If closest distance found between both particle's points is smaller than the addition of both's radius,
         calculate and apply collision force
          */
         if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius()))

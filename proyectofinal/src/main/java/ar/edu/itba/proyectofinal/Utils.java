@@ -59,7 +59,7 @@ public class Utils {
             //} else if (y1 == y2) {
         } else if (doubleEqual(y1,y2)){
             if ((a >= x1 && a >= x2) || (a <= x1 && a <= x2)){
-                if ((a-x1) * a-x1 >= (a - x2) * (a * x2)){
+                if ((a-x1) * (a-x1) >= (a - x2) * (a - x2)){
 //                    System.out.println("Closest point is " + x2 + " , " + y1);
                     return new Point(x2, y1);
                 } else {
@@ -121,7 +121,7 @@ public class Utils {
 
     }
 
-    static List<AngularPoint> calculateAngularPoints(Point massCenter, Point[] points) {
+    public static List<AngularPoint> calculateAngularPoints(Point massCenter, Point[] points) {
         List<AngularPoint> ap = new ArrayList<>();
         for (int i = 0; i < points.length; i++) {
             double angle = Utils.getAngle(massCenter, points[i]);

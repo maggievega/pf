@@ -10,14 +10,14 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println(Data.dt);
-        Input inputConstant = new Input(Type.CONSTANTS, "input/const.txt");
-        Input inputParticles = new Input(Type.PARTICLES, "input/particlesPaperLong.txt");
-        Input inputTargets = new Input(Type.TARGETS, "input/targetsPaper.txt");
-        Input inputWalls = new Input(Type.WALLS, "input/wallsPaper.txt");
-//        Input inputConstant = new Input(Type.CONSTANTS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/const.txt");
-//        Input inputParticles = new Input(Type.PARTICLES, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/particlesPaper.txt");
-//        Input inputTargets = new Input(Type.TARGETS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/targetsPaper.txt");
-//        Input inputWalls = new Input(Type.WALLS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/wallsPaper.txt");
+//        Input inputConstant = new Input(Type.CONSTANTS, "input/const.txt");
+//        Input inputParticles = new Input(Type.PARTICLES, "input/particlesPaperLong.txt");
+//        Input inputTargets = new Input(Type.TARGETS, "input/targetsPaper.txt");
+//        Input inputWalls = new Input(Type.WALLS, "input/wallsPaper.txt");
+        Input inputConstant = new Input(Type.CONSTANTS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/const.txt");
+        Input inputParticles = new Input(Type.PARTICLES, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/particlesPaper.txt");
+        Input inputTargets = new Input(Type.TARGETS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/targetsPaper.txt");
+        Input inputWalls = new Input(Type.WALLS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/wallsPaper.txt");
 
         List<Particle> particles = new ArrayList<>();
 
@@ -30,7 +30,7 @@ public class Main {
         inputParticles.loadParticles(particles);
         System.out.println("-- Particles Loaded");
 
-        String extra = "long_0.7_" + particles.get(100).getDesiredVelocity() + "_" + Data.SD + "";
+        String extra = "long_0.7_FIX" + particles.get(100).getDesiredVelocity() + "_" + Data.SD + "";
         Output o = new Output("sim" + extra + ".xyz", "exit" + extra + ".txt");
 
         Populator.getInstance().setParticles(particles);

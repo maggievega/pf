@@ -3,13 +3,13 @@ package ar.edu.itba.proyectofinal;
 import java.util.ArrayList;
 import java.util.List;
 
-class Data {
+public class Data {
 
     public static double angleLength = 2;
-    static double mMin = 45;
-    static double mMax = 114;
-    static double rMin = 0.12;
-    static double rMax = 0.165;
+    public static double mMin = 45;
+    public static double mMax = 114;
+    public static double rMin = 0.12;
+    public static double rMax = 0.165;
 
     static List<Target> targetList = new ArrayList<>();
 
@@ -21,12 +21,12 @@ class Data {
 
     private static double tc = Math.PI * Math.sqrt(mr / (2 * kn));
     static double dt = tc/300;
-    static double totalTime = 2000;
+    static double totalTime = 500;
     static double printTime = 0.05;
 
     static int caudal = 150;
 
-    static double precision = 0.00001;
+    public static double precision = 0.00001;
 
     static double wall_radius = 0.05;
     static double spacing = 0.5;
