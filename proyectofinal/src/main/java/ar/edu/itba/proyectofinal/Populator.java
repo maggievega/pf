@@ -49,11 +49,8 @@ public class Populator {
                 do {
                     p = particles.get(part++);
                 }while (p.isWall());
-                if(p == null)
-                    System.out.println("ERROR");
                 paperPosition(p,new Point(i * xDiv + xDiv / 2, j * yDiv + yDiv / 2));
                 populateTargets(p);
-                System.out.println(i * xDiv + " - " + j * yDiv);
             }
         }
     }

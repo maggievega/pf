@@ -19,12 +19,10 @@ public class Main {
             jc.usage();
             return;
         }
-        String starting = "../input/";
-        String ending = "../output/";
-        Input inputConstant = new Input(Type.CONSTANTS, starting + args.constants);
-        Input inputParticles = new Input(Type.PARTICLES, starting + args.particles);
-        Input inputTargets = new Input(Type.TARGETS, starting + args.targets);
-        Input inputWalls = new Input(Type.WALLS, starting + args.walls);
+        Input inputConstant = new Input(Type.CONSTANTS,   args.constants);
+        Input inputParticles = new Input(Type.PARTICLES, args.particles);
+        Input inputTargets = new Input(Type.TARGETS, args.targets);
+        Input inputWalls = new Input(Type.WALLS,  args.walls);
 //        Input inputConstant = new Input(Type.CONSTANTS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/const.txt");
 //        Input inputParticles = new Input(Type.PARTICLES, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/particlesPaper.txt");
 //        Input inputTargets = new Input(Type.TARGETS, "/Users/seguido/IdeaProjects/pf/proyectofinal/input/targetsPaper.txt");
@@ -42,8 +40,8 @@ public class Main {
         System.out.println("-- Particles Loaded");
 
         String extra = "long_0.7_ONLYEXIT" + particles.get(100).getDesiredVelocity() + "_" + Data.SD + "";
-        Output o = new Output(ending + args.out
-                , ending + args.exit);
+        Output o = new Output(args.out
+                , args.exit);
 
         Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
