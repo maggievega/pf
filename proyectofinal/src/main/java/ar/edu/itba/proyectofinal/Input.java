@@ -225,7 +225,33 @@ class Input {
             case "mmax":
                 Data.mMax = Double.parseDouble(values[value]);
                 break;
-
+            case "rmin":
+                Data.rMin = Double.parseDouble(values[value]);
+                break;
+            case "rmax":
+                Data.rMax = Double.parseDouble(values[value]);
+                break;
+            case "kn":
+                Data.kn = Double.parseDouble(values[value]);
+                break;
+            case "kt":
+                Data.kt = Double.parseDouble(values[value]);
+                break;
+            case "grav":
+                Data.grav = Double.parseDouble(values[value]);
+                break;
+            case "beta":
+                Data.beta = Double.parseDouble(values[value]);
+                break;
+            case "characteristict":
+                Data.characteristicT = Double.parseDouble(values[value]);
+                break;
+            case "sd":
+                Data.SD = Double.parseDouble(values[value]);
+                break;
+            case "eta":
+                Data.eta = Double.parseDouble(values[value]);
+                break;
             default:
                     //error
         }
