@@ -210,6 +210,7 @@ class Input {
         switch (param) {
             case "continuous":
                 Data.continuous = true;
+                break;
             case "dt":
                 Data.dt = Double.parseDouble(values[value]);
                 break;
