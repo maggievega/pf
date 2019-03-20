@@ -4,10 +4,13 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simulation entitities modeled as  a list of Angular Points given in relation from a centre of mass and
+ * a given orientation.
+ */
 public class Particle {
     /*
         TODO ( NEXT ) : Allow particle to change direction versor directly to opposite direction if there is rotational simmetry
-        Solution: Allign direction versor with 0 or PI of desired direction according to which is closerg
     */
     private int id;
     private double mass;
@@ -23,7 +26,6 @@ public class Particle {
     private double orientation;
 
     private boolean wall = false;
-    private int selected = 1;
 
     private Point force;
     private double torque;
@@ -49,14 +51,11 @@ public class Particle {
     //For sinusoidal noise
     private double phase;
 
-
-    private boolean thisone = false;
-
     private int R = 0;
     private int G = 0;
     private int B = 255;
 
-    //Constructors
+    //Constructor
     public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
                     double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration,
                     double inertiaMoment, double phase) {
@@ -76,7 +75,6 @@ public class Particle {
 
         this.phase = phase;
 
-        //TODO check if this works.
         this.previousOrientation = orientation;
 
         this.maxDistance = 0;
@@ -87,7 +85,11 @@ public class Particle {
         }
     }
 
-
+    /**
+     *
+     * @param particles
+     * @param time: for updating current time and noise calculation.
+     */
     public void getForce(List<Particle> particles, double time) {
         this.time = time;
         resetForce();
@@ -133,6 +135,12 @@ public class Particle {
 
     }
 
+    /**
+     * Shallow aproximation for calculating if both particles could collide.
+     * Used for preventing unnecessary operations
+     * @param p
+     * @return
+     */
     public boolean canCollide(Particle p){
         return this.massCenter.squaredDistanceBetween(p.massCenter)
                 <= (this.maxDistance + this.radius + p.maxDistance +p.radius) *
@@ -171,7 +179,6 @@ public class Particle {
                     minDistance = closestDistance;
                     a = closestPoint;
                     b = point;
-                    thisone = true;
 
                 }
             }
@@ -187,7 +194,6 @@ public class Particle {
                     minDistance = closestDistance;
                     b = closestPoint;
                     a = point;
-                    thisone = false;
                 }
             }
         }
@@ -208,7 +214,7 @@ public class Particle {
         overlap = Math.sqrt(a.squaredDistanceBetween(b)) - (this.getRadius() +  p.getRadius());
         overlapForce = forceFor(overlap);
 
-        /*r vector goes from centre of mass of this particle, to the contact point
+        /*r vector goes from centre of mass of this particle, to the contac t point
           f vector is the direction in which the force is being applied, going from one contact point, to the other
          */
         r = new Point(a.getX() - this.massCenter.getX(), a.getY() - this.massCenter.getY());
@@ -218,6 +224,9 @@ public class Particle {
         f.times(overlapForce);
 
         this.force.add(f);
+
+        //Dampening force
+//        this.force.ad
 
         this.torque -= r.crossProduct(f);
 
@@ -238,6 +247,8 @@ public class Particle {
 
         relativeSpeedT = relativeVelocity.dotProduct(Utils.getPerpendicularTo(f));
 
+        //CARE
+//        tForce = - Data.kt * overlap * relativeSpeedT - relativeVelocity.dotProduct(tangentVersor);
         tForce = - Data.kt * overlap * relativeSpeedT;   //* relativeVelocity.dotProduct(tangentVersor);
 
         tangentForce = f;
@@ -248,6 +259,15 @@ public class Particle {
 
         this.force.add(tangentForce);
 
+    }
+
+    public double dampeningTangentialForce(Particle p, Point a, Point b, double overlap){
+        Point relativeVelocity = new Point(p.vel.getX() - this.vel.getX(), p.vel.getY() - this.vel.getY());
+        Point f = new Point(a.getX() - b.getX(), a.getY() - b.getY());
+        f.times(1/f.module());
+        double relativeSpeed = relativeVelocity.dotProduct(Utils.getPerpendicularTo(f));
+//        Point relativeSpeedT =
+        return 0;
     }
 
 
@@ -265,6 +285,10 @@ public class Particle {
         return new Point(nextX, nextY);
     }
 
+    /**
+     *
+     * @return list of segments conforming the particle
+     */
     public List<Segment> getSegments () {
         List<Segment> aux = new ArrayList<>();
         List<Point> points = getPoints();
@@ -282,6 +306,11 @@ public class Particle {
         return - Data.kn * overlap;
     }
 
+    /**
+     * Provides a way to retrieve cartesian points from the list of Angular Points, mass center and orientation. Needed
+     * for easier calculation
+     * @return list of cartesian points
+     */
     List<Point> getPoints() {
         List<Point> cartesianPoints = new ArrayList<>();
         for (AngularPoint ap: points) {
@@ -379,11 +408,17 @@ public class Particle {
     public void resetTargets() { this.indexTarget = 0;
     }
 
+    /**
+     * Calls for a reinserting of the given particle into the system after reaching final target.
+     */
     public void resetPosition() {
-//        Populator.getInstance().positionParticle(this);
         Populator.getInstance().resetParticle(this);
     }
 
+    /**
+     * Sets previous mass center for integrating purposes
+     * @param previousMassCenter
+     */
     public void setPreviousMassCenter(Point previousMassCenter) {
         this.previousMassCenter = previousMassCenter;
     }
@@ -404,25 +439,37 @@ public class Particle {
         return id;
     }
 
+    /**
+     * Finds if a given particle is colliding onto a wall
+     * @param p: wall with which to check collision
+     * @return
+     */
     public boolean onWall(Particle p){
+        //Retrieve walls position
         List<Point> points = p.getPoints();
         Point p1 = points.get(0);
         Point p2 = points.get(1);
+
+        //Check wall's orientation
         if (p1.getX()==p2.getX()){
+            //Check for overlapping
             double xDif = this.massCenter.getX() - p1.getX();
             if(xDif*xDif<= (p.radius+this.radius)*(p.radius +this.radius)){
                 return true;
             }
         }else {
+            //Check for overlapping
             double yDif = this.massCenter.getY() - p1.getY();
             if(yDif*yDif<= (p.radius+this.radius)*(p.radius +this.radius)){
                 return true;
             }
         }
-
         return false;
     }
 
+    /**
+     * removes any forces on the particle in order to restart calculation
+     */
     private void resetForce() {
         force.setX(0.0);
         force.setY(0.0);
@@ -450,7 +497,6 @@ public class Particle {
 
     public void setWall() {
         this.wall = true;
-        this.selected = 0;
     }
 
     public int getR() {
@@ -475,6 +521,11 @@ public class Particle {
         this.B = B;
     }
 
+    /**
+     * Calculates noise based on a sinusoidal function for the given time
+     * @param t: time for noise calculation
+     * @return
+     */
     public double sinusoidalNoise(double t){
         return Data.eta * Data.mMax * this.maxDistance * Data.grav * Math.sin(t * (Math.PI * 2) + phase);
     }
