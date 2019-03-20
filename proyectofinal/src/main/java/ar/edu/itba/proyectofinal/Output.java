@@ -112,6 +112,17 @@ class Output {
         }
     }
 
+    private void printParticleSnapshot2(Particle p) {
+        try {
+            for(Point point: p.getPoints()){
+                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + p.getVel().getX() + "\t" + p.getVel().getY() + "\t" + p.getOrientation() + "\t" + p.getB() + "\t" + p.getAngularVelocity() + "\t" + p.getAngularAcceleration() + "\t" +  p.getTorque() + "\n"));
+                count++;
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to print. Simulation cannot be outputted");
+        }
+    }
+
     private void printWallSnapshot(Particle p) {
         List<Segment> listSeg = p.getSegments();
         Point p1 = listSeg.get(0).getP1();
