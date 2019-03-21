@@ -13,7 +13,11 @@ public class Particle {
         TODO ( NEXT ) : Allow particle to change direction versor directly to opposite direction if there is rotational simmetry
     */
     private int id;
+    private int type;
     private double mass;
+
+
+
     private List<AngularPoint> points;
 
     private Point massCenter;
@@ -56,10 +60,11 @@ public class Particle {
     private int B = 255;
 
     //Constructor
-    public Particle(int id, double mass, List<AngularPoint> points, Point massCenter, double orientation,
+    public Particle(int id, int type, double mass, List<AngularPoint> points, Point massCenter, double orientation,
                     double radius, double desiredVelocity, Point vel, double angularVelocity, double angularAcceleration,
                     double inertiaMoment, double phase) {
         this.id = id;
+        this.type = type;
         this.mass = mass;
         this.points = points;
         this.massCenter = massCenter;
@@ -147,6 +152,10 @@ public class Particle {
                     (this.maxDistance + this.radius + p.maxDistance + p.radius);
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void checkCollision(Particle p) {
 
         double closestDistance, minDistance = Double.MAX_VALUE;
@@ -231,6 +240,10 @@ public class Particle {
         this.torque -= r.crossProduct(f);
 
         tangentialForce(p, a, b, overlapForce);
+    }
+
+    public int getType() {
+        return type;
     }
 
     public void tangentialForce(Particle p, Point a, Point b, double overlap){
@@ -528,6 +541,10 @@ public class Particle {
      */
     public double sinusoidalNoise(double t){
         return Data.eta * Data.mMax * this.maxDistance * Data.grav * Math.sin(t * (Math.PI * 2) + phase);
+    }
+
+    public double getPhase() {
+        return phase;
     }
 
     public double getOrientationX() {

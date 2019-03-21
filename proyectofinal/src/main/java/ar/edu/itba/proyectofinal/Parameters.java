@@ -4,6 +4,7 @@ import com.beust.jcommander.Parameter;
 
 public class Parameters {
 
+
     @Parameter(	names = {"-p", "--particles"},
             description = "Particles archive")
     public String particles = "particlesPaper.txt";

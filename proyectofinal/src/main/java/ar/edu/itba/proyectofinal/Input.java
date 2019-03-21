@@ -12,6 +12,7 @@ class Input {
     private List<Particle> particles;
     private String fileName;
     private Type type;
+    private int particleType = 0;
 
     Input(Type type, String fileName) {
         this.type = type;
@@ -44,6 +45,7 @@ class Input {
 
     void load() {
         resetCounter();
+        System.out.println(fileName);
         try {
             stream =  Files.lines(Paths.get(fileName));
             stream.forEach(this::populate);
@@ -61,7 +63,8 @@ class Input {
                 populateConstants(line);
                 break;
             case PARTICLES:
-                populateParticles(line);
+                populateParticles(line, Type.PARTICLES.getValue() + particleType);
+                particleType++;
                 break;
             case TARGETS:
                 populateTargets(line);
@@ -100,14 +103,16 @@ class Input {
      * Doesn't position them on the board
      * Only creats their geometry
      */
-    private void populateParticles(String line) {
+    private void populateParticles(String line, int type) {
         if (N == -1) {
             N = Integer.parseInt(line);
+            //Shouldn't move the particle type ID, as it is refering to how many lines there are
+            particleType--;
             return;
         }
         if (count >= N) {
             System.out.println("More particles than expected");
-            throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
+            throw new ExceptionInInitializerError("Bad format. More particles than expected");
         }
         String[] particle = line.split("\\t");
         int countParticles = Integer.parseInt(particle[ParticleType.COUNT_PARTICLES.ordinal()]);
@@ -138,12 +143,14 @@ class Input {
             double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision);
             inertiaMoment *= mass;
             double phase = Math.random() * Math.PI * 2;
-            Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, inertiaMoment, phase);
+            Particle p = new Particle(particles.size(), type, mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, inertiaMoment, phase);
             p.setColor(255,255,255);
             particles.add(p);
+            System.out.println("Creating of type : " + type);
         }
         count ++;
     }
+
 
     private void populateWalls(String line) {
         if (N == -1) {
@@ -192,7 +199,7 @@ class Input {
         Point massCenter = Utils.calculateMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
 
-        Particle p = new Particle(particles.size(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, 1,0);
+        Particle p = new Particle(particles.size(), Type.WALLS.getValue(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, 1,0);
         p.setWall();
         p.setColor(255, 0, 0);
         particles.add(p);

@@ -25,7 +25,10 @@ public class Simulator {
         int printCont = 0;
         while (time < Data.totalTime) {
             if (Data.printTime * printCont <= time) {
-                output.printSystem(particles, time);
+//                output.printSystem(particles, time);
+
+                //This one should be the only remaining one
+                output.printSimSystem(particles,time);
                 System.out.println( 100.0 * time / Data.totalTime);
 //                System.out.println(printCont);
 //                System.out.println(System.currentTimeMillis() - prevtime);

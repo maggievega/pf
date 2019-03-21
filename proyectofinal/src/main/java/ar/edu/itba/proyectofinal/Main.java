@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class Main {
 
     public static void main(String[] argv) {
@@ -18,6 +19,9 @@ public class Main {
         if (args.help) {
             jc.usage();
             return;
+        }
+        for(Type t : Type.values()){
+            System.out.println(t.toString()  + "  " + t.getValue());
         }
         Input inputConstant = new Input(Type.CONSTANTS,   args.constants);
         Input inputParticles = new Input(Type.PARTICLES, args.particles);
@@ -35,13 +39,14 @@ public class Main {
         inputParticles.loadParticles(particles);
         System.out.println("-- Particles Loaded");
 
-        String extra = "long_0.7_ONLYEXIT" + particles.get(100).getDesiredVelocity() + "_" + Data.SD + "";
+        String extra = "long_0.7_ONLYEXIT" + "_" + Data.SD + "";
         Output o = new Output(args.out
                 , args.exit);
 
         Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
-        Populator.getInstance().PopulatePaper(new Point(12,16));
+//        Populator.getInstance().PopulatePaper(new Point(12,16));
+        Populator.getInstance().Populate();
         System.out.println("-- Population Finished");
         System.out.println("-- Start Simulation");
         Simulator s = new Simulator(particles, o);

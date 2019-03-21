@@ -99,25 +99,25 @@ public class Main {
 
     }
 
-    public static Particle createParticle(int id,Point[] points, double r){
-        double mMin = 45;
-        double mMax = 114;
-        double rMin = 0.12;
-        double rMax = 0.165;
-        double precision = 0.00001;
-        double mass = Math.random() * (mMax - mMin) + mMin;
-        Point massCenter = Utils.massCenter(points, precision );
-        List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
-        double radius = Math.random() * (rMax - rMin) + Data.rMin;
-        double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision);
-        inertiaMoment *= mass;
-        double phase = Math.random() * Math.PI * 2;
-        Particle p = new Particle(id, mass, ap, massCenter, 0, r, 2.0, new Point(0,0), 0 , 0, inertiaMoment, phase);
-        p.setColor(255,255,255);
-
-
-        return p;
-    }
+//    public static Particle createParticle(int id,Point[] points, double r){
+//        double mMin = 45;
+//        double mMax = 114;
+//        double rMin = 0.12;
+//        double rMax = 0.165;
+//        double precision = 0.00001;
+//        double mass = Math.random() * (mMax - mMin) + mMin;
+//        Point massCenter = Utils.massCenter(points, precision );
+//        List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
+//        double radius = Math.random() * (rMax - rMin) + Data.rMin;
+//        double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision);
+//        inertiaMoment *= mass;
+//        double phase = Math.random() * Math.PI * 2;
+//        Particle p = new Particle(id, mass, ap, massCenter, 0, r, 2.0, new Point(0,0), 0 , 0, inertiaMoment, phase);
+//        p.setColor(255,255,255);
+//
+//
+//        return p;
+//    }
 
     public static double getOrientation(Point p1, Point p2){
 

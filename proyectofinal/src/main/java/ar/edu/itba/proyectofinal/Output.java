@@ -11,6 +11,7 @@ class Output {
 
     private BufferedWriter writer;
     private BufferedWriter exitWriter;
+    private BufferedWriter simWriter;
 
     private int count = 0;
     private int particleCount = -1;
@@ -19,9 +20,11 @@ class Output {
     Output(String out, String exit) {
         File file = new File(out);
         File exitFile = new File(exit);
+        File simFile = new File("outtest.sim");
         try {
             Files.deleteIfExists(file.toPath());
             Files.deleteIfExists(exitFile.toPath());
+            Files.deleteIfExists(simFile.toPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -29,6 +32,7 @@ class Output {
         try {
             this.exitWriter = new BufferedWriter(new FileWriter(exit, true));
             this.writer = new BufferedWriter(new FileWriter(out,true));
+            this.simWriter = new BufferedWriter(new FileWriter("outtest.sim", true));
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
         }
@@ -53,6 +57,64 @@ class Output {
             this.exitWriter.flush();
         } catch (IOException e) {
             System.out.println("Unable to start simulation printer. Simulation cannot be outputted");
+        }
+    }
+
+    void printSimSystem(List<Particle> particles, double time) {
+        count = 0;
+        try{
+//            if (particleCount == -1)
+//                particleCount = sumParticles(particles) + sumTargets(Data.targetList);
+            if(time == 0.0){
+                int nonWall = 0;
+                for (Particle p : particles){
+                    if (p.getType() == Type.WALLS.getValue()){
+                        nonWall++;
+                    }
+                }
+                simWriter.write(nonWall + "\n");
+            }
+            System.out.println("PRINTING : " + particles.size() + "\nTime:   \t" + time );
+            simWriter.write("Time:   \t" + time + "\n");
+            printSimulationOutputData(particles);
+            simWriter.flush();
+        }catch (IOException e){
+            System.out.println("Error outputing simulation");
+        }
+    }
+
+    private void printSimulationOutputData(List<Particle> particles) {
+        for(Particle p : particles){
+            if(p.getType() == Type.WALLS.getValue()){
+//                printWallData(p);
+            }else{
+                System.out.println("writing");
+                printParticleData(p);
+            }
+        }
+    }
+
+    private void printParticleData(Particle p) {
+        try {
+            simWriter.write(p.getId() + "\t" + p.getType() + "\t" +
+                    p.getMassCenter().getX() + '\t' + p.getMassCenter().getY() + '\t' +
+                    p.getRadius() + '\t' +
+                    p.getOrientation() + '\t' + p.getVel().getX() + '\t' + p.getVel().getY() + '\t' +
+                    p.getAngularVelocity() + '\t' +  p.getPhase() + '\n');
+            simWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void printWallData(Particle p) {
+        try {
+            simWriter.write(p.getId() + "\t" + Type.WALLS.getValue() + "\t" +
+                    p.getMassCenter().getX() + '\t' + p.getMassCenter().getY() + '\t' +
+                    p.getRadius() + '\t' +
+                    p.getOrientation() + '\t' + "0\t0\t0\t0\n");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
