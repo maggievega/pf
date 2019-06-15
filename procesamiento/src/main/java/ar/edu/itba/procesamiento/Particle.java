@@ -106,4 +106,8 @@ public class Particle {
     public void setOrientation(double orientation) {
         this.orientation = orientation;
     }
+
+    public double getTarget() { return target; }
+
+    public void setTarget(double target) { this.target = target; }
 }
