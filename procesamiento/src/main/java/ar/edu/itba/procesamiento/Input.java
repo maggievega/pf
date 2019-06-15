@@ -38,15 +38,62 @@ public class Input {
     }
 
     private void parseConstants(String line) {
-          String [] constant = line.split("\\t");
-
-          String name = constant[0];
-          switch (name) {
-              case "precision":
-                  Data.precision = Double.parseDouble(constant[1]);
-                  break;
-          }
-          return;
+        String[] values = line.split("\\t");
+        if (values.length > 2) {
+            //error
+        }
+        int name = 0;
+        int value = 1;
+        String param = values[name].toLowerCase();
+        switch (param) {
+            case "continuous":
+                Data.continuous = true;
+                break;
+            case "dt":
+                Data.dt = Double.parseDouble(values[value]);
+                break;
+            case "printtime":
+                Data.printTime = Double.parseDouble(values[value]);
+                break;
+            case "totaltime":
+                Data.totalTime = Double.parseDouble(values[value]);
+                break;
+            case "mmin":
+                Data.mMin = Double.parseDouble(values[value]);
+                break;
+            case "mmax":
+                Data.mMax = Double.parseDouble(values[value]);
+                break;
+            case "rmin":
+                Data.rMin = Double.parseDouble(values[value]);
+                break;
+            case "rmax":
+                Data.rMax = Double.parseDouble(values[value]);
+                break;
+            case "kn":
+                Data.kn = Double.parseDouble(values[value]);
+                break;
+            case "kt":
+                Data.kt = Double.parseDouble(values[value]);
+                break;
+            case "grav":
+                Data.grav = Double.parseDouble(values[value]);
+                break;
+            case "beta":
+                Data.beta = Double.parseDouble(values[value]);
+                break;
+            case "characteristict":
+                Data.characteristicT = Double.parseDouble(values[value]);
+                break;
+            case "sd":
+                Data.SD = Double.parseDouble(values[value]);
+                break;
+            case "eta":
+                Data.eta = Double.parseDouble(values[value]);
+                break;
+            default:
+                //error
+        }
     }
 
     private void loadTargets(String nameTargets) {
