@@ -19,11 +19,9 @@ public class Main
             return;
         }
         Map<Integer, ParticleType> mapType;
-        List<Particle> list;
         List<Particle> walls;
         Input i = new Input(args.input, args.walls, args.particle, args.targets, args.constants);
         mapType = i.getMap();
         walls = i.getWalls();
-        list = i.loadParticles();
     }
 }
