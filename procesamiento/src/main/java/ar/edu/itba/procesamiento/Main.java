@@ -2,7 +2,9 @@ package ar.edu.itba.procesamiento;
 
 import com.beust.jcommander.JCommander;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main
 {
@@ -16,8 +18,12 @@ public class Main
             jc.usage();
             return;
         }
+        Map<Integer, ParticleType> mapType;
         List<Particle> list;
-        Input i = new Input(args.input);
+        List<Particle> walls;
+        Input i = new Input(args.input, args.walls, args.particle, args.targets);
+        mapType = i.getMap();
+        walls = i.getWalls();
         list = i.loadParticles();
     }
 }

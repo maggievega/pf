@@ -1,5 +1,7 @@
 package ar.edu.itba.procesamiento;
 
+import java.util.List;
+
 public class Particle {
     private int id;
     private int type;
@@ -11,6 +13,7 @@ public class Particle {
     private double orientation;
     private double mass;
     private double target;
+    private List<AngularPoint> ap;
 
     public Particle(int id, int type, Point massCenter, Point velocity, double radius, double angularVelocity, double phase, double orientation, double mass, double target) {
         this.id = id;
