@@ -4,15 +4,15 @@ import java.util.List;
 
 public class ParticleType {
 
-    private List<Particle> list;
+    private List<Point> list;
     private double desiredVelocity;
 
-    public ParticleType(List<Particle> list, double desiredVelocity) {
+    public ParticleType(List<Point> list, double desiredVelocity) {
         this.list = list;
         this.desiredVelocity = desiredVelocity;
     }
 
-    public List<Particle> getList() {
+    public List<Point> getList() {
         return list;
     }
 
