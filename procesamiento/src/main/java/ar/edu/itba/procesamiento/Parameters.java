@@ -17,8 +17,8 @@ public class Parameters {
             description = "Particle archive")
     public String particle = "particle.txt";
 
-    @Parameter(	names = {"--constant"},
-            description = "Constant archive")
+    @Parameter( names = {"--const"},
+            description = "Constant Archive")
     public String constants = "const.txt";
 
     @Parameter(	names = {"--targets"},

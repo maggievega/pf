@@ -20,11 +20,33 @@ public class Input {
     private Map<Integer, ParticleType> map;
     String name;
 
-    public Input(String nameParticles, String nameWalls, String nameType, String nameTargets) {
+    public Input(String nameParticles, String nameWalls, String nameType, String nameTargets, String nameConstants) {
         this.name = nameParticles;
         loadWalls(nameWalls);
         loadParticleType(nameType);
         loadTargets(nameTargets);
+        loadConstants(nameConstants);
+    }
+
+    private void loadConstants(String nameConstants){
+        try {
+            stream = Files.lines(Paths.get(nameConstants));
+            stream.forEach(this::parseConstants);
+        } catch (IOException e) {
+            System.out.println("Error opening file. Does not exist");
+        }
+    }
+
+    private void parseConstants(String line) {
+          String [] constant = line.split("\\t");
+
+          String name = constant[0];
+          switch (name) {
+              case "precision":
+                  Data.precision = Double.parseDouble(constant[1]);
+                  break;
+          }
+          return;
     }
 
     private void loadTargets(String nameTargets) {
@@ -110,6 +132,15 @@ public class Input {
             System.out.println("More particles than expected");
             throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
         }
+        String[] particle = line.split("\\t");
+        List<Point> list = new ArrayList<>();
+        double desiredVelocity = Double.parseDouble(particle[1]);
+        int countPoints = Integer.parseInt(particle[2]);
+        for (int i = 0; i < countPoints; i++) {
+            list.add(new Point(Double.parseDouble(particle[2 + 2 * i]), Double.parseDouble(particle[3 + 2 * i])));
+        }
+        ParticleType type = new ParticleType(list, desiredVelocity);
+        map.put(count, type);
     }
 
     public Map<Integer, ParticleType> getMap() {
