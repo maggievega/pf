@@ -14,7 +14,8 @@ public class ParticleType {
         this.list = list;
         this.desiredVelocity = desiredVelocity;
 
-//        this.massCentre = massCenter();
+        this.massCentre = Utils.massCenter((Point[])list.toArray(), Data.precision);
+        this.angularPoints = Utils.calculateAngularPoints(massCentre,(Point[])list.toArray());
     }
 
     public List<Point> getList() {
@@ -23,23 +24,5 @@ public class ParticleType {
 
     public double getDesiredVelocity() {
         return desiredVelocity;
-    }
-
-
-
-    /**
-     * Changes the list of cardinal points to angular points with respect to the massCenter
-     * @param massCenter
-     * @param points
-     * @return
-     */
-    public static List<AngularPoint> calculateAngularPoints(Point massCenter, Point[] points) {
-        List<AngularPoint> ap = new ArrayList<>();
-        for (int i = 0; i < points.length; i++) {
-            double angle = Utils.getAngle(massCenter, points[i]);
-            double length = massCenter.distanceBetween(points[i]);
-            ap.add(new AngularPoint(angle, length));
-        }
-        return ap;
     }
 }
