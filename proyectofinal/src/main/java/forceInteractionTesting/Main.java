@@ -4,11 +4,51 @@ package forceInteractionTesting;
 import ar.edu.itba.proyectofinal.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        Point[] poligon = new Point[8];
+        poligon[0] = new Point(0,0);
+        poligon[1] = new Point(0,5);
+        poligon[2] = new Point(2,5);
+        poligon[3] = new Point(2,1);
+        poligon[4] = new Point(6,1);
+        poligon[5] = new Point(6,5);
+        poligon[6] = new Point(8,5);
+        poligon[7] = new Point(8,0);
+
+        Point[] poligon2 = new Point[8];
+        poligon2[0] = new Point(0,0);
+        poligon2[1] = new Point(0,6);
+        poligon2[2] = new Point(1,6);
+        poligon2[3] = new Point(1,1);
+        poligon2[4] = new Point(4,1);
+        poligon2[5] = new Point(4,6);
+        poligon2[6] = new Point(5,6);
+        poligon2[7] = new Point(5,0);
+
+        Point[] square =  new Point[4];
+        square[0]=new Point(0,0);
+        square[1]=new Point(1,0);
+        square[2]=new Point(1,1);
+        square[3]=new Point(0,1);
+
+        Point[] triangle =  new Point[3];
+        triangle[0] = new Point(0,0);
+        triangle[1] = new Point(6,3);
+        triangle[2] = new Point(6,0);
+
+//        double[] bounds = poligonBounds(poligon);
+//        for (int i = 0; i < bounds.length; i++) {
+//            System.out.println(bounds[i]);
+//        }
+
+//        Point poin = new Point(9, 3);
+//        System.out.println(massCenter(square, 0.00001));
 
 
 //        Point A = new Point(0,0);
@@ -41,63 +81,129 @@ public class Main {
 
 //        System.out.println(dotProduct(A,B));
 
-        List<Particle> particles = new ArrayList<Particle>();
-
-        Point[] p1points = new Point[2];
-//        List<Point> p1points = new ArrayList<Point>();
-        p1points[0]=(new Point(5.329584190765531,0.20916659820020084));
-        p1points[1]=(new Point(5.444584162485996,0.20924724739286732));
-
-        List<Segment> segments1 = new ArrayList<>();
-        segments1.add(new Segment(p1points[0], p1points[1]));
-
-        Point[] p2points = new Point[2];
-
-//        List<Point> p2points = new ArrayList<Point>();
-        p2points[0]=(new Point(5.00682340941375,	0.1706952529048219));
-        p2points[1]=(new Point(5.121823402907966,0.17073393533496034));
-        System.out.println(p2points[1].squaredDistanceBetween(p1points[0]));
-        List<Segment> segments2 = new ArrayList<>();
-        segments2.add(new Segment(p2points[0], p2points[1]));
-        double closestDistance, minDistance = Double.MAX_VALUE;
-        Point a = null, b = null, closestPoint = null;
-        for (Segment segment : segments1){
-            System.out.println("Checking segment" + segment.toString());
-            for (Point point : p2points){
-                System.out.println("Checking point" + point.toString());
-                closestPoint = Utils.completeClosestPoint(segment, point);
-                System.out.println("Closest point is: " + closestPoint.toString());
-                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earlier
-                   TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
-                */
-                closestDistance = closestPoint.squaredDistanceBetween(point);
-                if (closestDistance < minDistance){
-                    System.out.println("new min : " + closestDistance);
-                    minDistance = closestDistance;
-                    a = closestPoint;
-                    b = point;
-                }
-            }
-
-            double r1 = 0.123146;
-            double r2 = 0.161865;
-
-            System.out.println("min dist: " +minDistance);
-            System.out.println((0.123146 + 0.161865) * (0.123146 + 0.161865));
-            if (minDistance < (r1+r2)*(r1+r2)){
-                System.out.println("CHOCAN2");
-            }else{
-                System.out.println("NOCHOC");
-            }
+//        List<Particle> particles = new ArrayList<Particle>();
+//
+//        Point[] p1points = new Point[2];
+////        List<Point> p1points = new ArrayList<Point>();
+//        p1points[0]=(new Point(5.329584190765531,0.20916659820020084));
+//        p1points[1]=(new Point(5.444584162485996,0.20924724739286732));
+//
+//        List<Segment> segments1 = new ArrayList<>();
+//        segments1.add(new Segment(p1points[0], p1points[1]));
+//
+//        Point[] p2points = new Point[2];
+//
+////        List<Point> p2points = new ArrayList<Point>();
+//        p2points[0]=(new Point(5.00682340941375,	0.1706952529048219));
+//        p2points[1]=(new Point(5.121823402907966,0.17073393533496034));
+//        System.out.println(p2points[1].squaredDistanceBetween(p1points[0]));
+//        List<Segment> segments2 = new ArrayList<>();
+//        segments2.add(new Segment(p2points[0], p2points[1]));
+//        double closestDistance, minDistance = Double.MAX_VALUE;
+//        Point a = null, b = null, closestPoint = null;
+//        for (Segment segment : segments1){
+//            System.out.println("Checking segment" + segment.toString());
+//            for (Point point : p2points){
+//                System.out.println("Checking point" + point.toString());
+//                closestPoint = Utils.completeClosestPoint(segment, point);
+//                System.out.println("Closest point is: " + closestPoint.toString());
+//                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earlier
+//                   TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
+//                */
+//                closestDistance = closestPoint.squaredDistanceBetween(point);
+//                if (closestDistance < minDistance){
+//                    System.out.println("new min : " + closestDistance);
+//                    minDistance = closestDistance;
+//                    a = closestPoint;
+//                    b = point;
+//                }
+//            }
+//
+//            double r1 = 0.123146;
+//            double r2 = 0.161865;
+//
+//            System.out.println("min dist: " +minDistance);
+//            System.out.println((0.123146 + 0.161865) * (0.123146 + 0.161865));
+//            if (minDistance < (r1+r2)*(r1+r2)){
+//                System.out.println("CHOCAN2");
+//            }else{
+//                System.out.println("NOCHOC");
+//            }
 //                this.applyCollisionForces(p, a, b);
         }
 
 
+//    /**
+//     * Finds out if Point p lies inside the provided poligon. Does so by calculating the number of intersections
+//     * an imaginary horizontal line starting on p collides with the poligon's walls. If the number of collisions is odd,
+//     * the point lies inside.
+//     * @param poligon list of points describing the poligon of interest
+//     * @param p Point
+//     * @return boolean determining if p lies inside p
+//     * idea obtained from: https://www.sanfoundry.com/java-program-check-whether-given-point-lies-given-polygon/
+//     */
+//    public static boolean liesInside(Point[] poligon, Point p){
+//        Point start, end;
+//        int wallsCrossed = 0;
+//        int startIndex, endIndex;
+//        int numberOfSides = poligon.length;
+//        for (int i = 0; i < numberOfSides; i++){
+//            if (i == numberOfSides-1){
+//                end = poligon[0];
+//            } else {
+//                end = poligon[i+1];
+//            }
+//            start = poligon[i];
+//            //horizontal case
+//            if(Math.abs(start.getY() - end.getY()) <= 0.0001){
+//                if(Math.abs(start.getY() - p.getY())<= 0.0001){
+//                    Point min, max;
+//                    if(Math.min(start.getX(), end.getX()) == start.getX()){
+//                        min = start;
+//                        max = end;
+//                    }else{
+//                        min = end;
+//                        max = start;
+//                    }
+//                    if(p.getX() >= min.getX() && p.getX() <= max.getX()){
+//                        return true;
+//                    }
+//                }
+//            }
+//            //vertical case
+//            else if (Math.abs(start.getX() - end.getX()) <= 0.0001){
+//                if((start.getY() >= p.getY() && end.getY() <= p.getY())
+//                        || (start.getY() <= p.getY() && end.getY() >= p.getY())){
+//                    if(Math.abs(p.getX()-start.getX())<0.0001){
+//                        return true;
+//                    }else if (p.getX() < start.getX()){
+//                        wallsCrossed++;
+//                    }
+//                }
+//            }
+//            //diagonal cases
+//            //find intersection of horizontal crossing p with the straigh line crossing start and end described as mx+c
+//            else{
+//                double m = (end.getY()-start.getY()) / (end.getX()-start.getX());
+//                double c = start.getY() - m * start.getX();
+//                double xIntersect = (p.getY() - c )/m;
+//                if ( Math.abs(xIntersect-p.getX()) < 0.0001){
+//                    return true;
+//                } else if ( p.getX() < xIntersect){
+//                    wallsCrossed++;
+//                }
+//            }
+//
+//        }
+//        return wallsCrossed%2 == 1;
+//    }
 
 
 
 
-    }
+
+
+
 
 //    public static Particle createParticle(int id,Point[] points, double r){
 //        double mMin = 45;
@@ -126,65 +232,61 @@ public class Main {
         return 0;
     }
 
-    public static boolean liesInside(Point[] poligon, Point p){
-        Point start, end;
-        int wallsCrossed = 0;
-        int startIndex, endIndex;
-        int numberOfSides = poligon.length;
-        for (int i = 0; i < numberOfSides; i++){
-            if (i == numberOfSides-1){
-                end = poligon[0];
-            } else {
-                end = poligon[i+1];
-            }
-            start = poligon[i];
 
+//    /**Finds the coordinates for an enclusing square limited by the poligon's right,left,top and bottommost coordinates.
+//     * @param poligon
+//     * @return 4 value array with [min x, max x, min y, max y] values
+//     */
+//    public static double[] poligonBounds(Point[] poligon){
+//        double xi =  poligon[0].getX();
+//        double xf = poligon[0].getX();
+//        double yi = poligon[0].getY();
+//        double yf = poligon[0].getY();
+//        for (Point p: poligon){
+//            if (xi>p.getX()){
+//                xi = p.getX();
+//            }
+//            if (xf< p.getX()){
+//                xf = p.getX();
+//            }
+//            if (yi > p.getY()){
+//                yi = p.getY();
+//            }
+//            if (yf < p.getY()){
+//                yf = p.getY();
+//            }
+//        }
+//        double[] ans =  {xi,xf,yi,yf};
+//        return ans;
+//    }
 
-        }
-        return wallsCrossed%2 == 1? false : true;
-    }
-
-    public static double[] poligonBounds(Point[] poligon){
-        double xi =  poligon[0].getX();
-        double xf = poligon[0].getX();
-        double yi = poligon[0].getY();
-        double yf = poligon[0].getY();
-        for (Point p: poligon){
-            if (xi>p.getX()){
-                xi = p.getX();
-            }
-            if (xf< p.getX()){
-                xf = p.getX();
-            }
-            if (yi > p.getY()){
-                yi = p.getY();
-            }
-            if (yf < p.getY()){
-                yf = p.getY();
-            }
-        }
-        double[] ans =  {xi,xf,yi,yf};
-        return ans;
-    }
-
-    public static Point massCenter(Point[]poligon, double precision){
-        int acum  = 0;
-        double xAcum = 0;
-        double yAcum = 0;
-        double[] bounds = poligonBounds(poligon);
-        for (double i = bounds[0]; i<= bounds[1]; i+= precision){
-            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
-                if (liesInside(poligon, new Point(i,j))){
-                    acum++;
-                    xAcum+=i;
-                    yAcum+=j;
-                }
-            }
-        }
-        double x =(double)Math.round((xAcum/acum) * 100000d) / 100000d;
-        double y = (double)Math.round((yAcum/acum) * 100000d) / 100000d;
-        return new Point(x,y);
-    }
+//    /**
+//     * Finds massCentre of given poligon with the desired precision. Does so by discretely calculating the integral
+//     * inside the poligon's bounding circle.
+//     * @param poligon
+//     * @param precision
+//     * @return
+//     */
+//    public static Point massCenter(Point[]poligon, double precision){
+//        long acum  = 0;
+//        double xAcum = 0;
+//        double yAcum = 0;
+//        double[] bounds = poligonBounds(poligon);
+//        for (double i = bounds[0]; i<= bounds[1]; i+= precision){
+//            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
+//                if (liesInside(poligon, new Point(i,j))){
+//                    acum++;
+//                    xAcum+=i;
+//                    yAcum+=j;
+//                }
+//            }
+//        }
+////        double x =(double)Math.round((xAcum/acum) * 100000d) / 100000d;
+//        double x =xAcum/acum;
+////        double y = (double)Math.round((yAcum/acum) * 100000d) / 100000d;
+//        double y = yAcum/acum;
+//        return new Point(x,y);
+//    }
 
     public static double inertiaMoment(Point[] poligon, Point relative, double precision, double mass){
         //TODO-> Check if the return (*mass/points) is correct

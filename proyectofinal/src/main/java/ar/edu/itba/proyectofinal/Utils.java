@@ -110,7 +110,7 @@ public class Utils {
         return false;
     }
 
-    static Point calculateMassCenter(Point[] points, double mass) {
+    static Point calculateWallMassCenter(Point[] points, double mass) {
         double totalMass = 0, totalX = 0, totalY = 0;
         for (Point p: points) {
             totalX += p.getX() * mass;
@@ -131,9 +131,15 @@ public class Utils {
         return ap;
     }
 
+    /**
+     * Finds the poligon's rotational moment of inertia with respect to the 'relative' point.
+     * Does so by discretely calculating the integral.
+     * @param poligon
+     * @param relative
+     * @param precision
+     * @return
+     */
     public static double inertiaMoment(Point[] poligon, Point relative, double precision){
-        //TODO-> Check if the return (*mass/points) is correct
-
         double points  = 0.0;
         double inertia = 0;
         double[] bounds = poligonBounds(poligon);
@@ -148,16 +154,22 @@ public class Utils {
             }
         }
         return inertia / points;
-//        return inertia * (mass/points);
     }
 
+    /**
+     * Finds massCentre of given poligon with the desired precision. Does so by discretely calculating the integral
+     * inside the poligon's bounding circle.
+     * @param poligon
+     * @param precision
+     * @return
+     */
     public static Point massCenter(Point[]poligon, double precision){
-        int acum  = 0;
+        long acum  = 0;
         double xAcum = 0;
         double yAcum = 0;
         double[] bounds = poligonBounds(poligon);
         for (double i = bounds[0]; i<= bounds[1]; i+= precision){
-            for (double j = bounds[2]; j<= bounds[3] ;j+=precision){
+            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
                 if (liesInside(poligon, new Point(i,j))){
                     acum++;
                     xAcum+=i;
@@ -165,11 +177,17 @@ public class Utils {
                 }
             }
         }
-        double x =(double)Math.round((xAcum/acum) * 100000d) / 100000d;
-        double y = (double)Math.round((yAcum/acum) * 100000d) / 100000d;
+//        double x =(double)Math.round((xAcum/acum) * 100000d) / 100000d;
+        double x =xAcum/acum;
+//        double y = (double)Math.round((yAcum/acum) * 100000d) / 100000d;
+        double y = yAcum/acum;
         return new Point(x,y);
     }
 
+    /**Finds the coordinates for an enclusing square limited by the poligon's right,left,top and bottommost coordinates.
+     * @param poligon
+     * @return 4 value array with [min x, max x, min y, max y] values
+     */
     public static double[] poligonBounds(Point[] poligon){
         double xi =  poligon[0].getX();
         double xf = poligon[0].getX();
@@ -193,6 +211,17 @@ public class Utils {
         return ans;
     }
 
+
+
+    /**
+     * Finds out if Point p lies inside the provided poligon. Does so by calculating the number of intersections
+     * an imaginary horizontal line starting on p collides with the poligon's walls. If the number of collisions is odd,
+     * the point lies inside.
+     * @param poligon list of points describing the poligon of interest
+     * @param p Point
+     * @return boolean determining if p lies inside p
+     * idea obtained from: https://www.sanfoundry.com/java-program-check-whether-given-point-lies-given-polygon/
+     */
     public static boolean liesInside(Point[] poligon, Point p){
         Point start, end;
         int wallsCrossed = 0;
@@ -205,9 +234,48 @@ public class Utils {
                 end = poligon[i+1];
             }
             start = poligon[i];
-
+            //horizontal case
+            if(Math.abs(start.getY() - end.getY()) <= 0.0001){
+                if(Math.abs(start.getY() - p.getY())<= 0.0001){
+                    Point min, max;
+                    if(Math.min(start.getX(), end.getX()) == start.getX()){
+                        min = start;
+                        max = end;
+                    }else{
+                        min = end;
+                        max = start;
+                    }
+                    if(p.getX() >= min.getX() && p.getX() <= max.getX()){
+                        return true;
+                    }
+                }
+            }
+            //vertical case
+            else if (Math.abs(start.getX() - end.getX()) <= 0.0001){
+                if((start.getY() >= p.getY() && end.getY() <= p.getY())
+                        || (start.getY() <= p.getY() && end.getY() >= p.getY())){
+                    if(Math.abs(p.getX()-start.getX())<0.0001){
+                        return true;
+                    }else if (p.getX() < start.getX()){
+                        wallsCrossed++;
+                    }
+                }
+            }
+            //diagonal cases
+            //find intersection of horizontal crossing p with the straigh line crossing start and end described as mx+c
+            else{
+                double m = (end.getY()-start.getY()) / (end.getX()-start.getX());
+                double c = start.getY() - m * start.getX();
+                double xIntersect = (p.getY() - c )/m;
+                if ( Math.abs(xIntersect-p.getX()) < 0.0001){
+                    return true;
+                } else if ( p.getX() < xIntersect){
+                    wallsCrossed++;
+                }
+            }
 
         }
-        return !(wallsCrossed%2 == 1);
+        return wallsCrossed%2 == 1;
     }
+
 }

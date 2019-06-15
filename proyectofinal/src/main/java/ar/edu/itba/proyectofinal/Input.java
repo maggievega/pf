@@ -196,7 +196,7 @@ class Input {
             }
         }
 
-        Point massCenter = Utils.calculateMassCenter(points, mass);
+        Point massCenter = Utils.calculateWallMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
 
         Particle p = new Particle(particles.size(), Type.WALLS.getValue(), mass, ap, massCenter, 0, radius , 0, new Point(0,0), 0, 0, 1,0);
