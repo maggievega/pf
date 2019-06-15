@@ -288,50 +288,25 @@ public class Main {
 //        return new Point(x,y);
 //    }
 
-    public static double inertiaMoment(Point[] poligon, Point relative, double precision, double mass){
-        //TODO-> Check if the return (*mass/points) is correct
-
-        int points  = 0;
-        double inertia = 0;
-        double[] bounds = poligonBounds(poligon);
-        for (double i = bounds[0]; i<= bounds[1]; i+= precision){
-            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
-                if (liesInside(poligon, new Point(i,j))){
-                    points++;
-                    double relX = i - relative.getX();
-                    double relY = j - relative.getY();
-                    inertia += relX * relX + relY * relY;
-                }
-            }
-        }
-
-        return inertia * (mass/points);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//    public static double inertiaMoment(Point[] poligon, Point relative, double precision, double mass){
+//        //TODO-> Check if the return (*mass/points) is correct
+//
+//        int points  = 0;
+//        double inertia = 0;
+//        double[] bounds = poligonBounds(poligon);
+//        for (double i = bounds[0]; i<= bounds[1]; i+= precision){
+//            for (double j = bounds[2]; j< bounds[3] ;j+=precision){
+//                if (liesInside(poligon, new Point(i,j))){
+//                    points++;
+//                    double relX = i - relative.getX();
+//                    double relY = j - relative.getY();
+//                    inertia += relX * relX + relY * relY;
+//                }
+//            }
+//        }
+//
+//        return inertia * (mass/points);
+//    }
 
     //TODO: At returns, corresponding points should be returned
 
