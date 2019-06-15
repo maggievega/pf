@@ -126,6 +126,23 @@ public class Input {
         } catch (IOException e) {
             System.out.println("Error opening file. Does not exist");
         }
+    }
+
+    private enum WallType {
+        CANT_POINTS, WALL_X, WALL_Y
+    }
+
+    private void parseWalls(String line) {
+        resetCounter();
+        if (cant == -1) {
+            cant = Integer.parseInt(line);
+            return;
+        }
+
+        if (count >= N) {
+            System.out.println("More particles than expected");
+            throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
+        }
         String[] particle = line.split("\\t");
 
         int position = 0;
@@ -153,38 +170,6 @@ public class Input {
         Particle p = new Particle(0, 0,mass, ap, massCenter, 0, 0, 0, 0);
         walls.add(p);
         count ++;
-    }
-
-    private enum WallType {
-        CANT_POINTS, WALL_X, WALL_Y
-    }
-
-    private void parseWalls(String line) {
-        resetCounter();
-        if (cant == -1) {
-            cant = Integer.parseInt(line);
-            return;
-        }
-
-        if (count >= N) {
-            System.out.println("More particles than expected");
-            throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
-        }
-        int position = 0;
-
-        String[] particle = line.split("\\t");
-        if (particle[WallType.CANT_POINTS.ordinal()].equals("I")){
-            position = 1;
-        }
-        int countPoints = Integer.parseInt(particle[position]);
-        if (particle.length != + position + WallType.WALL_X.ordinal() + countPoints * 2) {
-            System.out.println("More or less parameters");
-            throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
-        }
-        Point[] points = new Point[countPoints];
-        for(int i = 0; i < countPoints; i++) {
-            points[i] = new Point(Double.parseDouble(particle[position + WallType.WALL_X.ordinal() + 2 * i]), Double.parseDouble(particle[position + WallType.WALL_Y.ordinal() + 2 * i]));
-        }
     }
 
     private void loadParticleType (String name) {
