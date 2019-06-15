@@ -17,5 +17,6 @@ public class Data {
     public static double beta;
     public static double characteristicT;
     public static double eta;
+    public static double wall_radius = 0.05;
     static double precision;
 }

@@ -118,7 +118,7 @@ public class Input {
         }
     }
 
-    private void loadWalls (String name) {
+    private void loadWalls (String line) {
         resetCounter();
         try {
             stream = Files.lines(Paths.get(name));
@@ -126,6 +126,33 @@ public class Input {
         } catch (IOException e) {
             System.out.println("Error opening file. Does not exist");
         }
+        String[] particle = line.split("\\t");
+
+        int position = 0;
+        if (particle[0].equals("I")){
+            position = 1;
+        }
+
+        int countPoints = Integer.parseInt(particle[position]);
+        if (particle.length != position + 1 + countPoints * 2) {
+            System.out.println("More or less parameters");
+            throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
+        }
+        double mass = 1;
+        double radius = Data.wall_radius;
+
+        Point[] points = new Point[countPoints];
+
+        for(int i = 0; i < countPoints; i++) {
+            points[i] = new Point(Double.parseDouble(particle[position + WallType.WALL_X.ordinal() + 2 * i]), Double.parseDouble(particle[position + WallType.WALL_Y.ordinal() + 2 * i]));
+        }
+
+        Point massCenter = Utils.calculateWallMassCenter(points, mass);
+        List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
+
+        Particle p = new Particle(0, 0,mass, ap, massCenter, 0, 0, 0, 0);
+        walls.add(p);
+        count ++;
     }
 
     private enum WallType {

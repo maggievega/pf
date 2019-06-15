@@ -28,6 +28,21 @@ public class Particle {
         this.target = target;
     }
 
+    public Particle(int id, int type, double mass, List<AngularPoint> points, Point massCenter, double orientation,
+                    double radius, double angularVelocity, double phase) {
+        this.id = id;
+        this.type = type;
+        this.mass = mass;
+        this.ap = points;
+        this.massCenter = massCenter;
+        this.orientation = orientation;
+        this.radius = radius;
+        this.angularVelocity = angularVelocity;
+        this.mass = mass;
+
+        this.phase = phase;
+    }
+
     public int getId() {
         return id;
     }
