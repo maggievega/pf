@@ -137,7 +137,6 @@ public class Particle {
             if (!p.equals(this) && this.canCollide(p))
                     this.checkCollision(p);
 
-
     }
 
     /**
@@ -166,12 +165,6 @@ public class Particle {
         p2Segments = p.getSegments();
         p1Points = this.getPoints();
         p2Points = p.getPoints();
-
-        /*
-        Discard if cannot collide
-         */
-
-
 
         /*For each segment in the current particle, find the closest point to each of the other particle's edges.
           If the distance to this edge is smaller, than the previosly recorded minimum distance to the other particle,
