@@ -1,9 +1,7 @@
 package ar.edu.itba.procesamiento;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
@@ -20,7 +18,7 @@ public class Input {
     private int snapshotCount = 0;
     private static List<Particle> p;
     private static List<Particle> walls = new ArrayList<>();
-//    private static List<Target> targets = new ArrayList<>();
+    private static List<Target> targets = new ArrayList<>();
     private Map<Integer, ParticleType> map = new HashMap<>();
     private Scanner s = null;
     String name;
@@ -163,6 +161,11 @@ public class Input {
         }
     }
 
+    private enum TargetType {
+        TARGET_X, TARGET_Y, INTERVAL
+    }
+
+
     private void parseTargets(String line) {
         resetCounter();
         if (cant == -1) {
@@ -173,11 +176,24 @@ public class Input {
             System.out.println("More particles than expected");
             throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
         }
-
-        //TODO: DOO!
+        String[] target = line.split("\\t");
+        int amount = 0;
+        boolean end = false;
+        if (target[TargetType.TARGET_X.ordinal()].equals("F")) {
+            amount = 1;
+            end = true;
+        }
+        if (target.length != 3 + amount) {
+            System.out.println("More or less parameters");
+            throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
+        }
+        double interval = Double.parseDouble(target[amount + TargetType.INTERVAL.ordinal()]);
+        Target t = new Target(Double.parseDouble(target[amount]), Double.parseDouble(target[amount + TargetType.TARGET_Y.ordinal()]),  interval, end);
+        targets.add(t);
+        count ++;
     }
 
-    private void loadWalls (String line) {
+    private void loadWalls (String name) {
         resetCounter();
         try {
             stream = Files.lines(Paths.get(name));
@@ -205,7 +221,7 @@ public class Input {
         String[] particle = line.split("\\t");
 
         int position = 0;
-        if (particle[0].equals("I")){
+        if (particle[WallType.CANT_POINTS.ordinal()].equals("I")){
             position = 1;
         }
 
@@ -215,7 +231,6 @@ public class Input {
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
         double mass = 1;
-        double radius = Data.wall_radius;
 
         Point[] points = new Point[countPoints];
 
@@ -225,9 +240,9 @@ public class Input {
 
         Point massCenter = Utils.calculateWallMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
-//        TODO: SET WALL = TRUE CUANDO INICIALIZO
 
-        Particle p = new Particle(count, 0,mass, ap, massCenter, 0, 0, 0, 0);
+        Particle p = new Particle(count, 0,mass, ap, massCenter, 0, Data.wall_radius, 0, 0);
+        p.setWall(true);
         walls.add(p);
         count ++;
     }
@@ -269,16 +284,6 @@ public class Input {
     public List<Particle> getWalls() {
         return walls;
     }
-
-//    Load particles deberia no ser un stream
-//    Deberia
-
-    private double getCount() {
-        double count = 0.0;
-//        leer la primera linea del archivo y guardar la N cantidad de particulas
-        return count;
-    }
-
 
 
     private void resetCounter() {
