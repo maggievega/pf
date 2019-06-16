@@ -1,19 +1,23 @@
 package ar.edu.itba.procesamiento;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Processor {
 
     List<Particle> walls;
+    List<Target> targets;
     Map<Integer, ParticleType> mapType;
     Input input;
 
     List<Particle> particles;
+    double currentTime = 0;
 
-    public Processor(List<Particle> walls, Map<Integer, ParticleType> mapType, Input input) {
+    public Processor(List<Particle> walls, Map<Integer, ParticleType> mapType, List<Target> targets, Input input) {
         this.walls = walls;
         this.mapType = mapType;
+        this.targets = targets;
         this.input = input;
     }
 
@@ -27,22 +31,29 @@ public class Processor {
     }
 
     public void nextStep(Snapshot snap){
+        this.currentTime = snap.getTime();
         snap.getList().forEach( p -> updateParticle(p));
+        particles = new ArrayList<Particle>();
+        particles.addAll(walls);
+        particles.addAll(snap.getList());
     }
 
     public void updateParticle(Particle p){
-        //TODO check if previous speed, position and forces is relevant
-        Particle part = particles.get(p.getId());
-        part.setMassCenter(p.getMassCenter());
-        part.setOrientation(p.getOrientation());
-        part.setVelocity(p.getVelocity());
-        part.setAngularVelocity(p.getAngularVelocity());
-        part.setPhase(p.getPhase());
-        part.setTarget(p.getTarget());
+        p.setTargets(targets);
+        p.updateByType(mapType);
     }
 
+
     public void calculateData(List<Particle> particles){
-        
+        List<Particle> previousPositions = new ArrayList<>(particles);
+        particles.parallelStream().forEach(p->{
+            if (!p.isWall()) {
+                p.getForce(previousPositions, currentTime);
+            }});
+    }
+
+    public void outputProcessedData(){
+        List <Particle> a = new ArrayList<>(particles);
     }
 
 

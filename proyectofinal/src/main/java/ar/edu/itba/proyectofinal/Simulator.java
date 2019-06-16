@@ -15,7 +15,7 @@ public class Simulator {
     private long prevtime;
 
     public Simulator(List<Particle> p, Output o) {
-        output = o;
+        output = o;;
         particles = p;
     }
 

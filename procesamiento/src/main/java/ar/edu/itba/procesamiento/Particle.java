@@ -1,6 +1,7 @@
 package ar.edu.itba.procesamiento;
 
 import java.util.List;
+import java.util.Map;
 
 public class Particle {
     private int id;
@@ -12,10 +13,17 @@ public class Particle {
     private double phase;
     private double orientation;
     private double mass;
-    private double target;
+    private int target;
+    private boolean wall = false;
     private List<AngularPoint> ap;
+    private double maxDistance;
+    private double time;
+    private Point force = new Point(0,0);
+    private double desiredVelocity;
+    private double torque = 0.0;
+    private List<Target> targets;
 
-    public Particle(int id, int type, Point massCenter, Point velocity, double radius, double angularVelocity, double phase, double orientation, double mass, double target) {
+    public Particle(int id, int type, Point massCenter, Point velocity, double radius, double angularVelocity, double phase, double orientation, double mass, int target) {
         this.id = id;
         this.type = type;
         this.massCenter = massCenter;
@@ -42,6 +50,15 @@ public class Particle {
 
         this.phase = phase;
     }
+
+    public void updateByType(Map<Integer, ParticleType> particleTypeMap){
+        this.ap = particleTypeMap.get(this.type).getAngularPoints();
+        this.maxDistance = particleTypeMap.get(this.type).getMaxDistance();
+        this.desiredVelocity = particleTypeMap.get(this.type).getDesiredVelocity();
+    }
+
+    public boolean isWall() { return wall; }
+
 
     public int getId() {
         return id;
@@ -107,7 +124,16 @@ public class Particle {
         this.orientation = orientation;
     }
 
-    public double getTarget() { return target; }
+    public int getTarget() { return target; }
 
-    public void setTarget(double target) { this.target = target; }
+    public void setTarget(int target) { this.target = target; }
+
+    public void setWall(boolean value) { this.wall = value; }
+
+    public void setTargets(List<Target> targets) { this.targets = targets; }
+
+    public void getForce(List<Particle> previousPositions, double currentTime) {
+        this.time = currentTime;
+//        getDrivingForce();
+    }
 }

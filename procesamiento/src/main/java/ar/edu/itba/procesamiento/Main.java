@@ -20,7 +20,9 @@ public class Main
         }
         Map<Integer, ParticleType> mapType;
         List<Particle> walls;
+//        List<Target> targets;
         Input i = new Input(args.input, args.walls, args.particle, args.targets, args.constants);
+//        targets = i.getTargets();
         mapType = i.getMap();
         walls = i.getWalls();
     }
