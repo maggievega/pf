@@ -80,7 +80,7 @@ public class Input {
         double angularVelocity = Double.parseDouble(array[InputType.AngularVelocity.ordinal()]);
         double phase = Double.parseDouble(array[InputType.Phase.ordinal()]);
         double mass = Double.parseDouble(array[InputType.Mass.ordinal()]);
-        double indexTarget = Double.parseDouble(array[InputType.Target.ordinal()]);
+        int indexTarget = Integer.parseInt(array[InputType.Target.ordinal()]);
         return  new Particle(id, type, massCenter, velocity, radius, angularVelocity, phase, orientation, mass, indexTarget);
     }
 
