@@ -1,24 +1,28 @@
 package ar.edu.itba.procesamiento;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Input {
     private static Stream<String> stream = null;
     private static State state = State.Initial;
+    private String particleName;
     private int count = 0;
     private int N = 0;
+    private Double time = null;
     private int cant = -1;
+    private boolean stop = false;
     private int snapshotCount = 0;
-    private static List<Particle> p = new ArrayList<>();
+    private static List<Particle> p;
     private static List<Particle> walls = new ArrayList<>();
+//    private static List<Target> targets = new ArrayList<>();
     private Map<Integer, ParticleType> map = new HashMap<>();
+    private Scanner s = null;
     String name;
 
     public Input(String nameParticles, String nameWalls, String nameType, String nameTargets, String nameConstants) {
@@ -27,7 +31,59 @@ public class Input {
         loadParticleType(nameType);
         loadTargets(nameTargets);
         loadConstants(nameConstants);
+        this.particleName = nameParticles;
     }
+
+    private Snapshot loadParticles() throws IOException {
+        if (s == null)
+            s = new Scanner(particleName);
+
+        while (s.hasNextLine() && !stop) {
+            String line = s.nextLine();
+            switch (state) {
+                case Initial:
+                    N = Integer.parseInt(line.split("\\t")[0]);
+                    state = State.Time;
+                    break;
+                case Time:
+                    time = Double.parseDouble(line.split("\\t")[0]);
+                    count = 0;
+                    state = State.Particle;
+                    p = new ArrayList<>(N);
+                    break;
+                case Particle:
+                    p.add(loadParticle(line));
+                    count ++;
+                    if (count == N) {
+                        state = State.Time;
+                        time = null;
+                        stop = true;
+                    }
+                    break;
+            }
+
+        }
+        if (time == null)
+            return null;
+        return new Snapshot(time, p);
+
+    }
+    public Particle loadParticle(String line) {
+        String[] array = line.split("\\t");
+
+        int id = Integer.parseInt(array[InputType.Id.ordinal()]);
+        int type = Integer.parseInt(array[InputType.Type.ordinal()]);
+        Point massCenter = new Point(Double.parseDouble(array[InputType.MassCenterX.ordinal()]), Double.parseDouble(array[InputType.MassCenterY.ordinal()]));
+        double radius = Double.parseDouble(array[InputType.Radius.ordinal()]);
+        double orientation = Double.parseDouble(array[InputType.Orientation.ordinal()]);
+        Point velocity = new Point(Double.parseDouble(array[InputType.VelX.ordinal()]), Double.parseDouble(array[InputType.VelY.ordinal()]));
+        double angularVelocity = Double.parseDouble(array[InputType.AngularVelocity.ordinal()]);
+        double phase = Double.parseDouble(array[InputType.Phase.ordinal()]);
+        double mass = Double.parseDouble(array[InputType.Mass.ordinal()]);
+        double indexTarget = Double.parseDouble(array[InputType.Target.ordinal()]);
+        return  new Particle(id, type, massCenter, velocity, radius, angularVelocity, phase, orientation, mass, indexTarget);
+    }
+
 
     private void loadConstants(String nameConstants){
         try {
@@ -117,6 +173,8 @@ public class Input {
             System.out.println("More particles than expected");
             throw new ExceptionInInitializerError("Bad formatted. More particles than expected");
         }
+
+        //TODO: DOO!
     }
 
     private void loadWalls (String line) {
@@ -167,6 +225,7 @@ public class Input {
 
         Point massCenter = Utils.calculateWallMassCenter(points, mass);
         List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
+//        TODO: SET WALL = TRUE CUANDO INICIALIZO
 
         Particle p = new Particle(count, 0,mass, ap, massCenter, 0, 0, 0, 0);
         walls.add(p);
@@ -174,7 +233,6 @@ public class Input {
     }
 
     private void loadParticleType (String name) {
-        List<Snapshot> listSnapshot = new ArrayList<>();
         try {
             stream = Files.lines(Paths.get(name));
             stream.forEach(this::parseParticleType);
@@ -222,32 +280,6 @@ public class Input {
     }
 
 
-    public Snapshot getSnapshot() {
-//        las particulas deberian inicializarse con id -> cant walls mas count
-        int starting = 1 + snapshotCount * N;
-        Snapshot s = new Snapshot();
-        String line = "";
-        String[] array = line.split("\\t");
-        List<Particle> list = new ArrayList<>(N);
-
-//        for leyendo
-
-//        leyendo de particulas
-//            int id = Integer.parseInt(array[InputType.Id.ordinal()]);
-//            int type = Integer.parseInt(array[InputType.Type.ordinal()]);
-//            Point massCenter = new Point(Double.parseDouble(array[InputType.MassCenterX.ordinal()]), Double.parseDouble(array[InputType.MassCenterY.ordinal()]));
-//            double radius = Double.parseDouble(array[InputType.Radius.ordinal()]);
-//            double orientation = Double.parseDouble(array[InputType.Orientation.ordinal()]);
-//            Point velocity = new Point(Double.parseDouble(array[InputType.VelX.ordinal()]), Double.parseDouble(array[InputType.VelY.ordinal()]));
-//            double angularVelocity = Double.parseDouble(array[InputType.AngularVelocity.ordinal()]);
-//            double phase = Double.parseDouble(array[InputType.Phase.ordinal()]);
-//            double mass = Double.parseDouble(array[InputType.Mass.ordinal()]);
-//            double indexTarget = Double.parseDouble(array[InputType.Target.ordinal()]);
-//            Particle part = new Particle(id, type, massCenter, velocity, radius, angularVelocity, phase, orientation, mass, indexTarget);
-//            p.add(part);
-//            count++;
-        return s;
-    }
 
     private void resetCounter() {
         this.count = 0;
