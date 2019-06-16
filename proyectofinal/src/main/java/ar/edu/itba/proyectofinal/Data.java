@@ -53,6 +53,7 @@ public class Data {
     static double beta = 4.5 * Math.sqrt(SD);
 
     static double yn = Math.sqrt((4 * kn * mr) / (Math.pow(Math.PI / Math.log(1/ en) , 2)) + 1);
+    static double yt = yn;
 
     static double AmpModifier = 1;
 }

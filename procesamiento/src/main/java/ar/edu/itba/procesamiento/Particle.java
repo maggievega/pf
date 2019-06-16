@@ -1,5 +1,7 @@
 package ar.edu.itba.procesamiento;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,10 @@ public class Particle {
     private double desiredVelocity;
     private double torque = 0.0;
     private List<Target> targets;
+
+    private double absoluteTotalForce = 0;
+    private double absoluteTangentialForce = 0;
+    private double absoluteNormalForce = 0;
 
     public Particle(int id, int type, Point massCenter, Point velocity, double radius, double angularVelocity, double phase, double orientation, double mass, int target) {
         this.id = id;
@@ -162,6 +168,8 @@ public class Particle {
                 (desiredVel.getY() - velocity.getY()) * mass / Data.characteristicT);
         this.torque += drivingTorque;
         force.add(drivingForce);
+
+        absoluteTotalForce += absoluteValue(drivingForce);
     }
 
     public void getContactForce(List<Particle> particleList){
@@ -252,7 +260,9 @@ public class Particle {
         f.times(1/f.module());
         f.times(overlapForce);
 
+
         this.force.add(f);
+        absoluteNormalForce += absoluteValue(f);
 
         //Dampening force
 //        this.force.ad
@@ -334,4 +344,7 @@ public class Particle {
         return aux;
     }
 
+    public double absoluteValue(@NotNull Point p){
+        return Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY() );
+    }
 }

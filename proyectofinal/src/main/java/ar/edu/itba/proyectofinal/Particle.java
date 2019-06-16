@@ -527,6 +527,14 @@ public class Particle {
         this.B = B;
     }
 
+    public void addForce(Point addingForce){
+        this.force.add(addingForce);
+    }
+
+    public void addTorque(double addingTorque){
+        this.torque += addingTorque;
+    }
+
     /**
      * Calculates noise based on a sinusoidal function for the given time
      * @param t: time for noise calculation
