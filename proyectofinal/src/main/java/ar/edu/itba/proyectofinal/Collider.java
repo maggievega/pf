@@ -23,6 +23,20 @@ public class Collider {
 
     //Fn = -kn * overlap - gamman * vreln
     public static void findNormalForce(Particle p1, Particle p2, Point a, Point b, double overlap){
+        Point relV = relative(p1.getVel(), p2.getVel());
+
+        //Inside pointig vector
+        Point r = relative(b,a);
+        Point normalVersor = versor(r);
+        Point relativeVelocityNorm = vectorTimes(normalVersor, project(normalVersor, relV));
+
+        Point normalForce = vectorTimes(r, -(Data.kn * overlap));
+        Point dampningNormalForce = vectorTimes(relativeVelocityNorm, (-Data.yn));
+
+        Point totalForce = addForces(normalForce, dampningNormalForce);
+        Point toCollision = relative(p1.getMassCenter(), a);
+        p1.addForce(totalForce);
+        p1.addTorque(toCollision.crossProduct(totalForce));
 
     }
 
