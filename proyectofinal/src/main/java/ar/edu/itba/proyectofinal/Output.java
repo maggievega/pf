@@ -88,7 +88,7 @@ class Output {
             if(p.getType() == Type.WALLS.getValue()){
 //                printWallData(p);
             }else{
-                System.out.println("writing");
+//                System.out.println("writing");
                 printParticleData(p);
             }
         }

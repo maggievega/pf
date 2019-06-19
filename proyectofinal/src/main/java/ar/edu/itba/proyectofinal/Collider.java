@@ -19,9 +19,14 @@ public class Collider {
         Point dampningTangentialForce = vectorTimes(relativeVelocityTang, (-Data.yt));
         Point totalForce = addForces(tangentialForce, dampningTangentialForce);
 
-        p1.addForce(totalForce);
+//        p1.addForce(totalForce);
+        p1.addForce(tangentialForce);
+//        p2.addForce(dampningTangentialForce);
         Point toCollision = relative(p1.getMassCenter(), a);
-        p1.addTorque(toCollision.crossProduct(totalForce));
+
+//        p1.addTorque(toCollision.crossProduct(totalForce));
+        p1.addTorque(toCollision.crossProduct(tangentialForce));
+//        p1.addTorque(toCollision.crossProduct(dampningTangentialForce));
 
     }
 
@@ -30,7 +35,7 @@ public class Collider {
         Point relV = relative(p1.getVel(), p2.getVel());
 
         //Inside pointig vector
-        Point r = relative(b,a);
+        Point r = relative(a,b);
         Point normalVersor = versor(r);
         Point relativeVelocityNorm = vectorTimes(normalVersor, project(normalVersor, relV));
 
@@ -39,8 +44,13 @@ public class Collider {
 
         Point totalForce = addForces(normalForce, dampningNormalForce);
         Point toCollision = relative(p1.getMassCenter(), a);
-        p1.addForce(totalForce);
-        p1.addTorque(toCollision.crossProduct(totalForce));
+//        p1.addForce(totalForce);
+        p1.addForce(normalForce);
+//        p1.addForce(dampningNormalForce);
+
+//        p1.addTorque(toCollision.crossProduct(totalForce));
+        p1.addTorque(toCollision.crossProduct(normalForce));
+//        p1.addTorque(toCollision.crossProduct(dampningNormalForce));
 
     }
 
