@@ -95,10 +95,12 @@ public class Particle {
      * @param particles
      * @param time: for updating current time and noise calculation.
      */
-    public void getForce(List<Particle> particles, double time) {
+    public void getForces(List<Particle> particles, double time) {
         this.time = time;
         resetForce();
         getDrivingForce();
+
+
         getContactForce(particles);
     }
 
@@ -203,8 +205,11 @@ public class Particle {
         /*If closest distance found between both particle's points is smaller than the addition of both's radius,
         calculate and apply collision force
          */
-        if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius()))
-            this.applyCollisionForces(p, a, b);
+        if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
+            double overlap = Math.sqrt(a.squaredDistanceBetween(b)) - (this.getRadius() +  p.getRadius());
+            Collider.collisionForces(this,p,a,b, overlap);
+            //this.applyCollisionForces(p, a, b);
+        }
     }
 
 

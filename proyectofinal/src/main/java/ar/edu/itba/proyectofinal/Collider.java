@@ -2,6 +2,10 @@ package ar.edu.itba.proyectofinal;
 
 public class Collider {
 
+    public static void collisionForces(Particle p1, Particle p2, Point a, Point b, double overlap){
+        findTangentialForce(p1,p2,a,b,overlap);
+        findNormalForce(p1,p2,a,b,overlap);
+    }
     //Ft = -kt  * ERARO - gammat * vrelt
     public static void findTangentialForce(Particle p1, Particle p2, Point a, Point b, double overlap){
         Point relV = relative(p1.getVel(), p2.getVel());

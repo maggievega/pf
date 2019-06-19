@@ -49,7 +49,8 @@ public class Simulator {
             final double aarr = time;
 //            prevtime = System.currentTimeMillis();
 //            particles.forEach((p) -> {if(!p.isWall()) p.getForce(previousPositions,aarr);});
-            particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForce(previousPositions,aarr);});
+//            particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForce(previousPositions,aarr);});
+            particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForces(previousPositions,aarr);});
 
 
 
