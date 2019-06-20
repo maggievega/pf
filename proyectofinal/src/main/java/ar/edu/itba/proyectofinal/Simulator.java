@@ -18,7 +18,7 @@ public class Simulator {
     public Simulator(List<Particle> p, Output o) {
         output = o;;
         particles = p;
-        cellIndex = new CellIndex(16,17, -0.1, -0.6, 8.1, 8.1);
+        cellIndex = new CellIndex(10,10, -0.1, -0.6, 8.1, 8.1);
         cellIndex.populate(particles);
     }
 
@@ -34,7 +34,7 @@ public class Simulator {
 //                output.printSimSystem(particles,time);
                 System.out.println( 100.0 * time / Data.totalTime);
 //                System.out.println(printCont);
-//                System.out.println(System.currentTimeMillis() - prevtime);
+                System.out.println("TARDO :  " + (System.currentTimeMillis() - prevtime));
                 prevtime = System.currentTimeMillis();
                 printCont++;
 
@@ -50,16 +50,24 @@ public class Simulator {
 
             //Calculate forces
             final double aarr = time;
-//            prevtime = System.currentTimeMillis();
-//            particles.forEach((p) -> {if(!p.isWall()) p.getForce(previousPositions,aarr);});
 //            particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForce(previousPositions,aarr);});
 
 
-            particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForces(previousPositions,aarr);});
+//            prevtime = System.currentTimeMillis();
+            //Single threaded
+//            particles.forEach((p) -> {if(!p.isWall()) p.getForces(previousPositions,aarr);});
 
-
-
+            //Multi threaded
+//                        particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForces(previousPositions,aarr);});
 //            System.out.println(System.currentTimeMillis()-prevtime);
+
+            //Cell Index
+            particles.parallelStream().forEach( p -> {
+                if(!p.isWall()){
+                    p.getForces(cellIndex.getNeighbours(p), aarr);
+                }
+            });
+
 
 
 

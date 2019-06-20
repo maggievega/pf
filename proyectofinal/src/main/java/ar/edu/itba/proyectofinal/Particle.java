@@ -104,6 +104,8 @@ public class Particle {
         getContactForce(particles);
     }
 
+
+
     private void getDrivingForce() {
         Target target = targets.get(indexTarget);
         double desiredAngle = Utils.getAngle( massCenter, target);
@@ -560,4 +562,5 @@ public class Particle {
     public double getOrientationY() {
         return Data.angleLength * Math.cos(orientation);
     }
+
 }

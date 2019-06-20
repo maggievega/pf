@@ -13,7 +13,7 @@ public class CellIndex {
     private double deltaX;
     private double deltaY;
     private Map<Integer, Coordinate> positions;
-    private Map<Coordinate, Set<Integer>> matrix;
+    private Map<Coordinate, Set<Particle>> matrix;
 
     private class Coordinate {
         public int x;
@@ -50,6 +50,7 @@ public class CellIndex {
         this.deltaY = (maxY - minY) / y;
         positions = new HashMap<>();
         matrix = new HashMap<>();
+        initializeMatrix();
 
     }
 
@@ -79,7 +80,7 @@ public class CellIndex {
     public void addParticle(Particle p) {
         Coordinate pos = getCoordinate(p.getMassCenter().getX(), p.getMassCenter().getY());
         positions.put(p.getId(), pos);
-        matrix.get(pos).add(p.getId());
+        matrix.get(pos).add(p);
     }
 
     public void addWall(Particle p) {
@@ -95,20 +96,20 @@ public class CellIndex {
         for (double i = 0; i < abs; i+= 0.25) {
             double x = p1.getX() + wallVersor.getX() * i;
             double y = p1.getY() + wallVersor.getY() * i;
-            addPoint(p.getId(), x, y);
+            addPoint(p, x, y);
         }
         //In case the end vertex wasnt added
-        addPoint(p.getId(),p2.getX(),p2.getY());
+        addPoint(p,p2.getX(),p2.getY());
     }
 
-    public void addPoint(int id, double x, double y){
+    public void addPoint(Particle p, double x, double y){
         Coordinate pos = getCoordinate(x, y);
-        matrix.get(pos).add(id);
+        matrix.get(pos).add(p);
     }
 
-    public Set<Integer> getNeighbours(int id) {
-        Coordinate pos = positions.get(id);
-        Set<Integer> neighbours = new HashSet<>();
+    public List<Particle> getNeighbours(Particle p) {
+        Coordinate pos = positions.get(p.getId());
+        Set<Particle> neighbours = new HashSet<>();
         int xi = pos.x - 1 < 0 ? 0 : pos.x - 1 ;
         int xf = pos.x + 1 ==  x  ? pos.x : pos.x + 1 ;
         int yi = pos.y - 1 < 0 ? 0 : pos.y - 1 ;
@@ -118,7 +119,8 @@ public class CellIndex {
                 neighbours.addAll(matrix.get(new Coordinate(i,j)));
             }
         }
-        return neighbours;
+        neighbours.remove(p);
+        return new ArrayList<>(neighbours);
 
     }
 
