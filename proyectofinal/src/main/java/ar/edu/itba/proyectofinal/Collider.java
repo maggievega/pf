@@ -3,7 +3,7 @@ package ar.edu.itba.proyectofinal;
 public class Collider {
 
     public static void collisionForces(Particle p1, Particle p2, Point a, Point b, double overlap){
-        findTangentialForce(p1,p2,a,b,overlap);
+//        findTangentialForce(p1,p2,a,b,overlap);
         findNormalForce(p1,p2,a,b,overlap);
     }
     //Ft = -kt  * ERARO - gammat * vrelt
@@ -25,7 +25,7 @@ public class Collider {
         Point toCollision = relative(p1.getMassCenter(), a);
 
 //        p1.addTorque(toCollision.crossProduct(totalForce));
-        p1.addTorque(toCollision.crossProduct(tangentialForce));
+//        p1.addTorque(toCollision.crossProduct(tangentialForce));
 //        p1.addTorque(toCollision.crossProduct(dampningTangentialForce));
 
     }
@@ -39,18 +39,20 @@ public class Collider {
         Point normalVersor = versor(r);
         Point relativeVelocityNorm = vectorTimes(normalVersor, project(normalVersor, relV));
 
-        Point normalForce = vectorTimes(r, -(Data.kn * overlap));
-        Point dampningNormalForce = vectorTimes(relativeVelocityNorm, (-Data.yn));
+        Point normalForce = vectorTimes(normalVersor, Data.kn * overlap);
+        Point dampningNormalForce = vectorTimes(relativeVelocityNorm, (Data.yn));
 
         Point totalForce = addForces(normalForce, dampningNormalForce);
         Point toCollision = relative(p1.getMassCenter(), a);
 //        p1.addForce(totalForce);
         p1.addForce(normalForce);
-//        p1.addForce(dampningNormalForce);
+        p1.addForce(dampningNormalForce);
 
 //        p1.addTorque(toCollision.crossProduct(totalForce));
-        p1.addTorque(toCollision.crossProduct(normalForce));
-//        p1.addTorque(toCollision.crossProduct(dampningNormalForce));
+        p1.addTorque(-toCollision.crossProduct(normalForce));
+
+        //todo testing this
+        p1.addTorque(-toCollision.crossProduct(dampningNormalForce));
 
     }
 
