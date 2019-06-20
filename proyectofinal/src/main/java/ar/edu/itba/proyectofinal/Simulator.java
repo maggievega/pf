@@ -7,6 +7,7 @@ public class Simulator {
 
     private static List<Particle> particles;
     private static Output output;
+    private static CellIndex cellIndex;
 
     private static double lastExit = 0;
     private static double time150 = 0;
@@ -17,6 +18,8 @@ public class Simulator {
     public Simulator(List<Particle> p, Output o) {
         output = o;;
         particles = p;
+        cellIndex = new CellIndex(16,17, -0.1, -0.6, 8.1, 8.1);
+        cellIndex.populate(particles);
     }
 
     public void Simulate(){
@@ -50,6 +53,8 @@ public class Simulator {
 //            prevtime = System.currentTimeMillis();
 //            particles.forEach((p) -> {if(!p.isWall()) p.getForce(previousPositions,aarr);});
 //            particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForce(previousPositions,aarr);});
+
+
             particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForces(previousPositions,aarr);});
 
 
@@ -62,6 +67,7 @@ public class Simulator {
                 if (!p.isWall()){
                     updatePosition(p);
                     updateTarget(p, time);
+                    cellIndex.updateParticle(p);
                 }
             }
 
@@ -70,6 +76,7 @@ public class Simulator {
         System.out.println(calculateCaudal(time, leftRoom, time150, 0.7));
         output.done();
     }
+
 
     private void updateTarget(Particle p, double t) {
         if (p.reachedTarget()) {
