@@ -15,6 +15,7 @@ public class CellIndex {
     private Map<Integer, Coordinate> positions;
     private Map<Coordinate, Set<Particle>> matrix;
 
+
     private class Coordinate {
         public int x;
         public int y;
@@ -36,6 +37,11 @@ public class CellIndex {
         @Override
         public int hashCode() {
             return Objects.hash(x, y);
+        }
+
+        @Override
+        public String toString() {
+            return "( " + x + " , " + y + " )";
         }
     }
 
@@ -107,16 +113,23 @@ public class CellIndex {
         matrix.get(pos).add(p);
     }
 
-    public List<Particle> getNeighbours(Particle p) {
+    public List<Particle> getNeighbours(Particle p, List<Particle> previousPositions) {
         Coordinate pos = positions.get(p.getId());
         Set<Particle> neighbours = new HashSet<>();
         int xi = pos.x - 1 < 0 ? 0 : pos.x - 1 ;
-        int xf = pos.x + 1 ==  x  ? pos.x : pos.x + 1 ;
+        int xf = pos.x + 1 >=  x ? pos.x - 1 : pos.x + 1 ;
         int yi = pos.y - 1 < 0 ? 0 : pos.y - 1 ;
-        int yf = pos.y + 1 ==  y  ? pos.y : pos.y + 1 ;
-        for (int i = xi; i < xf; i++) {
-            for (int j = yi; j < yf; j++) {
-                neighbours.addAll(matrix.get(new Coordinate(i,j)));
+        int yf = pos.y + 1 >=  y  ? pos.y - 1 : pos.y + 1 ;
+//        System.out.println("xi " + xi + " xf " + xf + " yi " + yi + " yf " + yf);
+//        System.out.println("pos " +  pos.toString());
+//        System.out.println("Particle " + p.getId());
+        for (int i = xi; i <= xf; i++) {
+            for (int j = yi; j <= yf; j++) {
+                Set<Particle> set = matrix.get(new Coordinate(i,j));
+                for (Particle particle: set) {
+//                    System.out.println("Neighbour " + particle.getId());
+                    neighbours.add(previousPositions.get(particle.getId()));
+                }
             }
         }
         neighbours.remove(p);

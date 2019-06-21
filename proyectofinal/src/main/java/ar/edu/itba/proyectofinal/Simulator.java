@@ -64,12 +64,9 @@ public class Simulator {
             //Cell Index
             particles.parallelStream().forEach( p -> {
                 if(!p.isWall()){
-                    p.getForces(cellIndex.getNeighbours(p), aarr);
+                    p.getForces(cellIndex.getNeighbours(p, previousPositions), aarr);
                 }
             });
-
-
-
 
             for (Particle p : particles) {
                 if (!p.isWall()){
