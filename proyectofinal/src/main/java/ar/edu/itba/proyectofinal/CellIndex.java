@@ -13,7 +13,7 @@ public class CellIndex {
     private double deltaX;
     private double deltaY;
     private Map<Integer, Coordinate> positions;
-    private Map<Coordinate, Set<Particle>> matrix;
+    private Map<Coordinate, Set<Integer>> matrix;
 
 
     private class Coordinate {
@@ -86,7 +86,7 @@ public class CellIndex {
     public void addParticle(Particle p) {
         Coordinate pos = getCoordinate(p.getMassCenter().getX(), p.getMassCenter().getY());
         positions.put(p.getId(), pos);
-        matrix.get(pos).add(p);
+        matrix.get(pos).add(p.getId());
     }
 
     public void addWall(Particle p) {
@@ -102,33 +102,29 @@ public class CellIndex {
         for (double i = 0; i < abs; i+= 0.25) {
             double x = p1.getX() + wallVersor.getX() * i;
             double y = p1.getY() + wallVersor.getY() * i;
-            addPoint(p, x, y);
+            addPoint(p.getId(), x, y);
         }
         //In case the end vertex wasnt added
-        addPoint(p,p2.getX(),p2.getY());
+        addPoint(p.getId(),p2.getX(),p2.getY());
     }
 
-    public void addPoint(Particle p, double x, double y){
+    public void addPoint(int id, double x, double y){
         Coordinate pos = getCoordinate(x, y);
-        matrix.get(pos).add(p);
+        matrix.get(pos).add(id);
     }
 
     public List<Particle> getNeighbours(Particle p, List<Particle> previousPositions) {
         Coordinate pos = positions.get(p.getId());
         Set<Particle> neighbours = new HashSet<>();
-        int xi = pos.x - 1 < 0 ? 0 : pos.x - 1 ;
-        int xf = pos.x + 1 >=  x ? pos.x - 1 : pos.x + 1 ;
-        int yi = pos.y - 1 < 0 ? 0 : pos.y - 1 ;
-        int yf = pos.y + 1 >=  y  ? pos.y - 1 : pos.y + 1 ;
-//        System.out.println("xi " + xi + " xf " + xf + " yi " + yi + " yf " + yf);
-//        System.out.println("pos " +  pos.toString());
-//        System.out.println("Particle " + p.getId());
+        int xi = pos.x - 1 < 0 ? 0 : pos.x - 1;
+        int xf = pos.x + 1 >=  x ? pos.x - 1 : pos.x + 1;
+        int yi = pos.y - 1 < 0 ? 0 : pos.y - 1;
+        int yf = pos.y + 1 >=  y  ? pos.y - 1 : pos.y + 1;
         for (int i = xi; i <= xf; i++) {
             for (int j = yi; j <= yf; j++) {
-                Set<Particle> set = matrix.get(new Coordinate(i,j));
-                for (Particle particle: set) {
-//                    System.out.println("Neighbour " + particle.getId());
-                    neighbours.add(previousPositions.get(particle.getId()));
+                Set<Integer> set = matrix.get(new Coordinate(i, j));
+                for (Integer id: set) {
+                    neighbours.add(previousPositions.get(id));
                 }
             }
         }
@@ -146,16 +142,10 @@ public class CellIndex {
     }
 
     public Coordinate getCoordinate(double x, double y) {
-        int xc = (int)Math.floor((x-minX)/deltaX);
-        int yc = (int)Math.floor((y-minY)/deltaY);
+        int xc = (int)Math.floor((x - minX) / deltaX);
+        int yc = (int)Math.floor((y - minY) / deltaY);
         return new Coordinate(xc, yc);
 
     }
-
-
-
-
-
-
 
 }
