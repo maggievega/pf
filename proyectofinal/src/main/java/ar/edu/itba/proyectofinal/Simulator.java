@@ -18,7 +18,7 @@ public class Simulator {
     public Simulator(List<Particle> p, Output o) {
         output = o;;
         particles = p;
-        cellIndex = new CellIndex(10,10, -0.1, -0.6, 8.1, 8.1);
+        cellIndex = new CellIndex(10,10, -0.1, -1, 8.1, 8.1);
         cellIndex.populate(particles);
     }
 
@@ -112,7 +112,6 @@ public class Simulator {
     private double calculateCaudal(double time, double amount, double time150, double width) {
         return (amount - 150) / ((time - time150) * width);
     }
-
 
     /* Uses Verlet */
     private void updatePosition(Particle p) {
