@@ -41,8 +41,9 @@ public class Populator {
 
     void PopulatePaper(Point grid){
         int part=0;
-        double xDiv = Data.maxX / grid.getX();
-        double yDiv = Data.maxY / grid.getY();
+        double offset = 0.2;
+        double xDiv = (Data.maxX - 2 * offset) / grid.getX();
+        double yDiv = (Data.maxY - 2 * offset) / grid.getY();
         boolean end = false;
         for (int i = 0; i < grid.getX() && !end; i++) {
             for (int j = 0; j < grid.getY() && !end ; j++) {
@@ -50,7 +51,7 @@ public class Populator {
                 do {
                     p = particles.get(part++);
                 }while (p.isWall());
-                paperPosition(p,new Point(i * xDiv + xDiv / 2, j * yDiv + yDiv / 2));
+                paperPosition(p,new Point(offset + i * xDiv + xDiv / 2, offset + j * yDiv + yDiv / 2));
                 populateTargets(p);
                 if(i*grid.getX() + j+1 > particles.size()){
                     end = true;

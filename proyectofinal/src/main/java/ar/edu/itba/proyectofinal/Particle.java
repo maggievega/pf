@@ -100,7 +100,6 @@ public class Particle {
         resetForce();
         getDrivingForce();
 
-
         getContactForce(particles);
     }
 
@@ -208,7 +207,11 @@ public class Particle {
         calculate and apply collision force
          */
         if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
-            double overlap = Math.sqrt(a.squaredDistanceBetween(b)) - (this.getRadius() +  p.getRadius());
+            double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
+            if(overlap <0){
+                int ab = 3;
+                int j = ab + 4;
+            }
             Collider.collisionForces(this,p,a,b, overlap);
             //this.applyCollisionForces(p, a, b);
         }
