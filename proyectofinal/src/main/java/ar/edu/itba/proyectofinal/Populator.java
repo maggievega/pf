@@ -89,8 +89,7 @@ public class Populator {
     private void populateTargets(Particle p) {
         List<Target> targets = new ArrayList<>();
         for (Target t: Data.targetList) {
-            Target aux = new Target(t.getX(), t.getY(), p.getMassCenter(), t.getInterval(), t.isEnd());
-            targets.add(aux);
+            Target aux = new Target(t.getSegment(), t.isEnd(), p.getMassCenter());            targets.add(aux);
         }
         p.setTargets(targets);
     }

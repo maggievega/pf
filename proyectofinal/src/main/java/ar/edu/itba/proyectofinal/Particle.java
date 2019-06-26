@@ -109,7 +109,7 @@ public class Particle {
         Target target = targets.get(indexTarget);
 
         Point closestTarget = Utils.completeClosestPoint(target.getS(), massCenter);
-
+        target.setClosest(closestTarget);
         double desiredAngle = Utils.getAngle( massCenter, closestTarget);
 
         double aux = desiredAngle - orientation;
@@ -402,14 +402,10 @@ public class Particle {
         return inertiaMoment;
     }
 
-    public List<Target> getTargets() {
-        return targets;
-    }
-
     public Target getCurrentTarget() { return this.targets.get(indexTarget); }
 
     private boolean reached(Target t) {
-        return this.massCenter.squaredDistanceBetween(t)
+        return this.massCenter.squaredDistanceBetween(t.getClosest())
                 <= (this.maxDistance + this.radius) *
                 (this.maxDistance + this.radius);
 

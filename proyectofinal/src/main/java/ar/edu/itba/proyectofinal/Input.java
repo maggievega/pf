@@ -84,16 +84,19 @@ class Input {
         String[] target = line.split("\\t");
         int amount = 0;
         boolean end = false;
-        if (target[TargetType.TARGET_X.ordinal()].equals("F")) {
+        if (target[TargetType.TARGET_X1.ordinal()].equals("F")) {
             amount = 1;
             end = true;
         }
-        if (target.length != 3 + amount) {
+        if (target.length != 4 + amount) {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
-        double interval = Double.parseDouble(target[amount + TargetType.INTERVAL.ordinal()]);
-        Target t = new Target(Double.parseDouble(target[amount]), Double.parseDouble(target[amount + TargetType.TARGET_Y.ordinal()]),  interval, end);
+        double x1 = Double.parseDouble(target[amount + TargetType.TARGET_X1.ordinal()]);
+        double y1 = Double.parseDouble(target[amount + TargetType.TARGET_Y1.ordinal()]);
+        double x2 = Double.parseDouble(target[amount + TargetType.TARGET_X2.ordinal()]);
+        double y2 = Double.parseDouble(target[amount + TargetType.TARGET_Y2.ordinal()]);
+        Target t = new Target(end, new Segment(new Point(x1, y1), new Point(x2, y2)));
         Data.targetList.add(t);
         count ++;
     }

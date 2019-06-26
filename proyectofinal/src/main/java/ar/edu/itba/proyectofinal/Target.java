@@ -1,30 +1,26 @@
 package ar.edu.itba.proyectofinal;
 
-public class Target extends Point {
+public class Target {
 
     private Segment s;
-    private boolean end = false;
-    private double interval;
+    private boolean end;
+    private Point c;
 
     public int R = 0;
     public int G = 0;
     public int B = 0;
 
-    public Target(double x, double y, double interval, boolean end) {
-        super(x, y);
+    public Target(boolean end, Segment segment) {
+        this.s = segment;
         this.end = end;
-        this.interval = interval;
-        this.s = new Segment(getX() - interval, getY(),getX() + interval, getY());
         if (end) setFinal(); else setMiddle();
     }
 
-    public Target (double x, double y, Point mc, double interval, boolean end) {
-        super(x, y);
+    public Target(Segment segment, boolean end, Point massCenter) {
+        this.s = segment;
         this.end = end;
-        this.interval = interval;
-        this.s = new Segment(getX() - interval, getY(),getX() + interval, getY());
         if (end) setFinal(); else setMiddle();
-        place(mc);
+        place(massCenter);
     }
 
     public boolean isEnd() {
@@ -33,7 +29,7 @@ public class Target extends Point {
 
     public void place(Point mc) {
         Point closest = Utils.completeClosestPoint(s, mc);
-        this.setPoint(closest);
+        this.c = closest;
     }
 
     public int getR() {
@@ -53,17 +49,27 @@ public class Target extends Point {
         G = 255;
     }
 
+    public double getX() { return this.c.getX(); }
+
+    public double getY() { return this.c.getY(); }
+
     public Segment getS() {
         return s;
     }
 
-    public double getInterval() {
-        return interval;
-    }
-
-
-
     public void setFinal() {
         G = 255;
+    }
+
+    public Segment getSegment() {
+        return s;
+    }
+
+    public Point getClosest() {
+        return this.c;
+    }
+
+    public void setClosest(Point closestTarget) {
+        this.c = closestTarget;
     }
 }
