@@ -21,7 +21,7 @@ public class Data {
 
     private static double tc = Math.PI * Math.sqrt(mr / (2 * kn));
     static double dt = tc/300;
-    static double totalTime = 500;
+    static double totalTime = 35;
     static double printTime = 0.05;
 
     static int caudal = 150;
@@ -54,6 +54,8 @@ public class Data {
 
     static double yn = Math.sqrt((4 * kn * mr) / (Math.pow(Math.PI / Math.log(1/ en) , 2)) + 1);
     static double yt = yn;
+
+    static double u = 0.5;
 
     static double AmpModifier = 1;
 }

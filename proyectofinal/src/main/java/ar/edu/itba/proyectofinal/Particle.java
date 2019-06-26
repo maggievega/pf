@@ -107,13 +107,17 @@ public class Particle {
 
     private void getDrivingForce() {
         Target target = targets.get(indexTarget);
-        double desiredAngle = Utils.getAngle( massCenter, target);
+
+        Point closestTarget = Utils.completeClosestPoint(target.getS(), massCenter);
+
+        double desiredAngle = Utils.getAngle( massCenter, closestTarget);
 
         double aux = desiredAngle - orientation;
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
         List<Point> points = this.getPoints();
 
-        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity + sinusoidalNoise(time) ;
+        //TODO restore sinusoidal
+        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity;// + sinusoidalNoise(time) ;
 //        System.out.println("Orientation : " + this.orientation);
 //        System.out.println("Desired orientation" + desiredAngle);
 //        System.out.println("--------------");

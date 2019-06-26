@@ -45,12 +45,12 @@ public class Main {
 
         Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
-        Populator.getInstance().PopulatePaper(new Point(12,16));
-//        Populator.getInstance().Populate();
+//        Populator.getInstance().PopulatePaper(new Point(12,16));
+//        Populator.getInstance().PopulateSingleParticle();
+        Populator.getInstance().Populate();
         System.out.println("-- Population Finished");
         System.out.println("-- Start Simulation");
         Simulator s = new Simulator(particles, o);
         s.Simulate();
-
     }
 }

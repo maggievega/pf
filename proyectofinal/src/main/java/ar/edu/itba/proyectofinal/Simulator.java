@@ -18,8 +18,8 @@ public class Simulator {
     public Simulator(List<Particle> p, Output o) {
         output = o;;
         particles = p;
-        cellIndex = new CellIndex(10,10, -0.1, -1, 8.1, 8.1);
-        cellIndex.populate(particles);
+//        cellIndex = new CellIndex(10,10, -0.1, -1, 8.1, 8.1);
+//        cellIndex.populate(particles);
     }
 
     public void Simulate(){
@@ -58,21 +58,21 @@ public class Simulator {
 //            particles.forEach((p) -> {if(!p.isWall()) p.getForces(previousPositions,aarr);});
 
             //Multi threaded
-//                        particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForces(previousPositions,aarr);});
+                        particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForces(previousPositions,aarr);});
 //            System.out.println(System.currentTimeMillis()-prevtime);
 
             //Cell Index
-            particles.parallelStream().forEach( p -> {
-                if(!p.isWall()){
-                    p.getForces(cellIndex.getNeighbours(p, previousPositions), aarr);
-                }
-            });
+//            particles.parallelStream().forEach( p -> {
+//                if(!p.isWall()){
+//                    p.getForces(cellIndex.getNeighbours(p, previousPositions), aarr);
+//                }
+//            });
 
             for (Particle p : particles) {
                 if (!p.isWall()){
                     updatePosition(p);
                     updateTarget(p, time);
-                    cellIndex.updateParticle(p);
+//                    cellIndex.updateParticle(p);
                 }
             }
 

@@ -60,6 +60,21 @@ public class Populator {
         }
     }
 
+    void PopulateSingleParticle() {
+        for(Particle p : particles){
+            if(!p.isWall()) {
+                double orientation = Math.PI/2;//Math.PI * 3 / 2;
+                Point position = new Point(7, 5);
+                p.setOrientation(orientation);
+                p.setPreviousOrientation(orientation);
+                p.setMassCenter(position);
+                p.setPreviousMassCenter(position);
+                populateTargets(p);
+            }
+        }
+
+    }
+
     private void paperPosition(Particle p, Point position){
         if(!p.isWall()) {
             double orientation = Math.random() * 2 * Math.PI;
@@ -127,6 +142,7 @@ public class Populator {
         double y = (Math.random() * (maxY - minY)) + minY;
         return new Point(x, y);
     }
+
 
 
 
