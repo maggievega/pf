@@ -107,35 +107,28 @@ public class Particle {
 
     private void getDrivingForce() {
         Target target = targets.get(indexTarget);
-
         Point closestTarget = Utils.completeClosestPoint(target.getS(), massCenter);
         target.setClosest(closestTarget);
         double desiredAngle = Utils.getAngle( massCenter, closestTarget);
 
         double aux = desiredAngle - orientation;
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
-        List<Point> points = this.getPoints();
 
-        //TODO restore sinusoidal
-        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity;// + sinusoidalNoise(time) ;
-//        System.out.println("Orientation : " + this.orientation);
-//        System.out.println("Desired orientation" + desiredAngle);
-//        System.out.println("--------------");
+        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity + sinusoidalNoise(time) ;
 
         Point desiredDirection = new Point(target.getX() - massCenter.getX(),
                 target.getY() - massCenter.getY());
         double abs = Math.sqrt(desiredDirection.getX() * desiredDirection.getX() +
                 desiredDirection.getY() * desiredDirection.getY());
-//
+
         desiredDirection.times(1 / abs);
-//
+
         Point desiredVel = new Point (desiredVelocity * desiredDirection.getX(),
                 desiredVelocity * desiredDirection.getY());
-//
+
         Point drivingForce = new Point((desiredVel.getX() - vel.getX()) * mass / Data.characteristicT,
                 (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
         this.torque += drivingTorque;
-//        System.out.println(this.torque);
         force.add(drivingForce);
     }
 
