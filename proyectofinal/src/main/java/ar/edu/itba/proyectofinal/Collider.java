@@ -3,8 +3,10 @@ package ar.edu.itba.proyectofinal;
 public class Collider {
 
     public static void collisionForces(Particle p1, Particle p2, Point a, Point b, double overlap){
-        Point tForce = findTangentialForce(p1,p2,a,b,overlap);
-        Point nForce = findNormalForce(p1,p2,a,b,overlap);
+        double mr = Math.sqrt(p1.getMass() * p2.getMass() / (p1.getMass() + p2.getMass()));
+
+        Point tForce = findTangentialForce(p1,p2,a,b,overlap,mr);
+        Point nForce = findNormalForce(p1,p2,a,b,overlap,mr);
 
         if(tForce.module() >= Data.u * nForce.module()){
             Point tForceVersor = versor(tForce);
@@ -20,16 +22,19 @@ public class Collider {
 //        System.out.println("normal :  " + nForce.module() + " --- " + tForce.module() + "  : tangential");
     }
     //Ft = -kt  * ERARO - gammat * vrelt
-    private static Point findTangentialForce(Particle p1, Particle p2, Point a, Point b, double overlap){
+    private static Point findTangentialForce(Particle p1, Particle p2, Point a, Point b, double overlap, double mr){
         Point relV = relative(p2.getVel(), p1.getVel());
         Point r = relative(a,b);
         Point tangentVersor = tangentVersor(r);
+        Point velocityVersor = versor(p1.getVel());
         Point relativeVelocityTang = vectorTimes(tangentVersor, project(tangentVersor, relV));
 
 
         //todo check if overlap is right
-        Point tangentialForce =  vectorTimes(tangentVersor, -Data.kt * overlap);
-        Point dampningTangentialForce = vectorTimes(relativeVelocityTang, -Data.yt);
+        Point tangentialForce =  vectorTimes(tangentVersor, -Data.kt * overlap );
+        Point dampningTangentialForce = vectorTimes(relativeVelocityTang, -Data.yt * mr);
+        double tm = tangentialForce.module();
+        double dm = dampningTangentialForce.module();
         Point totalForce = addForces(tangentialForce, dampningTangentialForce);
 
 //        p1.addForce(totalForce);
@@ -50,7 +55,7 @@ public class Collider {
     }
 
     //Fn = -kn * overlap - gamman * vreln
-    private static Point findNormalForce(Particle p1, Particle p2, Point a, Point b, double overlap){
+    private static Point findNormalForce(Particle p1, Particle p2, Point a, Point b, double overlap, double mr){
         Point relV = relative(p2.getVel(), p1.getVel());
 
         //Inside pointig vector
@@ -59,8 +64,15 @@ public class Collider {
         Point relativeVelocityNorm = vectorTimes(normalVersor, project(normalVersor, relV));
 
         Point normalForce = vectorTimes(normalVersor, -Data.kn * overlap);
-        Point dampningNormalForce = vectorTimes(relativeVelocityNorm, -Data.yn);
+        Point dampningNormalForce = vectorTimes(relativeVelocityNorm, -Data.yn * mr);
 
+        Point vel = p1.getVel();
+        Point velocityVersor = versor(p1.getVel());
+        Point normalForceVersor = versor(normalForce);
+        Point normalDampningVersor = versor(dampningNormalForce);
+        if (vel.module() < 0.01){
+            int afdsa = 23;
+        }
         if(dampningNormalForce.getX() != 0 || dampningNormalForce.getY() != 0){
             int asd = 1;
         }
