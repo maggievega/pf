@@ -140,10 +140,10 @@ class Input {
         
         for (int j = 0; j < countParticles; j ++) {
             double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
-            Point massCenter = Utils.massCenter(points, Data.precision );
-            List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
             double radius = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
-            double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision);
+            Point massCenter = Utils.massCenter(points, Data.precision, radius );
+            double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision, radius);
+            List<AngularPoint> ap = Utils.calculateAngularPoints(massCenter, points);
             inertiaMoment *= mass;
             double phase = Math.random() * Math.PI * 2;
             Particle p = new Particle(particles.size(), type, mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, inertiaMoment, phase);

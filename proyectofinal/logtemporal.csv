@@ -1,0 +1,214 @@
+CONSTANTS  0
+WALLS  1
+TARGETS  2
+PARTICLES  3
+-- Starting to load
+const.txt
+targetsPaper.txt
+-- Targets Loaded
+wallsPaper.txt
+-- Walls Loaded
+particlesPaper.txt
+DESIRED 2.0
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+Creating of type : 3
+-- Particles Loaded
+-- Start Populating
+-- Population Finished
+-- Start Simulation
+1
+2
+3
+4
+5
+6

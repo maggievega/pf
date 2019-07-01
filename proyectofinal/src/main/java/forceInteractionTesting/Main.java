@@ -11,36 +11,76 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Point[] poligon = new Point[8];
-        poligon[0] = new Point(0,0);
-        poligon[1] = new Point(0,5);
-        poligon[2] = new Point(2,5);
-        poligon[3] = new Point(2,1);
-        poligon[4] = new Point(6,1);
-        poligon[5] = new Point(6,5);
-        poligon[6] = new Point(8,5);
-        poligon[7] = new Point(8,0);
+        Point a = new Point (0,0);
+        Point b = new Point (0,1);
 
-        Point[] poligon2 = new Point[8];
-        poligon2[0] = new Point(0,0);
-        poligon2[1] = new Point(0,6);
-        poligon2[2] = new Point(1,6);
-        poligon2[3] = new Point(1,1);
-        poligon2[4] = new Point(4,1);
-        poligon2[5] = new Point(4,6);
-        poligon2[6] = new Point(5,6);
-        poligon2[7] = new Point(5,0);
+        Point[] pol = new Point[]{a,b};
+        double[] bounds = Utils.poligonBounds(pol, 0.12);
+        System.out.println(bounds[0] +  " " + bounds[1] + " " + bounds[2] + " " + bounds[3]);
 
-        Point[] square =  new Point[4];
-        square[0]=new Point(0,0);
-        square[1]=new Point(1,0);
-        square[2]=new Point(1,1);
-        square[3]=new Point(0,1);
+        Point mc = Utils.massCenter(pol,Data.precision, 0.12);
+        double im1 = Utils.inertiaMoment(pol,mc,Data.precision,0.12);
+        double im2 = Utils.inertiaMoment2(pol,mc,Data.precision,0.12);
 
-        Point[] triangle =  new Point[3];
-        triangle[0] = new Point(0,0);
-        triangle[1] = new Point(6,3);
-        triangle[2] = new Point(6,0);
+        System.out.println(im1 +  "    "  + im2);
+
+        System.out.println(mc.getX() +  "  -  " + mc.getY());
+
+
+
+
+//        List<Double> springs = new ArrayList<>(5);
+//        for (int i = 0; i < 5; i++) {
+//            springs.add(0.0);
+//        }
+//        System.out.println("hi");
+//        for (Double d: springs){
+//            System.out.println("hi");
+//            System.out.println(d);
+//        }
+//         double minmr = Double.MAX_VALUE;
+//
+//         for(double a = Data.mMin ; a <= Data.mMax; a+= 0.01){
+//             for(double b = a; b <= Data.mMax; b+=0.01){
+//                 System.out.println(a);
+//                 double mr = a*b /(a+b);
+//                 if (mr < minmr){
+//                     minmr = mr;
+//                 }
+//             }
+//         }
+//
+//        System.out.println(minmr);
+//        Point[] poligon = new Point[8];
+//        poligon[0] = new Point(0,0);
+//        poligon[1] = new Point(0,5);
+//        poligon[2] = new Point(2,5);
+//        poligon[3] = new Point(2,1);
+//        poligon[4] = new Point(6,1);
+//        poligon[5] = new Point(6,5);
+//        poligon[6] = new Point(8,5);
+//        poligon[7] = new Point(8,0);
+//
+//        Point[] poligon2 = new Point[8];
+//        poligon2[0] = new Point(0,0);
+//        poligon2[1] = new Point(0,6);
+//        poligon2[2] = new Point(1,6);
+//        poligon2[3] = new Point(1,1);
+//        poligon2[4] = new Point(4,1);
+//        poligon2[5] = new Point(4,6);
+//        poligon2[6] = new Point(5,6);
+//        poligon2[7] = new Point(5,0);
+//
+//        Point[] square =  new Point[4];
+//        square[0]=new Point(0,0);
+//        square[1]=new Point(1,0);
+//        square[2]=new Point(1,1);
+//        square[3]=new Point(0,1);
+//
+//        Point[] triangle =  new Point[3];
+//        triangle[0] = new Point(0,0);
+//        triangle[1] = new Point(6,3);
+//        triangle[2] = new Point(6,0);
 
 //        double[] bounds = poligonBounds(poligon);
 //        for (int i = 0; i < bounds.length; i++) {

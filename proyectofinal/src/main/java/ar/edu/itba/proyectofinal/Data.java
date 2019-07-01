@@ -17,16 +17,17 @@ public class Data {
     static double kt = kn / 25.0;
 
     private static double en = 0.2;
-    private static double mr = 1; // TODO: FIND
+    private static double mr = 22.5;
 
     private static double tc = Math.PI * Math.sqrt(mr / (2 * kn));
+//    static double dt = 0.00025;
     static double dt = tc/300;
     static double totalTime = 2000;
     static double printTime = 0.05;
 
     static int caudal = 150;
 
-    public static double precision = 0.00001;
+    public static double precision = 0.001;
 
     static double wall_radius = 0.05;
     static double spacing = 0.5;
@@ -52,10 +53,25 @@ public class Data {
 
     static double beta = 4.5 * Math.sqrt(SD);
 
-    static double yn = Math.sqrt((4 * kn * mr) / (Math.pow(Math.PI / Math.log(1/ en) , 2)) + 1);
+//    static double yn2 = Math.sqrt((4 * kn * mr) / (Math.pow(Math.PI / Math.log(1/ en) , 2)) + 1);
+
+    //Add mr after this
+    static double yn = Math.sqrt((4 * kn) / (Math.pow((Math.PI/Math.log(1/en)),2) + 1   ) );
+
     static double yt = yn;
 
     static double u = 0.5;
 
     static double AmpModifier = 1;
+
+
+
+
+
+
+
+
+
+
+
 }

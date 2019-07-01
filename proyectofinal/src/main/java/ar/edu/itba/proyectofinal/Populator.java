@@ -64,7 +64,7 @@ public class Populator {
         for(Particle p : particles){
             if(!p.isWall()) {
                 double orientation = Math.PI/2;//Math.PI * 3 / 2;
-                Point position = new Point(7, 5);
+                Point position = new Point(1, 0.15);
                 p.setOrientation(orientation);
                 p.setPreviousOrientation(orientation);
                 p.setMassCenter(position);
@@ -108,14 +108,13 @@ public class Populator {
 
             p.positionParticle(mc, orientation);
         }
-
     }
 
      void resetParticle(Particle p){
         p.setOrientation(Math.PI);
         p.setPreviousOrientation(Math.PI);
-        double x = Math.random() * (Data.maxX - 1 ) + 0.3;
-        Point mc = new Point(x,7.8);
+        double x = Math.random() * (Data.maxX - 1.2 ) + 0.4;
+        Point mc = new Point(x,7.5);
         p.setMassCenter(mc);
         p.setPreviousMassCenter(mc);
         p.positionParticle(mc,Math.PI);

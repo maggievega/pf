@@ -88,10 +88,8 @@ public class Utils {
 
             if ((b >= f1 && b >= f2) || (b <= f1 && b <= f2)) {
                 if (p.squaredDistanceBetween(ab.getP1()) <= p.squaredDistanceBetween(ab.getP2())) {
-//                    System.out.println("Closest point is " + x1 + " , " + y1);
                     return new Point(x1, y1);
                 } else {
-//                    System.out.println("Closest point is " + x2 + " , " + y2);
                     return new Point(x2, y2);
                 }
             } else {
@@ -146,14 +144,14 @@ public class Utils {
      * @param precision
      * @return
      */
-    public static double inertiaMoment(Point[] poligon, Point relative, double precision){
+    public static double inertiaMoment(Point[] poligon, Point relative, double precision, double radius){
         double points  = 0.0;
         double inertia = 0;
-        double[] bounds = poligonBounds(poligon);
+        double[] bounds = poligonBounds(poligon, radius);
         for (double i = bounds[0]; i<= bounds[1]; i+= precision){
             for (double j = bounds[2]; j<= bounds[3] ;j+=precision){
-                if (liesInside(poligon, new Point(i,j))){
-                    points+=1.0;
+                if (liesInside(poligon, new Point(i,j)) || insideRadius(poligon, new Point(i,j),radius)) {
+                    points += 1.0;
                     double relX = i - relative.getX();
                     double relY = j - relative.getY();
                     inertia += relX * relX + relY * relY;
@@ -163,6 +161,40 @@ public class Utils {
         return inertia / points;
     }
 
+    public static double inertiaMoment2(Point[] poligon, Point relative, double precision, double radius){
+        double points  = 0.0;
+        double inertia = 0;
+        double[] bounds = poligonBounds(poligon, radius);
+        for (double i = bounds[0]; i<= bounds[1]; i+= precision){
+            for (double j = bounds[2]; j<= bounds[3] ;j+=precision){
+                if (liesInside(poligon, new Point(i,j))) {
+                    points += 1.0;
+                    double relX = i - relative.getX();
+                    double relY = j - relative.getY();
+                    inertia += relX * relX + relY * relY;
+                }
+            }
+        }
+        return inertia / points;
+    }
+
+    public static boolean insideRadius(Point[] poligon, Point p, double radius){
+//        System.out.println("inside radius");
+        for (int i = 0; i < poligon.length; i++) {
+            int index = i;
+            int indexf = i+1;
+            if(i == poligon.length-1){
+                indexf = 0;
+            }
+            Segment s = new Segment(poligon[index], poligon[indexf]);
+            Point closest = completeClosestPoint(s, p);
+            if(p.distanceBetween(closest)<=radius){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Finds massCentre of given poligon with the desired precision. Does so by discretely calculating the integral
      * inside the poligon's bounding circle.
@@ -170,14 +202,15 @@ public class Utils {
      * @param precision
      * @return
      */
-    public static Point massCenter(Point[]poligon, double precision){
+    public static Point massCenter(Point[]poligon, double precision, double radius){
         long acum  = 0;
         double xAcum = 0;
         double yAcum = 0;
-        double[] bounds = poligonBounds(poligon);
+        double[] bounds = poligonBounds(poligon, radius);
         for (double i = bounds[0]; i<= bounds[1]; i+= precision){
             for (double j = bounds[2]; j<= bounds[3] ;j+=precision){
-                if (liesInside(poligon, new Point(i,j))){
+//                System.out.println("x : " + i + " -  y : " + j );
+                if (liesInside(poligon, new Point(i,j)) || insideRadius(poligon,new Point(i,j),radius)){
                     acum++;
                     xAcum+=i;
                     yAcum+=j;
@@ -195,7 +228,7 @@ public class Utils {
      * @param poligon
      * @return 4 value array with [min x, max x, min y, max y] values
      */
-    public static double[] poligonBounds(Point[] poligon){
+    public static double[] poligonBounds(Point[] poligon, double radius){
         double xi =  poligon[0].getX();
         double xf = poligon[0].getX();
         double yi = poligon[0].getY();
@@ -214,6 +247,10 @@ public class Utils {
                 yf = p.getY();
             }
         }
+        xi -= (radius + 2*Data.precision);
+        yi -= (radius + 2*Data.precision);
+        xf += (radius + 2*Data.precision);
+        yf += (radius + 2*Data.precision);
         double[] ans =  {xi,xf,yi,yf};
         return ans;
     }
