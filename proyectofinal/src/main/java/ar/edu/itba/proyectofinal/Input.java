@@ -168,18 +168,18 @@ class Input {
         int position = 0;
 
         String[] particle = line.split("\\t");
-        if (particle[WallType.CANT_POINTS.ordinal()].equals("I")){
+        if (particle[WallType.WALL_RADIUS.ordinal()].equals("I")){
             initial = true;
             position = 1;
         }
 
-        int countPoints = Integer.parseInt(particle[position]);
+        int countPoints = Integer.parseInt(particle[1 + position]);
         if (particle.length != position + WallType.WALL_X.ordinal() + countPoints * 2) {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
         double mass = 1;
-        double radius = Data.wall_radius;
+        double radius = Double.parseDouble(particle[WallType.WALL_RADIUS.ordinal() + position]);
 
         Point[] points = new Point[countPoints];
 
