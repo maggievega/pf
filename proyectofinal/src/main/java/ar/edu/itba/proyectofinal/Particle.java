@@ -55,6 +55,8 @@ public class Particle {
     //values are different to zero if particles are colliding.
     private List<Double> springs;
 
+    private int stuckCounter;
+
 
     //For sinusoidal noise
     private double phase;
@@ -137,7 +139,12 @@ public class Particle {
         double aux = desiredAngle - orientation;
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
 
-        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity + sinusoidalNoise(time) ;
+        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity; //+ sinusoidalNoise(time) ;
+
+//        System.out.println("v: " + this.getVel().module() + " - w : " + Math.abs(this.getAngularVelocity())  );
+        if(isTrapped()){
+            drivingTorque += sinusoidalNoise(time);
+        }
 
         Point desiredDirection = new Point(target.getX() - massCenter.getX(),
                 target.getY() - massCenter.getY());
@@ -153,6 +160,19 @@ public class Particle {
                 (desiredVel.getY() - vel.getY()) * mass / Data.characteristicT);
         this.torque += drivingTorque;
         force.add(drivingForce);
+    }
+
+    private boolean isTrapped() {
+        if (this.getAngularVelocity() < 0.2 && this.getVel().module() < 0.2) {
+            if(stuckCounter > 5){
+                return true;
+            }else{
+                stuckCounter++;
+            }
+        }else{
+            stuckCounter=0;
+        }
+        return false;
     }
 
     public void getContactForce(List<Particle> particleList, double time){
@@ -658,7 +678,7 @@ public class Particle {
      * @return
      */
     public double sinusoidalNoise(double t){
-        double longAxis = 0.115 + 2 * Data.rMax;
+        double longAxis = 0.5;
         return Data.eta * Data.mMax * longAxis * Data.grav * Math.sin(t * (Math.PI * 2) + phase);
     }
 

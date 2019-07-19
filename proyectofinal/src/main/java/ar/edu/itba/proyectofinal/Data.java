@@ -6,8 +6,8 @@ import java.util.List;
 public class Data {
 
     public static double angleLength = 2;
-    public static double mMin = 45;
-    public static double mMax = 114;
+    public static double mMin = (159/2) - 20;
+    public static double mMax = (159/2) + 20;
     public static double rMin = 0.12;
     public static double rMax = 0.165;
 
