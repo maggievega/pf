@@ -139,7 +139,7 @@ class Input {
         }
         
         for (int j = 0; j < countParticles; j ++) {
-            double mass = Math.random() * (Data.mMax - Data.mMin) + Data.mMin;
+            double mass = Utils.getMass();
             double radius = Math.random() * (Data.rMax - Data.rMin) + Data.rMin;
             Point massCenter = Utils.massCenter(points, Data.precision, radius );
             double inertiaMoment = Utils.inertiaMoment(points, massCenter, Data.precision, radius);

@@ -34,7 +34,7 @@ public class Simulator {
 //                output.printSimSystem(particles,time);
 //                System.out.println( 100.0 * time / Data.totalTime);
 //                System.out.println(printCont);
-                System.out.println("TARDO :  " + (System.currentTimeMillis() - prevtime));
+//                System.out.println("TARDO :  " + (System.currentTimeMillis() - prevtime));
                 prevtime = System.currentTimeMillis();
                 printCont++;
 

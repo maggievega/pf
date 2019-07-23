@@ -3,6 +3,7 @@ package ar.edu.itba.proyectofinal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class Utils {
@@ -176,6 +177,18 @@ public class Utils {
             }
         }
         return inertia / points;
+    }
+
+    public static double getMass(){
+        Random r = new Random();
+        double mass = r.nextGaussian()*13 + 67;
+        if(mass < 45){
+            mass = 45;
+        }
+        if(mass >114){
+            mass= 114;
+        }
+        return mass;
     }
 
     public static boolean insideRadius(Point[] poligon, Point p, double radius){

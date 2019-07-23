@@ -142,9 +142,12 @@ public class Particle {
         double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity; //+ sinusoidalNoise(time) ;
 
 //        System.out.println("v: " + this.getVel().module() + " - w : " + Math.abs(this.getAngularVelocity())  );
-        if(isTrapped()){
-            drivingTorque += sinusoidalNoise(time);
-        }
+//        if(isTrapped()){
+//            drivingTorque += sinusoidalNoise(time);
+//        }else{
+//            drivingTorque += 0.2 * sinusoidalNoise(time);
+//        }
+        drivingTorque += sinusoidalNoise(time);
 
         Point desiredDirection = new Point(target.getX() - massCenter.getX(),
                 target.getY() - massCenter.getY());
@@ -164,7 +167,7 @@ public class Particle {
 
     private boolean isTrapped() {
         if (this.getAngularVelocity() < 0.2 && this.getVel().module() < 0.2) {
-            if(stuckCounter > 5){
+            if(stuckCounter > 4){
                 return true;
             }else{
                 stuckCounter++;
@@ -199,94 +202,9 @@ public class Particle {
         return id;
     }
 
-    public void checkCollision(Particle p, double time) {
-
-        double MINMAX = Double.MAX_VALUE;
-        double closestDistance, minDistance = Double.MAX_VALUE;
-        Point a = null, b = null, closestPoint = null;
-        List<Segment> p1Segments, p2Segments;
-        List<Point> p1Points, p2Points;
-        p1Segments = this.getSegments();
-        p2Segments = p.getSegments();
-        p1Points = this.getPoints();
-        p2Points = p.getPoints();
-
-        /*For each segment in the current particle, find the closest point to each of the other particle's edges.
-          If the distance to this edge is smaller, than the previosly recorded minimum distance to the other particle,
-          save the closest point on the current particle's segment and the corresponding closest point
-         */
-        for (Segment segment : p1Segments){
-            for (Point point : p2Points){
-                closestPoint = Utils.completeClosestPoint(segment, point);
-                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earlier
-                   TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
-                */
-                closestDistance = closestPoint.squaredDistanceBetween(point);
-//                if (closestDistance < minDistance){
-                minDistance = closestDistance;
-                a = closestPoint;
-                b = point;
-                if(minDistance < MINMAX){
-                    MINMAX = minDistance;
-                }
-
-                if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
-                    double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
-                    if(overlap <0){
-                        int ab = 3;
-                        int j = ab + 4;
-                    }
-                    Collider.collisionForces(this,p,a,b, overlap, time);
-                    //this.applyCollisionForces(p, a, b);
-                }
-//                }
-            }
-        }
-
-        /*Repeat process for other particle's segments
-         */
-        for (Segment segment : p2Segments){
-            for (Point point : p1Points){
-                closestPoint = Utils.completeClosestPoint(segment, point);
-                closestDistance = closestPoint.squaredDistanceBetween(point);
-//                if (closestDistance < minDistance){
-                minDistance = closestDistance;
-                b = closestPoint;
-                a = point;
-//                }
-                if(minDistance< MINMAX){
-                    MINMAX = minDistance;
-                }
-                if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
-                    double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
-                    if(overlap <0){
-                        int ab = 3;
-                        int j = ab + 4;
-                    }
-                    Collider.collisionForces(this,p,a,b, overlap, time);
-                    //this.applyCollisionForces(p, a, b);
-                }
-            }
-        }
-
-        /*If closest distance found between both particle's points is smaller than the addition of both's radius,
-        calculate and apply collision force
-         */
-        if (! (MINMAX < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius()))) {
-//            double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
-//            if(overlap <0){
-//                int ab = 3;
-//                int j = ab + 4;
-//            }
-//            Collider.collisionForces(this,p,a,b, overlap);
-            //this.applyCollisionForces(p, a, b);
-            this.resetSpring(p.getId());
-        }
-    }
-
-    //oroginal
-//    public void checkCollision(Particle p) {
+//    public void checkCollision(Particle p, double time) {
 //
+//        double MINMAX = Double.MAX_VALUE;
 //        double closestDistance, minDistance = Double.MAX_VALUE;
 //        Point a = null, b = null, closestPoint = null;
 //        List<Segment> p1Segments, p2Segments;
@@ -307,12 +225,24 @@ public class Particle {
 //                   TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
 //                */
 //                closestDistance = closestPoint.squaredDistanceBetween(point);
-//                if (closestDistance < minDistance){
-//                    minDistance = closestDistance;
-//                    a = closestPoint;
-//                    b = point;
-//
+////                if (closestDistance < minDistance){
+//                minDistance = closestDistance;
+//                a = closestPoint;
+//                b = point;
+//                if(minDistance < MINMAX){
+//                    MINMAX = minDistance;
 //                }
+//
+//                if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
+//                    double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
+//                    if(overlap <0){
+//                        int ab = 3;
+//                        int j = ab + 4;
+//                    }
+//                    Collider.collisionForces(this,p,a,b, overlap, time);
+//                    //this.applyCollisionForces(p, a, b);
+//                }
+////                }
 //            }
 //        }
 //
@@ -322,10 +252,22 @@ public class Particle {
 //            for (Point point : p1Points){
 //                closestPoint = Utils.completeClosestPoint(segment, point);
 //                closestDistance = closestPoint.squaredDistanceBetween(point);
-//                if (closestDistance < minDistance){
-//                    minDistance = closestDistance;
-//                    b = closestPoint;
-//                    a = point;
+////                if (closestDistance < minDistance){
+//                minDistance = closestDistance;
+//                b = closestPoint;
+//                a = point;
+////                }
+//                if(minDistance< MINMAX){
+//                    MINMAX = minDistance;
+//                }
+//                if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
+//                    double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
+//                    if(overlap <0){
+//                        int ab = 3;
+//                        int j = ab + 4;
+//                    }
+//                    Collider.collisionForces(this,p,a,b, overlap, time);
+//                    //this.applyCollisionForces(p, a, b);
 //                }
 //            }
 //        }
@@ -333,20 +275,81 @@ public class Particle {
 //        /*If closest distance found between both particle's points is smaller than the addition of both's radius,
 //        calculate and apply collision force
 //         */
-//        if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
-//            double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
-//            if(overlap <0){
-//                int ab = 3;
-//                int j = ab + 4;
-//            }
-//            Collider.collisionForces(this,p,a,b, overlap);
+//        if (! (MINMAX < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius()))) {
+////            double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
+////            if(overlap <0){
+////                int ab = 3;
+////                int j = ab + 4;
+////            }
+////            Collider.collisionForces(this,p,a,b, overlap);
 //            //this.applyCollisionForces(p, a, b);
-//        }
-//        //If they cannot collide, spring is reset
-//        else {
 //            this.resetSpring(p.getId());
 //        }
 //    }
+
+    //oroginal
+    public void checkCollision(Particle p, double time) {
+
+        double closestDistance, minDistance = Double.MAX_VALUE;
+        Point a = null, b = null, closestPoint = null;
+        List<Segment> p1Segments, p2Segments;
+        List<Point> p1Points, p2Points;
+        p1Segments = this.getSegments();
+        p2Segments = p.getSegments();
+        p1Points = this.getPoints();
+        p2Points = p.getPoints();
+
+        /*For each segment in the current particle, find the closest point to each of the other particle's edges.
+          If the distance to this edge is smaller, than the previosly recorded minimum distance to the other particle,
+          save the closest point on the current particle's segment and the corresponding closest point
+         */
+        for (Segment segment : p1Segments){
+            for (Point point : p2Points){
+                closestPoint = Utils.completeClosestPoint(segment, point);
+                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earlier
+                   TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
+                */
+                closestDistance = closestPoint.squaredDistanceBetween(point);
+                if (closestDistance < minDistance){
+                    minDistance = closestDistance;
+                    a = closestPoint;
+                    b = point;
+
+                }
+            }
+        }
+
+        /*Repeat process for other particle's segments
+         */
+        for (Segment segment : p2Segments){
+            for (Point point : p1Points){
+                closestPoint = Utils.completeClosestPoint(segment, point);
+                closestDistance = closestPoint.squaredDistanceBetween(point);
+                if (closestDistance < minDistance){
+                    minDistance = closestDistance;
+                    b = closestPoint;
+                    a = point;
+                }
+            }
+        }
+
+        /*If closest distance found between both particle's points is smaller than the addition of both's radius,
+        calculate and apply collision force
+         */
+        if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
+            double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
+            if(overlap <0){
+                int ab = 3;
+                int j = ab + 4;
+            }
+            Collider.collisionForces(this,p,a,b, overlap, time);
+            //this.applyCollisionForces(p, a, b);
+        }
+        //If they cannot collide, spring is reset
+        else {
+            this.resetSpring(p.getId());
+        }
+    }
 
 
     public void applyCollisionForces(Particle p, Point a, Point b){
@@ -532,10 +535,11 @@ public class Particle {
     public Target getCurrentTarget() { return this.targets.get(indexTarget); }
 
     private boolean reached(Target t) {
-        return this.massCenter.squaredDistanceBetween(t.getClosest())
-                <= (this.maxDistance + this.radius) *
-                (this.maxDistance + this.radius);
-
+//        return this.massCenter.squaredDistanceBetween(t.getClosest())
+//                <= (this.maxDistance + this.radius) *
+//                (this.maxDistance + this.radius);
+//
+        return this.massCenter.distanceBetween(t.getClosest()) <= 0.05;
     }
 
     public boolean reachedTarget() { return this.reached(this.getCurrentTarget());}

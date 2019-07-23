@@ -16,7 +16,7 @@ public class Collider {
 //        p1.addForce(tForce);
         p1.addForce(nForce);
 //        p1.addForce(tForce);
-        Point toCollision = relative(p1.getMassCenter(), a);
+        Point toCollision = relative(p1.getMassCenter(), middlePoint(a,b,p1.getRadius(),p2.getRadius()));
         p1.addTorque(-xProduct(toCollision, nForce));
 //        p1.addTorque(-xProduct(toCollision, tForce));
 //        System.out.println("normal :  " + nForce.module() + " --- " + tForce.module() + "  : tangential");
@@ -39,7 +39,7 @@ public class Collider {
 
 //        System.out.println(time + "\t" + ext);
         //todo check if overlap is right
-        Point tangentialForce =  vectorTimes(tangentVersor, -Data.kt * overlap  );
+        Point tangentialForce =  vectorTimes(tangentVersor, -Data.kt * ext  );
         Point dampningTangentialForce = vectorTimes(relativeVelocityTang, -Data.yt * mr);
         Point totalForce = addForces(tangentialForce, dampningTangentialForce);
 
@@ -51,7 +51,7 @@ public class Collider {
 //        p1.addTorque(-xProduct(toCollision, tangentialForce));
 //        p1.addTorque(-xProduct(toCollision, dampningTangentialForce));
 
-        return totalForce;
+        return tangentialForce;
     }
 
     //Fn = -kn * overlap - gamman * vreln
