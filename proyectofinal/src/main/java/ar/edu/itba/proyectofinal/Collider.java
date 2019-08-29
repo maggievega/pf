@@ -16,7 +16,7 @@ public class Collider {
 //        p1.addForce(tForce);
         p1.addForce(nForce);
 //        p1.addForce(tForce);
-        Point toCollision = relative(p1.getMassCenter(), middlePoint(a,b,p1.getRadius(),p2.getRadius()));
+        Point toCollision = relative(p1.getMassCenter(), middlePoint(a,b));
         p1.addTorque(-xProduct(toCollision, nForce));
 //        p1.addTorque(-xProduct(toCollision, tForce));
 //        System.out.println("normal :  " + nForce.module() + " --- " + tForce.module() + "  : tangential");
@@ -24,7 +24,8 @@ public class Collider {
 
     //Ft = -kt  * ERARO - gammat * vrelt
     private static Point findTangentialForce(Particle p1, Particle p2, Point a, Point b,double overlap, double mr, double time){
-        Point relV = relative(p2.getVel(), p1.getVel());
+//        Point relV = relative(p2.getVel(), p1.getVel());
+        Point relV = relativeVelocity(p1,p2,a,b);
         Point r = relative(a,b);
         Point tangentVersor = tangentVersor(r);
         Point relativeVelocityTang = vectorTimes(tangentVersor, project(tangentVersor, relV));
@@ -56,7 +57,8 @@ public class Collider {
 
     //Fn = -kn * overlap - gamman * vreln
     private static Point findNormalForce(Particle p1, Particle p2, Point a, Point b, double overlap, double mr){
-        Point relV = relative(p2.getVel(), p1.getVel());
+//        Point relV = relative(p2.getVel(), p1.getVel());
+        Point relV = relativeVelocity(p1,p2,a,b);
 
         //Inside pointig vector
         Point r = relative(a,b);
@@ -127,7 +129,33 @@ public class Collider {
         return a.getX() * b.getX() >= 0 && a.getY() * b.getY() >= 0 ? 1.0 : -1.0;
     }
 
-    private static Point middlePoint(Point a, Point b, double r1, double r2){
+    private static Point middlePoint(Point a, Point b) {
+        return new Point((a.getX() + b.getX()) / 2, (a.getY() + b.getY()) / 2);
+    }
+
+    //velpart2 - velpart1
+    private static Point relativeVelocity(Particle p1, Particle p2, Point a, Point b){
+        Point p1VelocityAtCollision = velocityAtCollisionPoint(p1, a);
+        Point p2VelocityAtCollision = velocityAtCollisionPoint(p2,b);
+        return new Point(p2VelocityAtCollision.getX()-p1VelocityAtCollision.getX(),
+                p2VelocityAtCollision.getY() - p1VelocityAtCollision.getY());
+    }
+
+    private static Point velocityAtCollisionPoint(Particle p, Point cp){
+        double angularVelocity = p.getAngularVelocity();
+        Point massCenterVelocity = p.getVel();
+        Point r = relative(cp,p.getMassCenter());
+        double massCenterDistCollision = r.module();
+        r = versor(r);
+        Point angularAgregatedVelocity = angularVelocity >= 0 ?
+                new Point(r.getY(), -r.getX()) : new Point(-r.getY(), r.getX());
+        angularAgregatedVelocity.times(massCenterDistCollision);
+        return angularAgregatedVelocity;
+    }
+
+
+
+    private static Point middlePointWithRadius(Point a, Point b, double r1, double r2){
         Point r = relative(a,b);
         Point versor = versor(r);
         double overlap = (r1+r2) - r.module();

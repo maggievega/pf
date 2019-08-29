@@ -11,20 +11,22 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Point a = new Point (0,0);
+        Point a = new Point (1,0);
         Point b = new Point (0,1);
 
-        Point[] pol = new Point[]{a,b};
-        double[] bounds = Utils.poligonBounds(pol, 0.12);
-        System.out.println(bounds[0] +  " " + bounds[1] + " " + bounds[2] + " " + bounds[3]);
+        System.out.println(xProduct(a,b));
 
-        Point mc = Utils.massCenter(pol,Data.precision, 0.12);
-        double im1 = Utils.inertiaMoment(pol,mc,Data.precision,0.12);
-        double im2 = Utils.inertiaMoment2(pol,mc,Data.precision,0.12);
-
-        System.out.println(im1 +  "    "  + im2);
-
-        System.out.println(mc.getX() +  "  -  " + mc.getY());
+//        Point[] pol = new Point[]{a,b};
+//        double[] bounds = Utils.poligonBounds(pol, 0.12);
+//        System.out.println(bounds[0] +  " " + bounds[1] + " " + bounds[2] + " " + bounds[3]);
+//
+//        Point mc = Utils.massCenter(pol,Data.precision, 0.12);
+//        double im1 = Utils.inertiaMoment(pol,mc,Data.precision,0.12);
+//        double im2 = Utils.inertiaMoment2(pol,mc,Data.precision,0.12);
+//
+//        System.out.println(im1 +  "    "  + im2);
+//
+//        System.out.println(mc.getX() +  "  -  " + mc.getY());
 
 
 
@@ -347,6 +349,11 @@ public class Main {
 //
 //        return inertia * (mass/points);
 //    }
+
+
+    private static double xProduct(Point p1, Point p2){
+        return p1.getX() * p2.getY() - p1.getY() * p2.getX();
+    }
 
     //TODO: At returns, corresponding points should be returned
 
