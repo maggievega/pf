@@ -16,6 +16,8 @@ public class Main {
 
         System.out.println(xProduct(a,b));
 
+
+
 //        Point[] pol = new Point[]{a,b};
 //        double[] bounds = Utils.poligonBounds(pol, 0.12);
 //        System.out.println(bounds[0] +  " " + bounds[1] + " " + bounds[2] + " " + bounds[3]);

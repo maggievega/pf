@@ -147,7 +147,7 @@ public class Particle {
 //        }else{
 //            drivingTorque += 0.2 * sinusoidalNoise(time);
 //        }
-        drivingTorque += sinusoidalNoise(time);
+        drivingTorque +=  sinusoidalNoise(time);
 
         Point desiredDirection = new Point(target.getX() - massCenter.getX(),
                 target.getY() - massCenter.getY());

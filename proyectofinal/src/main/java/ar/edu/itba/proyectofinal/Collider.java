@@ -38,21 +38,17 @@ public class Collider {
 
         double ext = p1.getSpring(p2.getId());
 
-//        System.out.println(time + "\t" + ext);
-        //todo check if overlap is right
-        Point tangentialForce =  vectorTimes(tangentVersor, -Data.kt * ext  );
+
+        Point tangentialForce =  vectorTimes(tangentVersor, Data.kt * ext  );
         Point dampningTangentialForce = vectorTimes(relativeVelocityTang, -Data.yt * mr);
+
+        //new testing
+        dampningTangentialForce.times(-1);
         Point totalForce = addForces(tangentialForce, dampningTangentialForce);
+        return totalForce;
 
 
-//        p1.addForce(tangentialForce);
-//        p1.addForce(dampningTangentialForce);
-
-//        p1.addTorque(-xProduct(toCollision, totalForce));
-//        p1.addTorque(-xProduct(toCollision, tangentialForce));
-//        p1.addTorque(-xProduct(toCollision, dampningTangentialForce));
-
-        return tangentialForce;
+//        return totalForce;
     }
 
     //Fn = -kn * overlap - gamman * vreln
@@ -72,29 +68,13 @@ public class Collider {
         Point velocityVersor = versor(p1.getVel());
         Point normalForceVersor = versor(normalForce);
         Point normalDampningVersor = versor(dampningNormalForce);
-        if (vel.module() < 0.01){
-            int afdsa = 23;
-        }
-        if(dampningNormalForce.getX() != 0 || dampningNormalForce.getY() != 0){
-            int asd = 1;
-        }
+
+        //new testing
+        dampningNormalForce.times(-1);
         Point totalForce = addForces(normalForce, dampningNormalForce);
-        Point toCollision = relative(p1.getMassCenter(), a);
-//        p1.addForce(totalForce);
-//        p1.addForce(normalForce);
-//        p1.addForce(dampningNormalForce);
-
-        double torque = xProduct(toCollision, normalForce);
-        double tangtorque = xProduct(toCollision, dampningNormalForce);
-        if (torque != 0 && tangtorque!= 0){
-            int asdasd = 2;
-        }
-//        p1.addTorque(-xProduct(toCollision, totalForce));
-//        p1.addTorque(-xProduct(toCollision, normalForce));
-        //todo testing this
-//        p1.addTorque(-xProduct(toCollision, dampningNormalForce));
-
         return totalForce;
+
+//        return totalForce;
     }
 
     private static Point relative(Point p1, Point p2){
@@ -150,6 +130,7 @@ public class Collider {
         Point angularAgregatedVelocity = angularVelocity >= 0 ?
                 new Point(r.getY(), -r.getX()) : new Point(-r.getY(), r.getX());
         angularAgregatedVelocity.times(massCenterDistCollision);
+        angularAgregatedVelocity.add(massCenterVelocity);
         return angularAgregatedVelocity;
     }
 
