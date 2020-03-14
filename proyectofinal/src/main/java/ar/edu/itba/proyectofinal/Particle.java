@@ -54,6 +54,7 @@ public class Particle {
     // List representing the length of the imaginary springs in tangential direction between colliding particles. Where
     //values are different to zero if particles are colliding.
     private List<Double> springs;
+    private List<Point> springs2D;
 
     private int stuckCounter;
 
@@ -98,22 +99,31 @@ public class Particle {
 
     public void setUpSprings(int amount){
         springs = new ArrayList<>(amount);
+        springs2D = new ArrayList<>(amount);
         for (int i = 0; i < amount; i++) {
             springs.add(0.0);
+            springs2D.add(new Point(0,0));
         }
     }
 
     public void resetSpring(int id){
         springs.set(id, 0.0);
+        springs2D.set(id, new Point(0,0));
     }
 
     public void extendSpring(int id, double extension){
         springs.set(id, springs.get(id) + extension);
     }
 
+    public void extendSpring2D(int id, Point extension){
+        springs2D.get(id).add(extension);
+    }
+
     public double getSpring(int id){
         return springs.get(id);
     }
+
+    public Point getSpring2D(int id) { return springs2D.get(id);}
 
     /**
      *
@@ -147,7 +157,7 @@ public class Particle {
 //        }else{
 //            drivingTorque += 0.2 * sinusoidalNoise(time);
 //        }
-        drivingTorque +=  sinusoidalNoise(time);
+//        drivingTorque +=  sinusoidalNoise(time);
 
         Point desiredDirection = new Point(target.getX() - massCenter.getX(),
                 target.getY() - massCenter.getY());
@@ -180,10 +190,13 @@ public class Particle {
 
     public void getContactForce(List<Particle> particleList, double time){
         for (Particle p : particleList)
-            if (!p.equals(this) && this.canCollide(p))
+            if (!p.equals(this) && this.canCollide(p)) {
                 this.checkCollision(p, time);
-            else
+
+            } else {
                 this.resetSpring(p.getId());
+            }
+
     }
 
     /**
@@ -198,8 +211,26 @@ public class Particle {
                     (this.maxDistance + this.radius + p.maxDistance + p.radius);
     }
 
+    public double maxSpring() {
+        double max = 0;
+        for (int i = 0; i < springs.size(); i++) {
+            if (Math.abs(springs.get(i)) > max ) {
+                max = Math.abs(springs.get(i));
+            }
+        }
+        return max;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public void setSpring(int particleId, double extension) {
+        this.springs.set(particleId, extension);
+    }
+
+    public void setSpring2D(int particleId, Point extension) {
+        this.springs2D.set(particleId, extension);
     }
 
 //    public void checkCollision(Particle p, double time) {

@@ -35,6 +35,10 @@ public class Point {
 
     public void add(Point p) { this.x += p.getX(); this.y += p.getY(); }
 
+    public Point minus(Point p) {
+        return new Point(this.x -p.x, this.y -p.y);
+    }
+
     public double squaredDistanceBetween (Point p) {
         return (this.getX() - p.getX()) * (this.getX() - p.getX()) + (this.getY() - p.getY()) * (this.getY() - p.getY());
     }

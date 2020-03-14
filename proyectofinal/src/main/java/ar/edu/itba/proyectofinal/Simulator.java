@@ -1,6 +1,7 @@
 package ar.edu.itba.proyectofinal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Simulator {
@@ -14,6 +15,7 @@ public class Simulator {
     private static int leftRoom = 1;
 
     private long prevtime;
+    private int frame = 0;
 
     public Simulator(List<Particle> p, Output o) {
         output = o;;
@@ -36,8 +38,15 @@ public class Simulator {
 //                System.out.println(printCont);
 //                System.out.println("TARDO :  " + (System.currentTimeMillis() - prevtime));
                 prevtime = System.currentTimeMillis();
-                printCont++;
 
+
+//                List<Double> maxSprings = new ArrayList<>();
+//                for (int i = 0; i < particles.size(); i++) {
+//                    maxSprings.add(particles.get(i).maxSpring());
+//                }
+//                System.out.println("Frame: " + frame++ + " - " +  Collections.max(maxSprings));
+
+                printCont++;
             }
 
             // If 20 seconds have passed and no particles leave. They are stuck, finish simulation
