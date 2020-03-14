@@ -24,8 +24,8 @@ public class Collider {
 
     //Ft = -kt  * ERARO - gammat * vrelt
     private static Point findTangentialForce(Particle p1, Particle p2, Point a, Point b,double overlap, double mr, double time){
-//        Point relV = relative(p2.getVel(), p1.getVel());
-        Point relV = relativeVelocity(p1,p2,a,b);
+//        Point relV = relativeVelocity(p1,p2,a,b);
+        Point relV = relativeVelocity(p1,p2,middlePoint(a,b));
         Point r = relative(a,b);
         Point tangentVersor = tangentVersor(r);
         Point relativeVelocityTang = vectorTimes(tangentVersor, project(tangentVersor, relV));
@@ -40,10 +40,7 @@ public class Collider {
 
 
         Point tangentialForce =  vectorTimes(tangentVersor, Data.kt * ext  );
-        Point dampningTangentialForce = vectorTimes(relativeVelocityTang, -Data.yt * mr);
-
-        //new testing
-        dampningTangentialForce.times(-1);
+        Point dampningTangentialForce = vectorTimes(relativeVelocityTang, Data.yt * mr);
         Point totalForce = addForces(tangentialForce, dampningTangentialForce);
         return totalForce;
 
@@ -54,7 +51,8 @@ public class Collider {
     //Fn = -kn * overlap - gamman * vreln
     private static Point findNormalForce(Particle p1, Particle p2, Point a, Point b, double overlap, double mr){
 //        Point relV = relative(p2.getVel(), p1.getVel());
-        Point relV = relativeVelocity(p1,p2,a,b);
+//        Point relV = relativeVelocity(p1,p2,a,b);
+        Point relV = relativeVelocity(p1,p2,middlePoint(a,b));
 
         //Inside pointig vector
         Point r = relative(a,b);
@@ -62,7 +60,7 @@ public class Collider {
         Point relativeVelocityNorm = vectorTimes(normalVersor, project(normalVersor, relV));
 
         Point normalForce = vectorTimes(normalVersor, -Data.kn * overlap);
-        Point dampningNormalForce = vectorTimes(relativeVelocityNorm, -Data.yn * mr);
+        Point dampningNormalForce = vectorTimes(relativeVelocityNorm, Data.yn * mr);
 
         Point vel = p1.getVel();
         Point velocityVersor = versor(p1.getVel());
@@ -70,7 +68,6 @@ public class Collider {
         Point normalDampningVersor = versor(dampningNormalForce);
 
         //new testing
-        dampningNormalForce.times(-1);
         Point totalForce = addForces(normalForce, dampningNormalForce);
         return totalForce;
 
@@ -114,9 +111,9 @@ public class Collider {
     }
 
     //velpart2 - velpart1
-    private static Point relativeVelocity(Particle p1, Particle p2, Point a, Point b){
-        Point p1VelocityAtCollision = velocityAtCollisionPoint(p1, a);
-        Point p2VelocityAtCollision = velocityAtCollisionPoint(p2,b);
+    private static Point relativeVelocity(Particle p1, Particle p2, Point middle){
+        Point p1VelocityAtCollision = velocityAtCollisionPoint(p1, middle);
+        Point p2VelocityAtCollision = velocityAtCollisionPoint(p2,middle);
         return new Point(p2VelocityAtCollision.getX()-p1VelocityAtCollision.getX(),
                 p2VelocityAtCollision.getY() - p1VelocityAtCollision.getY());
     }
