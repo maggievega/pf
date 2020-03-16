@@ -116,7 +116,10 @@ public class Particle {
     }
 
     public void extendSpring2D(int id, Point extension){
-        springs2D.get(id).add(extension);
+        Point spring = springs2D.get(id);
+        spring.add(extension);
+        springs2D.set(id, extension);
+//        springs2D.get(id).add(extension);
     }
 
     public double getSpring(int id){
@@ -149,7 +152,7 @@ public class Particle {
         double aux = desiredAngle - orientation;
         double deltaAngle = aux <= Math.PI ? aux : aux - 2 * Math.PI;
 
-        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity; //+ sinusoidalNoise(time) ;
+        double drivingTorque =  Data.SD * deltaAngle - Data.beta * angularVelocity;// + sinusoidalNoise(time) ;
 
 //        System.out.println("v: " + this.getVel().module() + " - w : " + Math.abs(this.getAngularVelocity())  );
 //        if(isTrapped()){
@@ -157,7 +160,7 @@ public class Particle {
 //        }else{
 //            drivingTorque += 0.2 * sinusoidalNoise(time);
 //        }
-//        drivingTorque +=  sinusoidalNoise(time);
+        drivingTorque +=  sinusoidalNoise(time);
 
         Point desiredDirection = new Point(target.getX() - massCenter.getX(),
                 target.getY() - massCenter.getY());
