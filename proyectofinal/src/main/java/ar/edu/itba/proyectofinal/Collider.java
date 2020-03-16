@@ -54,10 +54,10 @@ public class Collider {
 
 
         p1.extendSpring2D(p2.getId(), springExtension);
-        Point ext2D = p1.getSpring2D(p2.getId());
-        ext2D.times(-Data.kt);
+        Point tangentialForce = p1.getSpring2D(p2.getId());
+        tangentialForce.times(Data.kt);
 
-        Point tangentialForce =  ext2D;
+//        Point tangentialForce =  ext2D;
 
         Point dampningTangentialForce = vectorTimes(relativeVelocityTang, Data.yt * mr);
         Point totalForce = addForces(tangentialForce, dampningTangentialForce);

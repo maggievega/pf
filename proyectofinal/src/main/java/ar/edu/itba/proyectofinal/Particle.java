@@ -118,8 +118,7 @@ public class Particle {
     public void extendSpring2D(int id, Point extension){
         Point spring = springs2D.get(id);
         spring.add(extension);
-        springs2D.set(id, extension);
-//        springs2D.get(id).add(extension);
+        springs2D.set(id, spring);
     }
 
     public double getSpring(int id){
