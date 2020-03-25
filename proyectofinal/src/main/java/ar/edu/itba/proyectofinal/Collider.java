@@ -17,7 +17,7 @@ public class Collider {
             Point r = relative(a,b);
             Point tangentVersor = tangentVersor(r);
             Point relativeVelocityTang = vectorTimes(tangentVersor, project(tangentVersor, relV));
-            relativeVelocityTang.times(Data.yt);
+            relativeVelocityTang.times(Data.yt * mr);
             Point tangSpring = tForce.minus(relativeVelocityTang);
             tangSpring.times(1/Data.kt);
 
@@ -36,9 +36,9 @@ public class Collider {
 //        System.out.println("normal :  " + nForce.module() + " --- " + tForce.module() + "  : tangential");
     }
 
-    //Ft = -kt  * ERARO - gammat * vrelt
+    //Ft = -kt  * spring - gammat * vrelt
     private static Point findTangentialForce(Particle p1, Particle p2, Point a, Point b,double overlap, double mr, double time){
-//        Point relV = relativeVelocity(p1,p2,a,b);
+
         Point relV = relativeVelocity(p1,p2,middlePoint(a,b));
         Point r = relative(a,b);
         Point tangentVersor = tangentVersor(r);
@@ -55,7 +55,7 @@ public class Collider {
 
         p1.extendSpring2D(p2.getId(), springExtension);
         Point tangentialForce = p1.getSpring2D(p2.getId());
-        tangentialForce.times(Data.kt);
+        tangentialForce.times(-Data.kt);
 
 //        Point tangentialForce =  ext2D;
 
@@ -64,7 +64,6 @@ public class Collider {
         return totalForce;
 
 
-//        return totalForce;
     }
 
     //Fn = -kn * overlap - gamman * vreln
