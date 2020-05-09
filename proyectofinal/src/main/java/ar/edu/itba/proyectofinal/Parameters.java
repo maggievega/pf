@@ -23,7 +23,7 @@ public class Parameters {
 
     @Parameter(	names = {"--exit"},
             description = "Particles exist archive")
-    public String exit = "exit.txt";
+    public String exit = "exit2dspringv1.txt";
 
     @Parameter(	names = {"--grid"},
         description = "Particles exist archive")
@@ -32,7 +32,7 @@ public class Parameters {
 
     @Parameter(	names = {"--out"},
             description = "Particles ovito")
-    public String out = "sim.xyz";
+    public String out = "sim2dspringv1.xyz";
 
     @Parameter(	names = {"--help"},
             description = "Print this help",
