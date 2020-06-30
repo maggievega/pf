@@ -347,8 +347,14 @@ public class Particle {
                     minDistance = closestDistance;
                     a = closestPoint;
                     b = point;
-
                 }
+
+                if (closestDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
+                    double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
+                    Collider.collisionForces(this,p,closestPoint, point, overlap, time);
+                    //this.applyCollisionForces(p, a, b);
+                }
+
             }
         }
 
@@ -358,10 +364,17 @@ public class Particle {
             for (Point point : p1Points){
                 closestPoint = Utils.completeClosestPoint(segment, point);
                 closestDistance = closestPoint.squaredDistanceBetween(point);
+
                 if (closestDistance < minDistance){
                     minDistance = closestDistance;
                     b = closestPoint;
                     a = point;
+                }
+
+                if (closestDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
+                    double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
+                    Collider.collisionForces(this,p,point,closestPoint, overlap, time);
+                    //this.applyCollisionForces(p, a, b);
                 }
             }
         }
@@ -370,12 +383,8 @@ public class Particle {
         calculate and apply collision force
          */
         if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
-            double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
-            if(overlap <0){
-                int ab = 3;
-                int j = ab + 4;
-            }
-            Collider.collisionForces(this,p,a,b, overlap, time);
+//            double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
+//            Collider.collisionForces(this,p,a,b, overlap, time);
             //this.applyCollisionForces(p, a, b);
         }
         //If they cannot collide, spring is reset

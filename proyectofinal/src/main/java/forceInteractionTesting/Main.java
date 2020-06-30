@@ -3,6 +3,7 @@ package forceInteractionTesting;
 
 import ar.edu.itba.proyectofinal.*;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,12 +12,17 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Point a = new Point (1,0);
-        Point b = new Point (0,1);
-
-        System.out.println(xProduct(a,b));
 
 
+        Segment ab = new Segment(new Point(5.79276, 0.0537232), new Point(6.57767, 0.208362));
+        Point wall = new Point(6, 0);
+
+        Point closest = testclosest(ab,wall);
+
+        System.out.println(testclosest(ab, wall));
+
+        System.out.println("Distance is " + closest.distanceBetween(wall) + " radius add " +  (0.05 + 0.14004));
+        System.out.println((0.05 + 0.14004) - closest.distanceBetween(wall));
 
 //        Point[] pol = new Point[]{a,b};
 //        double[] bounds = Utils.poligonBounds(pol, 0.12);
@@ -547,6 +553,35 @@ public class Main {
         System.out.println(test4 + "    " + test5  + "    " + test6);
         System.out.println("asd");
         System.out.println(pDistance(0,0,-2,3,-4,7));
+    }
+
+    public static Point testclosest(Segment ab, Point p) {
+        double x1= ab.getP1().getX();
+        double y1= ab.getP1().getY();
+        double x2= ab.getP2().getX();
+        double y2= ab.getP2().getY();
+        double a = p.getX();
+        double b = p.getY();
+
+        Point lineVec = new Point(x2-x1, y2-y1);
+        Point pVec = new Point(a-x1, b-y1);
+
+        double lineLength =  lineVec.module();
+        Point lineUnitVec = new Point(lineVec.getX() /lineLength, lineVec.getY() /lineLength);
+
+        Point pointVecScaled = new Point(pVec.getX() / lineLength, pVec.getY()/lineLength);
+
+        double t = lineUnitVec.dotProduct(pointVecScaled);
+
+        if (t<0.0) {
+            t = 0.0;
+        } else if (t>1.0) {
+            t=1.0;
+        }
+
+        Point nearest = new Point(lineVec.getX() * t, lineVec.getY() * t);
+        nearest.add(ab.getP1());
+        return nearest;
     }
 
 }
