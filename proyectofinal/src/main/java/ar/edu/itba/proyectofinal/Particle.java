@@ -272,7 +272,9 @@ public class Particle {
 //                        int ab = 3;
 //                        int j = ab + 4;
 //                    }
-//                    Collider.collisionForces(this,p,a,b, overlap, time);
+//                    Collider.collisionForces(t
+//
+//                    his,p,a,b, overlap, time);
 //                    //this.applyCollisionForces(p, a, b);
 //                }
 ////                }
@@ -350,7 +352,7 @@ public class Particle {
                 }
 
                 if (closestDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
-                    double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
+                    double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(closestPoint.squaredDistanceBetween(point));
                     Collider.collisionForces(this,p,closestPoint, point, overlap, time);
                     //this.applyCollisionForces(p, a, b);
                 }
@@ -372,7 +374,7 @@ public class Particle {
                 }
 
                 if (closestDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
-                    double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
+                    double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(point.squaredDistanceBetween(closestPoint));
                     Collider.collisionForces(this,p,point,closestPoint, overlap, time);
                     //this.applyCollisionForces(p, a, b);
                 }
@@ -385,7 +387,7 @@ public class Particle {
         if (minDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
 //            double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(a.squaredDistanceBetween(b));
 //            Collider.collisionForces(this,p,a,b, overlap, time);
-            //this.applyCollisionForces(p, a, b);
+//            this.applyCollisionForces(p, a, b);
         }
         //If they cannot collide, spring is reset
         else {
@@ -725,7 +727,8 @@ public class Particle {
      */
     public double sinusoidalNoise(double t){
         double longAxis = 0.5;
-        return Data.eta * Data.mMax * longAxis * Data.grav * Math.sin(t * (Math.PI * 2) + phase);
+        return 0;
+//        return Data.eta * Data.mMax * longAxis * Data.grav * Math.sin(t * (Math.PI * 2) + phase);
     }
 
     public double getPhase() {

@@ -7,7 +7,7 @@ public class Parameters {
 
     @Parameter(	names = {"--particles"},
             description = "Particles archive")
-    public String particles = "particlesPaper.txt";
+    public String particles = "particlesSquares.txt";
 
     @Parameter(	names = {"--constants"},
             description = "Constants archive")

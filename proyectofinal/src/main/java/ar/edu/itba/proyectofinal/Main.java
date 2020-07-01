@@ -45,9 +45,9 @@ public class Main {
 
         Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
-        Populator.getInstance().PopulatePaper(new Point(12,16));
+//        Populator.getInstance().PopulatePaper(new Point(12,16));
 //        Populator.getInstance().PopulateSingleParticle();
-//        Populator.getInstance().Populate();
+        Populator.getInstance().Populate();
         System.out.println("-- Population Finished");
         System.out.println("-- Start Simulation");
         particles.forEach(p -> p.setUpSprings(particles.size()));

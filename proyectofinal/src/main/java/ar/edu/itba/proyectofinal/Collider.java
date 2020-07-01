@@ -59,7 +59,7 @@ public class Collider {
 
 //        Point tangentialForce =  ext2D;
 
-        Point dampningTangentialForce = vectorTimes(relativeVelocityTang, Data.yt * mr);
+        Point dampningTangentialForce = vectorTimes(relativeVelocityTang, -Data.yt * mr);
         Point totalForce = addForces(tangentialForce, dampningTangentialForce);
         return totalForce;
 

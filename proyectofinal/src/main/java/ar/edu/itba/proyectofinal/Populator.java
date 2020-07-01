@@ -63,8 +63,9 @@ public class Populator {
     void PopulateSingleParticle() {
         for(Particle p : particles){
             if(!p.isWall()) {
-                double orientation = Math.PI * 2 *Math.random();//Math.PI * 3 / 2;
-                Point position = new Point(2.5, 0.5);
+//                double orientation = Math.PI * 2 *Math.random();//Math.PI * 3 / 2;
+                double orientation = Math.PI;//Math.PI * 3 / 2;
+                Point position = new Point(2.2,2.0);
                 p.setOrientation(orientation);
                 p.setPreviousOrientation(orientation);
                 p.setMassCenter(position);
