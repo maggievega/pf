@@ -208,6 +208,12 @@ public class Particle {
      * @return
      */
     public boolean canCollide(Particle p){
+//        if (this.id == 5 && (p.getId() == 4 || p.getId() ==3)){
+//            System.out.println("Colliding with " + p.getId());
+//            System.out.println((this.massCenter.squaredDistanceBetween(p.massCenter)
+//                    <= (this.maxDistance + this.radius + p.maxDistance +p.radius) *
+//                    (this.maxDistance + this.radius + p.maxDistance + p.radius)));
+//        }
         return this.massCenter.squaredDistanceBetween(p.massCenter)
                 <= (this.maxDistance + this.radius + p.maxDistance +p.radius) *
                     (this.maxDistance + this.radius + p.maxDistance + p.radius);
@@ -351,8 +357,11 @@ public class Particle {
                     b = point;
                 }
 
+//                String seg = "["+segment.getP1().getX()+ " ; " +segment.getP1().getY()+"]" + "-" + "["+segment.getP2().getX()+ " ; " +segment.getP2().getY()+"]";
+//                System.out.println("Segment: " + seg + " vs " + point.toString() + "  :  " + closestPoint.toString() + " - " + point.toString() );
                 if (closestDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
                     double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(closestPoint.squaredDistanceBetween(point));
+//                    System.out.println("Colliding " + closestPoint.toString() + " vs" + point.toString() + " ovrlp " + overlap);
                     Collider.collisionForces(this,p,closestPoint, point, overlap, time);
                     //this.applyCollisionForces(p, a, b);
                 }
@@ -375,6 +384,7 @@ public class Particle {
 
                 if (closestDistance < (this.getRadius() + p.getRadius()) * (this.getRadius() + p.getRadius())) {
                     double overlap = (this.getRadius() +  p.getRadius()) - Math.sqrt(point.squaredDistanceBetween(closestPoint));
+//                    System.out.println("Colliding2 " + closestPoint.toString() + " vs" + point.toString() + " ovrlp " + overlap);
                     Collider.collisionForces(this,p,point,closestPoint, overlap, time);
                     //this.applyCollisionForces(p, a, b);
                 }
@@ -727,8 +737,8 @@ public class Particle {
      */
     public double sinusoidalNoise(double t){
         double longAxis = 0.5;
-        return 0;
-//        return Data.eta * Data.mMax * longAxis * Data.grav * Math.sin(t * (Math.PI * 2) + phase);
+//        return 0;
+        return Data.eta * Data.mMax * longAxis * Data.grav * Math.sin(t * (Math.PI * 2) + phase);
     }
 
     public double getPhase() {

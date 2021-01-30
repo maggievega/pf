@@ -10,6 +10,8 @@ public class Data {
     public static double mMax = (159/2) + 20;
     public static double rMin = 0.12;
     public static double rMax = 0.165;
+//    public static double rMin = 0.01;
+//    public static double rMax = 0.02;
 
     static List<Target> targetList = new ArrayList<>();
 
@@ -22,8 +24,8 @@ public class Data {
     private static double tc = Math.PI * Math.sqrt(mr / (2 * kn));
 //    static double dt = 0.00025;
     static double dt = tc/300;
-    static double totalTime = 2000;
-    static double printTime = 0.05;
+    static double totalTime = 600;
+    static double printTime = 0.01;
 
     static int caudal = 150;
 

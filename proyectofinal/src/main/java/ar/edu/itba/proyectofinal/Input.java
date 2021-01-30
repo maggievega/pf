@@ -178,7 +178,7 @@ class Input {
             System.out.println("More or less parameters");
             throw new ExceptionInInitializerError("Bad formatted. More or less parameters than expected");
         }
-        double mass = 1;
+        double mass = 10000;
         double radius = Double.parseDouble(particle[WallType.WALL_RADIUS.ordinal() + position]);
 
         Point[] points = new Point[countPoints];

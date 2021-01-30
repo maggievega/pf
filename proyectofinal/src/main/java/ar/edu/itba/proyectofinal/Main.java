@@ -38,14 +38,14 @@ public class Main {
         System.out.println("-- Walls Loaded");
         inputParticles.loadParticles(particles);
         System.out.println("-- Particles Loaded");
-
-        String extra = "long_0.7_ONLYEXIT" + "_" + Data.SD + "";
+        System.out.println("Number of particles loaded = " + particles.size());
+        String extra = "testing" + "_" + Data.SD + "";
         Output o = new Output(args.out
                 , args.exit);
 
-        Populator.getInstance().setParticles(particles);
+//        Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
-//        Populator.getInstance().PopulatePaper(new Point(12,16));
+        Populator.getInstance().PopulatePaper(new Point(12,16));
 //        Populator.getInstance().PopulateSingleParticle();
         Populator.getInstance().Populate();
         System.out.println("-- Population Finished");

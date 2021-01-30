@@ -3,6 +3,8 @@ package ar.edu.itba.proyectofinal;
 public class Collider {
 
     public static void collisionForces(Particle p1, Particle p2, Point a, Point b, double overlap, double time){
+//        if (overlap > 0.01)
+//            System.out.println(p1.getId() + " vs " + p2.getId() + " " + overlap);
         double mr = Math.sqrt(p1.getMass() * p2.getMass() / (p1.getMass() + p2.getMass()));
 
         Point tForce = findTangentialForce(p1,p2,a,b,overlap,mr, time);
@@ -62,7 +64,7 @@ public class Collider {
         Point dampningTangentialForce = vectorTimes(relativeVelocityTang, -Data.yt * mr);
         Point totalForce = addForces(tangentialForce, dampningTangentialForce);
         return totalForce;
-
+//        return new Point(0,0);
 
     }
 
