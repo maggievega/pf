@@ -45,8 +45,10 @@ public class Populator {
         double xDiv = (Data.maxX - 2 * offset) / grid.getX();
         double yDiv = (Data.maxY - 2 * offset) / grid.getY();
         boolean end = false;
+        System.out.println(particles.size());
         for (int i = 0; i < grid.getX() && !end; i++) {
             for (int j = 0; j < grid.getY() && !end ; j++) {
+                System.out.println(part);
                 Particle p;
                 do {
                     p = particles.get(part++);
