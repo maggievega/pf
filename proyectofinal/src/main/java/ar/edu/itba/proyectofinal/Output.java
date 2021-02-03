@@ -60,8 +60,8 @@ class Output {
         for (Particle p: particles) {
             if (p.isWall()) {
 //                List<Point> points = p.getPoints();
-                if (points.size() != 2)
-                    System.out.println("ERROR");
+//                if (points.size() != 2)
+//                    System.out.println("ERROR");
 //                sum += countPoints(points.get(0), points.get(1));
                 sum += 2;
             }
