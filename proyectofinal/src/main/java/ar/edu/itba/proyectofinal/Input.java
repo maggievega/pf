@@ -149,7 +149,7 @@ class Input {
             Particle p = new Particle(particles.size(), type, mass, ap, massCenter, 0, radius, desiredVel, new Point(0,0), 0 , 0, inertiaMoment, phase);
             p.setColor(255,255,255);
             particles.add(p);
-            System.out.println("Creating of type : " + type);
+//            System.out.println("Creating of type : " + type);
         }
         count ++;
     }

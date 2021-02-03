@@ -45,7 +45,8 @@ public class Main {
 
         Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
-        Populator.getInstance().PopulatePaper(new Point(12,16));
+//        Populator.getInstance().PopulatePaper(new Point(12,16));
+        Populator.getInstance().PopulateInforme(new Point(12,11));
 //        Populator.getInstance().PopulateSingleParticle();
 //        Populator.getInstance().Populate();
         System.out.println("-- Population Finished");

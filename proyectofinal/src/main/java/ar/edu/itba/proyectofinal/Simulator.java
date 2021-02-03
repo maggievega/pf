@@ -30,7 +30,7 @@ public class Simulator {
         int printCont = 0;
         while (time < Data.totalTime) {
             if (Data.printTime * printCont <= time) {
-                System.out.println("FRAME: " + printCont);
+                System.out.println("Completion: " + (time * 100/Data.totalTime ) + "%");
                 output.printSystem(particles, time);
 
                 //This one should be the only remaining one
@@ -52,6 +52,7 @@ public class Simulator {
 
             // If 20 seconds have passed and no particles leave. They are stuck, finish simulation
             if (Double.compare(time - lastExit, 20) >= 0) {
+                System.out.println("system stuck");
                 break;
             }
 

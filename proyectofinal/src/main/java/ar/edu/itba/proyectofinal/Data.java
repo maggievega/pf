@@ -24,7 +24,7 @@ public class Data {
     private static double tc = Math.PI * Math.sqrt(mr / (2 * kn));
 //    static double dt = 0.00025;
     static double dt = tc/300;
-    static double totalTime = 600;
+    static double totalTime = 1250;
     static double printTime = 0.01;
 
     static int caudal = 150;
@@ -38,8 +38,10 @@ public class Data {
 
     static double minX = 0;
     static double minY = 0;
-    static double maxX = 8;
-    static double maxY = 8;
+//    static double maxX = 8;
+//    static double maxY = 8;
+    static double maxX = 12;
+    static double maxY = 12;
 
 
 
