@@ -184,8 +184,8 @@ class Output {
 //            Segment s = t.getS();
 //            printSegment(s.getP1(), s.getP2(), t.getR(), t.getG(), t.getB(), Data.wall_radius,
 //                    0, 0, 0);
-            printParticle(t.getSegment().getP1(), 204, 204, 0, 0.01, 0, 0, 0);
-            printParticle(t.getSegment().getP2(), 204, 204, 0, 0.01, 0, 0, 0);
+            printParticle(t.getSegment().getP1(), 204, 204, 0, 0.05, 0, 0, 0);
+            printParticle(t.getSegment().getP2(), 204, 204, 0, 0.05, 0, 0, 0);
         }
 
     }
