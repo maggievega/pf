@@ -24,8 +24,8 @@ public class Data {
     private static double tc = Math.PI * Math.sqrt(mr / (2 * kn));
 //    static double dt = 0.00025;
     static double dt = tc/300;
-    static double totalTime = 1250;
-    static double printTime = 0.01;
+    static double totalTime = 1000;
+    static double printTime = 0.05;
 
     static int caudal = 150;
 
