@@ -76,8 +76,9 @@ class Output {
         for (Target t: targets) {
             Segment s = t.getS();
             sum += countPoints(s.getP1(), s.getP2());
+            sum += 2;
+
         }
-        sum += targets.size();
         return sum;
     }
 
