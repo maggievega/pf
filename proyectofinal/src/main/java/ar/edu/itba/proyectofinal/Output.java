@@ -63,6 +63,7 @@ class Output {
                 if (points.size() != 2)
                     System.out.println("ERROR");
                 sum += countPoints(points.get(0), points.get(1));
+                sum += 2;
             }
             else
                 sum += p.getPoints().size();
@@ -76,6 +77,7 @@ class Output {
             Segment s = t.getS();
             sum += countPoints(s.getP1(), s.getP2());
         }
+        sum += targets.size();
         return sum;
     }
 
@@ -103,7 +105,9 @@ class Output {
     private void printParticleSnapshot(Particle p) {
         try {
             for(Point point: p.getPoints()){
-                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" + p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" + p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  1  + "\t" + p.getId() + "\n"));
+                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" +
+                        p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" +
+                        p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  1  + "\t" + p.getId() + "\n"));
                 count++;
             }
         } catch (IOException e) {
@@ -115,10 +119,28 @@ class Output {
         List<Segment> listSeg = p.getSegments();
         Point p1 = listSeg.get(0).getP1();
         Point p2 = listSeg.get(0).getP2();
-        printSegment(p1, p2, p.getR(), p.getG(), p.getB(), p.getRadius(), p.getOrientationX(), p.getOrientationY(), p.getId());
+        printSegment(p1, p2, p.getR(), p.getG(), p.getB(), p.getRadius(), p.getOrientationX(),
+                p.getOrientationY(), p.getId());
+        printParticle(p1, 139, 0, 0, p.getRadius(), p.getOrientationX(), p.getOrientationY(), p.getId());
     }
 
-    private void printSegment(Point p1, Point p2, int R, int G, int B, double radius, double orientationX, double orientationY, int id) {
+    private void printParticle(Point p1, int R, int G, int B, double radius, double orientationX,
+                               double orientationY, int id) {
+        int signDiff = Utils.getSign(p1.getY() - p1.getY());
+        int signStart = Utils.getSign(p1.getY());
+        int sign = signStart > 0 ? signDiff : signStart;
+        double i = Math.abs(p1.getY());
+        try {
+            this.writer.write((count + "\t" + p1.getX() + "\t" + i * sign
+                    + "\t" + 0 + "\t" + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX
+                    + "\t" + orientationY + "\t" + 0 + "\t" + id + "\n"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void printSegment(Point p1, Point p2, int R, int G, int B, double radius,
+                              double orientationX, double orientationY, int id) {
         double i;
         if (Utils.doubleEqual(p1.getX(), p2.getX())) {
             int signDiff =  Utils.getSign(p2.getY() - p1.getY());
@@ -128,7 +150,9 @@ class Output {
             double end = Math.abs(p2.getY());
             for (i = start; i <= end; i += Data.spacing)
                 try {
-                    this.writer.write((count + "\t" + p1.getX() + "\t" + i  * sign + "\t" + 0 + "\t" + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX + "\t" + orientationY + "\t" +  0 + "\t" + id + "\n"));
+                    this.writer.write((count + "\t" + p1.getX() + "\t" + i  * sign + "\t"
+                            + 0 + "\t" + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX
+                            + "\t" + orientationY + "\t" +  0 + "\t" + id + "\n"));
                     count++;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -143,7 +167,9 @@ class Output {
             double end = Math.abs(p2.getX());
             for (i = start; i <= end; i += Data.spacing)
                 try {
-                    this.writer.write((count + "\t" + i + "\t" + (m * i * sign + b) + "\t" + 0 + "\t" + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX + "\t" + orientationY + "\t" + 0 + "\t" + id + "\n"));
+                    this.writer.write((count + "\t" + i + "\t" + (m * i * sign + b) + "\t" + 0 + "\t"
+                            + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX + "\t"
+                            + orientationY + "\t" + 0 + "\t" + id + "\n"));
                     count++;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -154,8 +180,12 @@ class Output {
     private void printAllTargets() {
         for (Target t : Data.targetList) {
             Segment s = t.getS();
-            printSegment(s.getP1(), s.getP2(), t.getR(), t.getG(), t.getB(), Data.wall_radius, 0, 0, 0);
+            printSegment(s.getP1(), s.getP2(), t.getR(), t.getG(), t.getB(), Data.wall_radius,
+                    0, 0, 0);
+            printParticle(t.getSegment().getP1(), 204, 204, 0, 0.01, 0, 0, 0);
+            printParticle(t.getSegment().getP2(), 204, 204, 0, 0.01, 0, 0, 0);
         }
+
     }
 
     void done() {
