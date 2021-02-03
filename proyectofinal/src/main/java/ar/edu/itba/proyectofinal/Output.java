@@ -59,10 +59,10 @@ class Output {
         int sum = 0;
         for (Particle p: particles) {
             if (p.isWall()) {
-                List<Point> points = p.getPoints();
+//                List<Point> points = p.getPoints();
                 if (points.size() != 2)
                     System.out.println("ERROR");
-                sum += countPoints(points.get(0), points.get(1));
+//                sum += countPoints(points.get(0), points.get(1));
                 sum += 2;
             }
             else
@@ -74,8 +74,8 @@ class Output {
     private int sumTargets(List<Target> targets) {
         int sum = 0;
         for (Target t: targets) {
-            Segment s = t.getS();
-            sum += countPoints(s.getP1(), s.getP2());
+//            Segment s = t.getS();
+//            sum += countPoints(s.getP1(), s.getP2());
             sum += 2;
 
         }
@@ -120,9 +120,10 @@ class Output {
         List<Segment> listSeg = p.getSegments();
         Point p1 = listSeg.get(0).getP1();
         Point p2 = listSeg.get(0).getP2();
-        printSegment(p1, p2, p.getR(), p.getG(), p.getB(), p.getRadius(), p.getOrientationX(),
-                p.getOrientationY(), p.getId());
+//        printSegment(p1, p2, p.getR(), p.getG(), p.getB(), p.getRadius(), p.getOrientationX(),
+//                p.getOrientationY(), p.getId());
         printParticle(p1, 139, 0, 0, p.getRadius(), p.getOrientationX(), p.getOrientationY(), p.getId());
+        printParticle(p2, 139, 0, 0, p.getRadius(), p.getOrientationX(), p.getOrientationY(), p.getId());
     }
 
     private void printParticle(Point p1, int R, int G, int B, double radius, double orientationX,
@@ -180,9 +181,9 @@ class Output {
 
     private void printAllTargets() {
         for (Target t : Data.targetList) {
-            Segment s = t.getS();
-            printSegment(s.getP1(), s.getP2(), t.getR(), t.getG(), t.getB(), Data.wall_radius,
-                    0, 0, 0);
+//            Segment s = t.getS();
+//            printSegment(s.getP1(), s.getP2(), t.getR(), t.getG(), t.getB(), Data.wall_radius,
+//                    0, 0, 0);
             printParticle(t.getSegment().getP1(), 204, 204, 0, 0.01, 0, 0, 0);
             printParticle(t.getSegment().getP2(), 204, 204, 0, 0.01, 0, 0, 0);
         }
