@@ -3,6 +3,9 @@ package ar.edu.itba.proyectofinal;
 public class Collider {
 
     public static void collisionForces(Particle p1, Particle p2, Point a, Point b, double overlap, double time){
+//        if ((p2.getId() == 4 || p2.getId() == 3)  && p1.getMassCenter().getY() <= 0.01) {
+//            System.out.println("in weird shit");
+//        }
 //        if (overlap > 0.01)
 //            System.out.println(p1.getId() + " vs " + p2.getId() + " " + overlap);
         double mr = Math.sqrt(p1.getMass() * p2.getMass() / (p1.getMass() + p2.getMass()));
@@ -56,7 +59,12 @@ public class Collider {
 
 
         p1.extendSpring2D(p2.getId(), springExtension);
+//        Point currentExtension = p1.getSpring2D(p2.getId());
+//        if (currentExtension.module() > Data.maxStringExtension) {
+//            p1.setSpring2D(p2.getId(), );
+//        }
         Point tangentialForce = p1.getSpring2D(p2.getId());
+//        Point tangentialForce = new Point(0,0);
         tangentialForce.times(-Data.kt);
 
 //        Point tangentialForce =  ext2D;
@@ -147,6 +155,7 @@ public class Collider {
         Point angularAgregatedVelocity = angularVelocity >= 0 ?
                 new Point(r.getY(), -r.getX()) : new Point(-r.getY(), r.getX());
         angularAgregatedVelocity.times(massCenterDistCollision);
+        angularAgregatedVelocity.times(angularVelocity);
         angularAgregatedVelocity.add(massCenterVelocity);
         return angularAgregatedVelocity;
     }

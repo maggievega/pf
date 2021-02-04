@@ -27,6 +27,8 @@ public class Data {
     static double totalTime = 1000;
     static double printTime = 0.05;
 
+    static double maxStringExtension = 0.3;
+
     static int caudal = 150;
 
     public static double precision = 0.001;

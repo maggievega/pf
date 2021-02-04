@@ -106,8 +106,8 @@ public class Populator {
 
     private void paperPosition(Particle p, Point position){
         if(!p.isWall()) {
-            double orientation = Math.random() * 2 * Math.PI;
-//            double orientation = 0.5 * Math.PI;
+//            double orientation = Math.random() * 2 * Math.PI;
+            double orientation = 0.5 * Math.PI;
             p.setOrientation(orientation);
             p.setPreviousOrientation(orientation);
             p.setMassCenter(position);
@@ -144,11 +144,13 @@ public class Populator {
      void resetParticle(Particle p){
         p.setOrientation(Math.PI);
         p.setPreviousOrientation(Math.PI);
-        double x = Math.random() * (Data.maxX - 1.2 ) + 0.4;
-        Point mc = new Point(x,Data.maxY - 1);
-        p.setMassCenter(mc);
-        p.setPreviousMassCenter(mc);
-        p.positionParticle(mc,Math.PI);
+        do {
+            double x = Math.random() * (Data.maxX - 1.2 ) + 0.4;
+            Point mc = new Point(x,Data.maxY - 1);
+            p.setMassCenter(mc);
+            p.setPreviousMassCenter(mc);
+            p.positionParticle(mc,Math.PI);
+        } while (!isValid(p));
     }
 
     private boolean isValid(Particle p) {

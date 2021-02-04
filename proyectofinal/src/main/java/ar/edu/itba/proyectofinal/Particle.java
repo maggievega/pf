@@ -593,7 +593,7 @@ public class Particle {
 //                <= (this.maxDistance + this.radius) *
 //                (this.maxDistance + this.radius);
 //
-        return this.massCenter.distanceBetween(t.getClosest()) <= 0.05 || this.massCenter.getY() < t.getClosest().getY();
+        return this.massCenter.distanceBetween(t.getClosest()) <= 0.05 || this.massCenter.getY() <= t.getClosest().getY();
     }
 
     public boolean reachedTarget() { return this.reached(this.getCurrentTarget());}

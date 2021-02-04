@@ -30,7 +30,7 @@ public class Simulator {
         int printCont = 0;
         while (time < Data.totalTime) {
             if (Data.printTime * printCont <= time) {
-                System.out.println("Completion: " + (time * 100/Data.totalTime ) + "%");
+                System.out.println("Completion: " + (time * 100/Data.totalTime ) + "% - frame: " + (printCont+1));
                 output.printSystem(particles, time);
 
                 //This one should be the only remaining one
@@ -96,9 +96,11 @@ public class Simulator {
 
     private void updateTarget(Particle p, double t) {
         if (p.reachedTarget()) {
-            if (!p.getCurrentTarget().isEnd())
+            System.out.println("Particle " + p.getId() + " reached target at " + p.getCurrentTarget().getY());
+            if (!p.getCurrentTarget().isEnd()) {
                 p.nextTarget();
-            else {
+                System.out.println("Particle " + p.getId() + " now targeting at " + p.getCurrentTarget().getY());
+            } else {
                 resetParticle(p);
                 output.printExit(t, leftRoom);
                 System.out.println(leftRoom);
