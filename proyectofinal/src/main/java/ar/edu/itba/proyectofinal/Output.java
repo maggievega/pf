@@ -63,7 +63,8 @@ class Output {
 //                if (points.size() != 2)
 //                    System.out.println("ERROR");
 //                sum += countPoints(points.get(0), points.get(1));
-                sum += 2;
+//                sum += 2;
+                sum += 1;
             }
             else
                 sum += p.getPoints().size();
@@ -76,7 +77,8 @@ class Output {
         for (Target t: targets) {
 //            Segment s = t.getS();
 //            sum += countPoints(s.getP1(), s.getP2());
-            sum += 2;
+//            sum += 2;
+            sum += 1;
 
         }
         return sum;
@@ -105,15 +107,61 @@ class Output {
 
     private void printParticleSnapshot(Particle p) {
         try {
-            for(Point point: p.getPoints()){
-                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" +
+            for(Segment s: p.getSegments()) {
+                Quaternion q = getQuaternionFromSegment(s);
+                double len = s.getLength();
+                double rad = p.getRadius();
+                Point middle = s.middlePoint();
+                this.writer.write((count + "\t" + s.getP1().getX() + "\t" + s.getP1().getY() + "\t" + 0 + "\t" +
                         p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" +
-                        p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  1  + "\t" + p.getId() + "\n"));
+                        p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  1  + "\t" + p.getId()
+                        + "\t" + q.x + "\t" + q.y + "\t" + q.z + "\t" + q.w
+                        + "\t" + len + "\t" + rad
+                        + "\t" + middle.getX() + "\t" + middle.getY() + "\t" + 0
+                        + "\n"));
                 count++;
             }
+////            for(Point point: p.getPoints()){
+////                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" +
+////                        p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" +
+////                        p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  1  + "\t" + p.getId() + "\n"));
+////                count++;
+////            }
         } catch (IOException e) {
             System.out.println("Unable to print. Simulation cannot be outputted");
         }
+    }
+
+    private Quaternion getQuaternionFromSegment(Segment s) {
+        double x = 0;
+        double y = 0;
+        double z = 1;
+        double x2 = s.getP2().getX() - s.getP1().getX();
+        double y2 = s.getP2().getY() - s.getP1().getY();
+        double z2 = 0;
+
+        double norm1 = Math.sqrt(x*x + y*y + z*z);
+        double norm2 = Math.sqrt(x2*x2 + y2*y2 + z2*z2);
+
+        x/=norm1;
+        y/=norm1;
+        z/=norm1;
+        x2/=norm2;
+        y2/=norm2;
+        z2/=norm2;
+//        double x2 = 0;
+//        double y2 = 0;
+//        double z2 = 1;
+//        double x = s.getP2().getX() - s.getP1().getX();
+//        double y = s.getP2().getY() - s.getP1().getY();
+//        double z = 0;
+
+
+        Quaternion q = new Quaternion(y*z2-z*y2, z*x2-x*z2, x*y2-y*x2);
+//        q.w = Math.sqrt(1 + (x2*x2+y2*y2)) + 0;
+        q.w = 1;
+        q.normalize();
+        return q;
     }
 
     private void printWallSnapshot(Particle p) {
@@ -122,12 +170,16 @@ class Output {
         Point p2 = listSeg.get(0).getP2();
 //        printSegment(p1, p2, p.getR(), p.getG(), p.getB(), p.getRadius(), p.getOrientationX(),
 //                p.getOrientationY(), p.getId());
-        printParticle(p1, 139, 0, 0, p.getRadius(), p.getOrientationX(), p.getOrientationY(), p.getId());
-        printParticle(p2, 139, 0, 0, p.getRadius(), p.getOrientationX(), p.getOrientationY(), p.getId());
+        Quaternion q = getQuaternionFromSegment(listSeg.get(0));
+        double len = listSeg.get(0).getLength();
+        double rad = p.getRadius();
+        Point middle = listSeg.get(0).middlePoint();
+        printParticle(p1, 139, 0, 0, p.getRadius(), p.getOrientationX(), p.getOrientationY(), p.getId(), q, len, rad, middle);
+//        printParticle(p2, 139, 0, 0, p.getRadius(), p.getOrientationX(), p.getOrientationY(), p.getId(), q, len, rad);
     }
 
     private void printParticle(Point p1, int R, int G, int B, double radius, double orientationX,
-                               double orientationY, int id) {
+                               double orientationY, int id, Quaternion q, double len, double rad, Point middle) {
         int signDiff = Utils.getSign(p1.getY() - p1.getY());
         int signStart = Utils.getSign(p1.getY());
         int sign = signStart > 0 ? signDiff : signStart;
@@ -135,7 +187,11 @@ class Output {
         try {
             this.writer.write((count + "\t" + p1.getX() + "\t" + i * sign
                     + "\t" + 0 + "\t" + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX
-                    + "\t" + orientationY + "\t" + 0 + "\t" + id + "\n"));
+                    + "\t" + orientationY + "\t" + 0 + "\t" + id
+                    + "\t" + q.x + "\t" + q.y + "\t" + q.z + "\t" + q.w
+                    + "\t" + len + "\t" + rad
+                    + "\t" + middle.getX() + "\t" + middle.getY()+  "\t" + 0
+                    + "\n"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -184,8 +240,12 @@ class Output {
 //            Segment s = t.getS();
 //            printSegment(s.getP1(), s.getP2(), t.getR(), t.getG(), t.getB(), Data.wall_radius,
 //                    0, 0, 0);
-            printParticle(t.getSegment().getP1(), 204, 204, 0, 0.05, 0, 0, 0);
-            printParticle(t.getSegment().getP2(), 204, 204, 0, 0.05, 0, 0, 0);
+            Quaternion q = getQuaternionFromSegment(t.getSegment());
+            double len = t.getSegment().getLength();
+            double rad = 0.05;
+            Point middle = t.getSegment().middlePoint();
+            printParticle(t.getSegment().getP1(), 204, 204, 0, 0.05, 0, 0, 0, q, len, rad, middle);
+//            printParticle(t.getSegment().getP2(), 204, 204, 0, 0.05, 0, 0, 0, q, len, rad, middle);
         }
 
     }

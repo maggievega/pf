@@ -49,4 +49,15 @@ public class Segment {
                 ", length = " + length +
                 '}';
     }
+
+    public double getLength () {
+        double x = p1.getX() - p2.getX();
+        double y = p1.getY() - p2.getY();
+        return Math.sqrt(x*x+ y*y);
+    }
+
+    public Point middlePoint() {
+        return new Point((p1.getX()+p2.getX())/2, (p1.getY()+p2.getY())/2);
+    }
+
 }

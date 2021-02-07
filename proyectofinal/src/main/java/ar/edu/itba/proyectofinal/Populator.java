@@ -68,10 +68,8 @@ public class Populator {
         double xDiv = (Data.maxX - 2 * offset) / grid.getX();
         double yDiv = (Data.maxY - 2 * offset) / grid.getY();
         boolean end = false;
-        System.out.println(particles.size());
         for (int i = 0; i < grid.getX() && !end; i++) {
             for (int j = 0; j < grid.getY() && !end ; j++) {
-                System.out.println(part);
                 Particle p;
                 do {
                     p = particles.get(part++);
@@ -79,8 +77,6 @@ public class Populator {
                 paperPosition(p,new Point(offset + i * xDiv + xDiv / 2, offset + j * yDiv + yDiv / 2));
                 populateTargets(p);
                 if(i*grid.getX() + j+1 -5 > particles.size()){
-                    System.out.println("Ending cicle");
-                    System.out.println("coordenates were " + i + " - " + j);
                     end = true;
                 }
             }
@@ -122,7 +118,6 @@ public class Populator {
             Target aux = new Target(t.getSegment(), t.isEnd(), p.getMassCenter());            targets.add(aux);
         }
         p.setTargets(targets);
-        System.out.println("populating targets for particule " + p.getId());
     }
 
     private void positionParticle(Particle p) {

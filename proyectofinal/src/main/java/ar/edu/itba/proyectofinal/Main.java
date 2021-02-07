@@ -5,7 +5,7 @@ import com.beust.jcommander.JCommander;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.regex.Pattern;
 
 
 public class Main {
@@ -39,9 +39,26 @@ public class Main {
         inputParticles.loadParticles(particles);
         System.out.println("-- Particles Loaded");
         System.out.println("Number of particles loaded = " + particles.size());
-        String extra = "testing" + "_" + Data.SD + "";
-        Output o = new Output(args.out
-                , args.exit);
+
+        double speed = particles.get(50).getDesiredVelocity();
+
+        double x1 = particles.get(3).getPoints().get(1).getX();
+        double x2 = particles.get(4).getPoints().get(0).getX();
+        double opening = Math.round((x2-x1)*100)/100.0;
+
+
+        String outName = args.out.split(Pattern.quote("."))[0];
+        outName += "SD_" + Data.SD + "_ETA_"+ Data.eta + "_V_" + speed + "_OPEN_" + opening + ".xyz";
+
+        String exitName = args.exit.split(Pattern.quote("."))[0];
+        exitName += "SD_" + Data.SD + "_ETA_"+ Data.eta + "_V_" + speed + "_OPEN_" + opening + ".txt";
+
+
+//        Output o = new Output(args.out, args.exit);
+        Output o = new Output(outName, exitName);
+
+        System.out.println("SD - " + Data.SD);
+        System.out.println("ETA - " + Data.eta);
 
         Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
