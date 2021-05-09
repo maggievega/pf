@@ -1,6 +1,5 @@
 package ar.edu.itba.proyectofinal;
 
-import ar.edu.itba.proyectofinal.Particle;
 import com.beust.jcommander.JCommander;
 
 import java.util.ArrayList;
@@ -47,23 +46,20 @@ public class Main {
         double opening = Math.round((x2-x1)*100)/100.0;
 
 
-        String outName = args.out.split(Pattern.quote("."))[0];
-        outName += "SD_" + Data.SD + "_ETA_"+ Data.eta + "_V_" + speed + "_OPEN_" + opening + ".xyz";
-
-        String exitName = args.exit.split(Pattern.quote("."))[0];
-        exitName += "SD_" + Data.SD + "_ETA_"+ Data.eta + "_V_" + speed + "_OPEN_" + opening + ".txt";
 
 
-//        Output o = new Output(args.out, args.exit);
-        Output o = new Output(outName, exitName);
+
+        Output o = new Output(args.out, args.exit);
 
         System.out.println("SD - " + Data.SD);
         System.out.println("ETA - " + Data.eta);
+        System.out.println("Vel - " + speed);
+        System.out.println("APER - " + opening);
 
         Populator.getInstance().setParticles(particles);
         System.out.println("-- Start Populating");
-//        Populator.getInstance().PopulatePaper(new Point(12,16));
         Populator.getInstance().PopulateInforme(new Point(12,11));
+//        Populator.getInstance().PopulatePaper(new Point(12,16));
 //        Populator.getInstance().PopulateSingleParticle();
 //        Populator.getInstance().Populate();
         System.out.println("-- Population Finished");

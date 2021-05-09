@@ -87,8 +87,7 @@ public class Populator {
     void PopulateSingleParticle() {
         for(Particle p : particles){
             if(!p.isWall()) {
-//                double orientation = Math.PI * 2 *Math.random();//Math.PI * 3 / 2;
-                double orientation = Math.PI;//Math.PI * 3 / 2;
+                double orientation = Math.PI;
                 Point position = new Point(2.2,2.0);
                 p.setOrientation(orientation);
                 p.setPreviousOrientation(orientation);
@@ -102,8 +101,7 @@ public class Populator {
 
     private void paperPosition(Particle p, Point position){
         if(!p.isWall()) {
-//            double orientation = Math.random() * 2 * Math.PI;
-            double orientation = 0.5 * Math.PI;
+            double orientation = Math.PI;
             p.setOrientation(orientation);
             p.setPreviousOrientation(orientation);
             p.setMassCenter(position);

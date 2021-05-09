@@ -157,9 +157,6 @@ public class Main {
 //                System.out.println("Checking point" + point.toString());
 //                closestPoint = Utils.completeClosestPoint(segment, point);
 //                System.out.println("Closest point is: " + closestPoint.toString());
-//                /*TODO: Check if further restrictions could be verified, maybe to cut the for loops earlier
-//                   TODO: Would finding one point that collides be sufficient? Are we certain there's always gonna be only 1?
-//                */
 //                closestDistance = closestPoint.squaredDistanceBetween(point);
 //                if (closestDistance < minDistance){
 //                    System.out.println("new min : " + closestDistance);
@@ -339,7 +336,6 @@ public class Main {
 //    }
 
 //    public static double inertiaMoment(Point[] poligon, Point relative, double precision, double mass){
-//        //TODO-> Check if the return (*mass/points) is correct
 //
 //        int points  = 0;
 //        double inertia = 0;
@@ -363,7 +359,6 @@ public class Main {
         return p1.getX() * p2.getY() - p1.getY() * p2.getX();
     }
 
-    //TODO: At returns, corresponding points should be returned
 
     /** Provides closest point on the edge to the provided point.
      * Does so by calculating if one of the edge's limits is the closest, otherwise calculates
@@ -494,7 +489,6 @@ public class Main {
     }
 
 
-    //TODO (fix this)
     public static double checkForColinearity(double x, double y, double x1, double y1, double x2, double y2, double dist){
 
         double d1,d2,seg;
@@ -522,7 +516,6 @@ public class Main {
         // but also area == (BC * AD) / 2
         // BC * AD == 2 * area
         // AD == (2 * area) / BC
-        // TODO: check if BC == 0
         double AD = (2 * area) / BC;
         return AD;
     }

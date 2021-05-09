@@ -259,12 +259,15 @@ class Input {
                 break;
             case "sd":
                 Data.SD = Double.parseDouble(values[value]);
+                Data.beta = 4.5 * Math.sqrt(Data.SD);
                 break;
             case "eta":
                 Data.eta = Double.parseDouble(values[value]);
                 break;
+            case "simout":
+                Data.simOut = Boolean.parseBoolean(values[value]);
+                break;
             default:
-                    //error
         }
     }
 

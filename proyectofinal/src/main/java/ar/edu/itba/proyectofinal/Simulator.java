@@ -20,8 +20,6 @@ public class Simulator {
     public Simulator(List<Particle> p, Output o) {
         output = o;;
         particles = p;
-//        cellIndex = new CellIndex(10,10, -0.1, -1, 8.1, 8.1);
-//        cellIndex.populate(particles);
     }
 
     public void Simulate(){
@@ -29,24 +27,11 @@ public class Simulator {
         double time = 0.0;
         int printCont = 0;
         while (time < Data.totalTime) {
-            if (Data.printTime * printCont <= time) {
+            if ( Data.printTime * printCont <= time) {
                 System.out.println("Completion: " + (time * 100/Data.totalTime ) + "% - frame: " + (printCont+1));
-                output.printSystem(particles, time);
+                if (Data.simOut) output.printSystem(particles, time);
 
-                //This one should be the only remaining one
-//                output.printSimSystem(particles,time);
-//                System.out.println( 100.0 * time / Data.totalTime);
-//                System.out.println(printCont);
-//                System.out.println("TARDO :  " + (System.currentTimeMillis() - prevtime));
                 prevtime = System.currentTimeMillis();
-
-
-//                List<Double> maxSprings = new ArrayList<>();
-//                for (int i = 0; i < particles.size(); i++) {
-//                    maxSprings.add(particles.get(i).maxSpring());
-//                }
-//                System.out.println("Frame: " + frame++ + " - " +  Collections.max(maxSprings));
-
                 printCont++;
             }
 
@@ -61,29 +46,14 @@ public class Simulator {
 
             //Calculate forces
             final double aarr = time;
-//            particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForce(previousPositions,aarr);});
-
-
-//            prevtime = System.currentTimeMillis();
-            //Single threaded
-//            particles.forEach((p) -> {if(!p.isWall()) p.getForces(previousPositions,aarr);});
 
             //Multi threaded
-                        particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForces(previousPositions,aarr);});
-//            System.out.println(System.currentTimeMillis()-prevtime);
-
-            //Cell Index
-//            particles.parallelStream().forEach( p -> {
-//                if(!p.isWall()){
-//                    p.getForces(cellIndex.getNeighbours(p, previousPositions), aarr);
-//                }
-//            });
+            particles.parallelStream().forEach((p)->{if(!p.isWall()) p.getForces(previousPositions,aarr);});
 
             for (Particle p : particles) {
                 if (!p.isWall()){
                     updatePosition(p);
                     updateTarget(p, time);
-//                    cellIndex.updateParticle(p);
                 }
             }
 
@@ -96,10 +66,8 @@ public class Simulator {
 
     private void updateTarget(Particle p, double t) {
         if (p.reachedTarget()) {
-            System.out.println("Particle " + p.getId() + " reached target at " + p.getCurrentTarget().getY());
             if (!p.getCurrentTarget().isEnd()) {
                 p.nextTarget();
-                System.out.println("Particle " + p.getId() + " now targeting at " + p.getCurrentTarget().getY());
             } else {
                 resetParticle(p);
                 output.printExit(t, leftRoom);

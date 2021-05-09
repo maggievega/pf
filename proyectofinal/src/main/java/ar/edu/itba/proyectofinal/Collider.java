@@ -3,11 +3,7 @@ package ar.edu.itba.proyectofinal;
 public class Collider {
 
     public static void collisionForces(Particle p1, Particle p2, Point a, Point b, double overlap, double time){
-//        if ((p2.getId() == 4 || p2.getId() == 3)  && p1.getMassCenter().getY() <= 0.01) {
-//            System.out.println("in weird shit");
-//        }
-//        if (overlap > 0.01)
-//            System.out.println(p1.getId() + " vs " + p2.getId() + " " + overlap);
+
         double mr = Math.sqrt(p1.getMass() * p2.getMass() / (p1.getMass() + p2.getMass()));
 
         Point tForce = findTangentialForce(p1,p2,a,b,overlap,mr, time);
@@ -16,7 +12,6 @@ public class Collider {
         if(tForce.module() >= Data.u * nForce.module()){
             Point tForceVersor = versor(tForce);
             tForce = vectorTimes(tForceVersor, Data.u * nForce.module());
-//            System.out.println("SPRING WAS " + p1.getSpring(p2.getId()));
 
             Point relV = relativeVelocity(p1,p2,middlePoint(a,b));
             Point r = relative(a,b);
@@ -26,19 +21,13 @@ public class Collider {
             Point tangSpring = tForce.minus(relativeVelocityTang);
             tangSpring.times(1/Data.kt);
 
-//            System.out.println("SPRING IS NOW  " + newLength);
 
-//            p1.setSpring(p2.getId(), newLength);
             p1.setSpring2D(p2.getId(), tangSpring);
         }
         nForce.add(tForce);
-//        p1.addForce(tForce);
         p1.addForce(nForce);
-//        p1.addForce(tForce);
         Point toCollision = relative(p1.getMassCenter(), middlePoint(a,b));
         p1.addTorque(-xProduct(toCollision, nForce));
-//        p1.addTorque(-xProduct(toCollision, tForce));
-//        System.out.println("normal :  " + nForce.module() + " --- " + tForce.module() + "  : tangential");
     }
 
     //Ft = -kt  * spring - gammat * vrelt
@@ -54,32 +43,22 @@ public class Collider {
         double direction = getParallelDirection(tangentVersor, springExtension);
 
         p1.extendSpring(p2.getId(), direction * springExtension.module() );
-        double ext = p1.getSpring(p2.getId());
-//        Point tangentialForce =  vectorTimes(tangentVersor, Data.kt * ext  );
+
 
 
         p1.extendSpring2D(p2.getId(), springExtension);
-//        Point currentExtension = p1.getSpring2D(p2.getId());
-//        if (currentExtension.module() > Data.maxStringExtension) {
-//            p1.setSpring2D(p2.getId(), );
-//        }
         Point tangentialForce = p1.getSpring2D(p2.getId());
-//        Point tangentialForce = new Point(0,0);
         tangentialForce.times(-Data.kt);
 
-//        Point tangentialForce =  ext2D;
 
         Point dampningTangentialForce = vectorTimes(relativeVelocityTang, -Data.yt * mr);
         Point totalForce = addForces(tangentialForce, dampningTangentialForce);
         return totalForce;
-//        return new Point(0,0);
 
     }
 
     //Fn = -kn * overlap - gamman * vreln
     private static Point findNormalForce(Particle p1, Particle p2, Point a, Point b, double overlap, double mr){
-//        Point relV = relative(p2.getVel(), p1.getVel());
-//        Point relV = relativeVelocity(p1,p2,a,b);
         Point relV = relativeVelocity(p1,p2,middlePoint(a,b));
 
         //Inside pointig vector
@@ -90,16 +69,12 @@ public class Collider {
         Point normalForce = vectorTimes(normalVersor, -Data.kn * overlap);
         Point dampningNormalForce = vectorTimes(relativeVelocityNorm, Data.yn * mr);
 
-        Point vel = p1.getVel();
-        Point velocityVersor = versor(p1.getVel());
-        Point normalForceVersor = versor(normalForce);
-        Point normalDampningVersor = versor(dampningNormalForce);
+
+
 
         //new testing
         Point totalForce = addForces(normalForce, dampningNormalForce);
         return totalForce;
-
-//        return totalForce;
     }
 
     private static Point relative(Point p1, Point p2){

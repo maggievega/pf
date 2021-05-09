@@ -59,11 +59,6 @@ class Output {
         int sum = 0;
         for (Particle p: particles) {
             if (p.isWall()) {
-//                List<Point> points = p.getPoints();
-//                if (points.size() != 2)
-//                    System.out.println("ERROR");
-//                sum += countPoints(points.get(0), points.get(1));
-//                sum += 2;
                 sum += 1;
             }
             else
@@ -75,9 +70,6 @@ class Output {
     private int sumTargets(List<Target> targets) {
         int sum = 0;
         for (Target t: targets) {
-//            Segment s = t.getS();
-//            sum += countPoints(s.getP1(), s.getP2());
-//            sum += 2;
             sum += 1;
 
         }
@@ -112,8 +104,8 @@ class Output {
                 double len = s.getLength();
                 double rad = p.getRadius();
                 Point middle = s.middlePoint();
-                this.writer.write((count + "\t" + s.getP1().getX() + "\t" + s.getP1().getY() + "\t" + 0 + "\t" +
-                        p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" +
+                this.writer.write((
+                        p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" +
                         p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  1  + "\t" + p.getId()
                         + "\t" + q.x + "\t" + q.y + "\t" + q.z + "\t" + q.w
                         + "\t" + len + "\t" + rad
@@ -121,12 +113,6 @@ class Output {
                         + "\n"));
                 count++;
             }
-////            for(Point point: p.getPoints()){
-////                this.writer.write((count + "\t" + point.getX() + "\t" + point.getY() + "\t" + 0 + "\t" +
-////                        p.getRadius() + "\t" + p.getR() + "\t" + p.getG() + "\t" + p.getB() + "\t" +
-////                        p.getOrientationX() + "\t" + p.getOrientationY() + "\t" +  1  + "\t" + p.getId() + "\n"));
-////                count++;
-////            }
         } catch (IOException e) {
             System.out.println("Unable to print. Simulation cannot be outputted");
         }
@@ -149,16 +135,9 @@ class Output {
         x2/=norm2;
         y2/=norm2;
         z2/=norm2;
-//        double x2 = 0;
-//        double y2 = 0;
-//        double z2 = 1;
-//        double x = s.getP2().getX() - s.getP1().getX();
-//        double y = s.getP2().getY() - s.getP1().getY();
-//        double z = 0;
 
 
         Quaternion q = new Quaternion(y*z2-z*y2, z*x2-x*z2, x*y2-y*x2);
-//        q.w = Math.sqrt(1 + (x2*x2+y2*y2)) + 0;
         q.w = 1;
         q.normalize();
         return q;
@@ -168,25 +147,19 @@ class Output {
         List<Segment> listSeg = p.getSegments();
         Point p1 = listSeg.get(0).getP1();
         Point p2 = listSeg.get(0).getP2();
-//        printSegment(p1, p2, p.getR(), p.getG(), p.getB(), p.getRadius(), p.getOrientationX(),
-//                p.getOrientationY(), p.getId());
         Quaternion q = getQuaternionFromSegment(listSeg.get(0));
         double len = listSeg.get(0).getLength();
         double rad = p.getRadius();
         Point middle = listSeg.get(0).middlePoint();
         printParticle(p1, 139, 0, 0, p.getRadius(), p.getOrientationX(), p.getOrientationY(), p.getId(), q, len, rad, middle);
-//        printParticle(p2, 139, 0, 0, p.getRadius(), p.getOrientationX(), p.getOrientationY(), p.getId(), q, len, rad);
     }
 
     private void printParticle(Point p1, int R, int G, int B, double radius, double orientationX,
                                double orientationY, int id, Quaternion q, double len, double rad, Point middle) {
-        int signDiff = Utils.getSign(p1.getY() - p1.getY());
-        int signStart = Utils.getSign(p1.getY());
-        int sign = signStart > 0 ? signDiff : signStart;
-        double i = Math.abs(p1.getY());
+
         try {
-            this.writer.write((count + "\t" + p1.getX() + "\t" + i * sign
-                    + "\t" + 0 + "\t" + radius + "\t" + R + "\t" + G + "\t" + B + "\t" + orientationX
+            this.writer.write((
+                    R + "\t" + G + "\t" + B + "\t" + orientationX
                     + "\t" + orientationY + "\t" + 0 + "\t" + id
                     + "\t" + q.x + "\t" + q.y + "\t" + q.z + "\t" + q.w
                     + "\t" + len + "\t" + rad
@@ -237,15 +210,11 @@ class Output {
 
     private void printAllTargets() {
         for (Target t : Data.targetList) {
-//            Segment s = t.getS();
-//            printSegment(s.getP1(), s.getP2(), t.getR(), t.getG(), t.getB(), Data.wall_radius,
-//                    0, 0, 0);
             Quaternion q = getQuaternionFromSegment(t.getSegment());
             double len = t.getSegment().getLength();
             double rad = 0.05;
             Point middle = t.getSegment().middlePoint();
             printParticle(t.getSegment().getP1(), 204, 204, 0, 0.05, 0, 0, 0, q, len, rad, middle);
-//            printParticle(t.getSegment().getP2(), 204, 204, 0, 0.05, 0, 0, 0, q, len, rad, middle);
         }
 
     }

@@ -98,7 +98,6 @@ public class CellIndex {
         dif.times(1/abs);
         Point wallVersor = dif;
 
-        //todo check the increment
         for (double i = 0; i < abs; i+= 0.25) {
             double x = p1.getX() + wallVersor.getX() * i;
             double y = p1.getY() + wallVersor.getY() * i;
