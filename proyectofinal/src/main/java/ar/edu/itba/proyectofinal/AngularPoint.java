@@ -2,19 +2,23 @@ package ar.edu.itba.proyectofinal;
 
 import java.util.Objects;
 
+/**
+ * Modeling of point in relation to particle's mass centre and orientation.
+ */
 public class AngularPoint {
 
     private double angle;
     private double length;
 
     /**
-     *
+     * Constructor
      * @param angle makes sure that the angle is between 0 and 2 PI
      * @param length
      */
     public AngularPoint(double angle, double length){
         if (angle <= Math.PI * 2 && angle >= 0)
             this.angle = angle;
+        //Normalize angle if not in range
         else if (angle > Math.PI * 2) {
             int amount = (int)(angle / (Math.PI * 2));
             this.angle = angle - amount * Math.PI * 2;
@@ -23,7 +27,6 @@ public class AngularPoint {
             this.angle = angle + amount * Math.PI * 2;
         }
         this.length = length;
-
     }
 
     @Override
@@ -37,7 +40,6 @@ public class AngularPoint {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(angle, length);
     }
 
@@ -63,7 +65,5 @@ public class AngularPoint {
                 "angle = " + angle +
                 " , length = " + length +
                "  }";
-
-
     }
 }

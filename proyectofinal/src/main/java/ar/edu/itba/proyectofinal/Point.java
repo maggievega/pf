@@ -29,10 +29,22 @@ public class Point {
         this.y = y;
     }
 
+    public void setPoint(Point p) { this.x = x; this.y = y;}
+
     public void times(double scalar) {this.x *= scalar; this.y *= scalar; }
+
+    public void add(Point p) { this.x += p.getX(); this.y += p.getY(); }
+
+    public Point minus(Point p) {
+        return new Point(this.x -p.x, this.y -p.y);
+    }
 
     public double squaredDistanceBetween (Point p) {
         return (this.getX() - p.getX()) * (this.getX() - p.getX()) + (this.getY() - p.getY()) * (this.getY() - p.getY());
+    }
+
+    public double distanceBetween (Point p) {
+        return Math.sqrt(squaredDistanceBetween(p));
     }
 
     public double dotProduct(Point p) {
@@ -61,7 +73,7 @@ public class Point {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(x, y);
     }
+
 }

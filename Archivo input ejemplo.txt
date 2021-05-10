@@ -1,10 +1,20 @@
-Archivo input ejemplo
+Archivo input ejemplo (siempre separado con tabs)
+no tener lineas de mas en los archivos
 
-n
-desideredVel velx vely angVel angAcant_puntos angulo long angulo long
-(angulo en radianes)
+-- particles
+cantidad_de_formatos_de_particulas
+cantidad_de_particulas_de_ese_formato	desideredVel radius cant_puntos x y x y
 
-o 
+-- paredes
+se le puede poner un parametro I adelante. para que empiezen en ese cuadrado (tiene que ser un cuadrado)
+siempre son 2 los cant_puntos
+cantidad de paredes que se quieren
+cant_puntos x y x y o 
+I cant_puntos x y x y 
 
-desideredVel velx vely cant_puntos x y x y
-(x e y en relación del (0,0) -> el centro de la partícula)
+-- targets
+F dice si es final o no (se puede poner o no)
+despues va x y con el punto donde tiene que ir
+
+-- constantes
+nombre	valor
